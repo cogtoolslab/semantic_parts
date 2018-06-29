@@ -4,6 +4,7 @@
 <!-- Load the Paper.js library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>	
 <script type="text/javascript" src="js/paper-full.min.js"></script>
+<script type="text/javascript" src="../data/smiley.json"></script> 
 <!-- Define inlined PaperScript associate it with myCanvas -->
 <script type="text/paperscript" canvas="myCanvas">
 
@@ -20,7 +21,6 @@
 	path.position = view.center;
     };
     
-
 </script>
 
 <style type="text/css">
@@ -43,7 +43,11 @@ body {
 	<canvas id="myCanvas" style="border: 1px dotted red;" resize="true"></canvas>
 </body>
 
-<script> 	
+<script>
+  console.log(smiley['svgData']);
+</script>
+
+<!-- <script> 	
   var requestURL = "http://localhost:8080/smiley.json"
   var request = new XMLHttpRequest();
   request.open('GET', requestURL);
@@ -51,7 +55,6 @@ body {
   request.send();
   var smile = request.response;
   console.log(smile);
+ </script> -->
 
-
- </script>
 </html>
