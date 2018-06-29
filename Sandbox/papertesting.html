@@ -12,14 +12,13 @@
 	radius: 50,
 	strokeColor: 'black'
     });
+  curves = path.firstCurve
+  console.log(curves)
 
     function onResize(event) {
 	// Whenever the window is resized, recenter the path:
 	path.position = view.center;
     };
-    stringVer = toString(path)
-    console.log(stringVer)
-    console.log(path.curves)
     
 
 </script>
