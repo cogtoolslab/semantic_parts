@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- Load the Paper.js library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>	
+<script type="text/javascript" src="js/paper-full.min.js"></script>
+<!-- Define inlined PaperScript associate it with myCanvas -->
+<script type="text/paperscript" canvas="myCanvas">
+
+	var path = new Path.Circle({
+	center: view.center,
+	radius: 50,
+	strokeColor: 'black'
+    });
+
+    function onResize(event) {
+	// Whenever the window is resized, recenter the path:
+	path.position = view.center;
+    };
+    stringVer = toString(path)
+    console.log(stringVer)
+    console.log(path.curves)
+    
+
+</script>
+
+<style type="text/css">
+html,
+body {
+    margin: 0;
+    overflow: hidden;
+    height: 100%;
+    }
+
+/* Scale canvas with resize attribute to full size */
+    canvas[resize] {
+    width: 100%;
+    height: 100%;
+};
+</style>
+</head>
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>	
+	<canvas id="myCanvas" style="border: 1px dotted red;" resize="true"></canvas>
+</body>
+
+<script> 	
+  var requestURL = "http://localhost:8080/smiley.json"
+  var request = new XMLHttpRequest();
+  request.open('GET', requestURL);
+  request.responseType = 'json';
+  request.send();
+  var smile = request.response;
+  console.log(smile);
+
+
+ </script>
+</html>

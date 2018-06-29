@@ -1,0 +1,17 @@
+{
+  "name": "papertesting",
+  "version": "1.0.0",
+  "description": "Test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "NA"
+  ],
+  "author": "Kushin",
+  "license": "MIT",
+  "dependencies": {
+    "paper": "^0.11.5"
+  }
+}
