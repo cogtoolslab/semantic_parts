@@ -7,20 +7,30 @@
 <script type="text/javascript" src="../data/smiley.json"></script> 
 <!-- Define inlined PaperScript associate it with myCanvas -->
 <script type="text/paperscript" canvas="myCanvas">
+  var smiledata = smiley['svgData']; 
+  var smiledata = smiledata.join("z ");
+  var smile = new CompoundPath(smiledata);
+  smile.strokeColor = 'black';
 
-	var path = new Path.Circle({
-	center: view.center,
-	radius: 50,
-	strokeColor: 'black'
-    });
-  curves = path.firstCurve
-  console.log(curves)
+  // Create a new path once, when the script is executed:
+  var myPath = new Path();
+  myPath.strokeColor = 'black';
 
-    function onResize(event) {
-	// Whenever the window is resized, recenter the path:
-	path.position = view.center;
-    };
-    
+  // This function is called whenever the user
+  // clicks the mouse in the view:
+  function onMouseDown(event) {
+  // Add a segment to the path at the position of the mouse:
+  myPath.add(event.point);
+  console.log('You pressed the mouse!');
+  }
+
+  function onResize(event) {
+  // Whenever the window is resized, recenter the path:
+  smile.position = view.center;
+    };  
+
+
+
 </script>
 
 <style type="text/css">
@@ -39,22 +49,18 @@ body {
 </style>
 </head>
 <body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>	
-	<canvas id="myCanvas" style="border: 1px dotted red;" resize="true"></canvas>
+
+	<canvas id="myCanvas" style="border: 3px solid #314DFE;" resize="true">   
+  </canvas>
+  
 </body>
 
 <script>
-  console.log(smiley['svgData']);
-</script>
+  var sm = smiley['svgData'];
+  var smiledata = sm.join("z ");
+  console.log(smiledata);
+  
 
-<!-- <script> 	
-  var requestURL = "http://localhost:8080/smiley.json"
-  var request = new XMLHttpRequest();
-  request.open('GET', requestURL);
-  request.responseType = 'json';
-  request.send();
-  var smile = request.response;
-  console.log(smile);
- </script> -->
+</script>
 
 </html>
