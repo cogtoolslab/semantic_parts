@@ -6,33 +6,73 @@
 <script type="text/javascript" src="js/paper-full.min.js"></script>
 <script type="text/javascript" src="../data/smiley.json"></script> 
 <!-- Define inlined PaperScript associate it with myCanvas -->
+
 <script type="text/paperscript" canvas="myCanvas">
-  var smiledata = smiley['svgData']; 
-  var smiledata = smiledata.join("z ");
-  var smile = new CompoundPath(smiledata);
-  smile.strokeColor = 'black';
 
-  // Create a new path once, when the script is executed:
-  var myPath = new Path();
-  myPath.strokeColor = 'black';
+  var circle = new Path.Circle(new Point(100, 100), 50);
+  circle.strokeColor = 'blue';
+  console.log(circle.curves);
+  
+  var smile = smiley['svgData']; 
+  var smiledata = smile.join("z ");
+  var smilepath = new CompoundPath(smiledata);
+  smilepath.strokeColor = 'black';
 
-  // This function is called whenever the user
-  // clicks the mouse in the view:
+  var myPath;
+  var PathData = new Array();
+
   function onMouseDown(event) {
-  // Add a segment to the path at the position of the mouse:
-  myPath.add(event.point);
-  console.log('You pressed the mouse!');
+  myPath = new Path();
+  myPath.strokeColor = 'black';
+  console.log('mouse is down');
   }
+
+  function onMouseDrag(event) {
+  myPath.add(event.point);
+  console.log('dragging mouse');
+
+  }
+
+  function onMouseUp(event) {
+  myPath.add(event.point);
+  myPath.strokeColor = 'red';
+  
+  PathData[0] = myPath;
+  CurveData = myPath.curves;
+  console.log(CurveData.join(" + "));
+  }
+
 
   function onResize(event) {
   // Whenever the window is resized, recenter the path:
-  smile.position = view.center;
+  smilepath.position = view.center;
     };  
+
+  
+
+    
 
 
 
 </script>
 
+
+<!--
+<button id="download-to-svg">DOWNLOAD</button>
+<script type="text/javascript">
+   document.addEventListener("DOMContentLoaded", function(event) { 
+    document.getElementById("download-to-svg").onclick = function(){
+     var fileName = "custom.svg"
+     var url = "data:image/svg+xml;utf8," + encodeURIComponent(paper.project.exportSVG({asString:true}));
+     var link = document.createElement("a");
+     link.download = fileName;
+     link.href = url;
+     link.click();
+    }
+   });
+</script>
+
+-->
 <style type="text/css">
 html,
 body {
@@ -43,8 +83,8 @@ body {
 
 /* Scale canvas with resize attribute to full size */
     canvas[resize] {
-    width: 100%;
-    height: 100%;
+    width: 50%;
+    height: 50%;
 };
 </style>
 </head>
@@ -56,9 +96,6 @@ body {
 </body>
 
 <script>
-  var sm = smiley['svgData'];
-  var smiledata = sm.join("z ");
-  console.log(smiledata);
   
 
 </script>
