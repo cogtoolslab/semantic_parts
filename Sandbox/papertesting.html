@@ -8,13 +8,9 @@
 <!-- Define inlined PaperScript associate it with myCanvas -->
 
 <script type="text/paperscript" canvas="myCanvas">
-
-  var circle = new Path.Circle(new Point(100, 100), 50);
-  circle.strokeColor = 'blue';
-  console.log(circle.curves);
   
   var smile = smiley['svgData']; 
-  var smiledata = smile.join("z ");
+  var smiledata = smile.join(" ");
   var smilepath = new CompoundPath(smiledata);
   smilepath.strokeColor = 'black';
 
@@ -39,9 +35,20 @@
   
   PathData[0] = myPath;
   CurveData = myPath.curves;
-  console.log(CurveData.join(" + "));
+  showIntersections(myPath, myPath);
+  console.log(CurveData.join());
   }
 
+  function showIntersections(path1, path2) {
+    var intersections = myPath.getIntersections(myPath);
+    for (var i = 0; i < intersections.length; i++) {
+        new Path.Circle({
+            center: intersections[i].point,
+            radius: 5,
+            fillColor: '#009dec'
+        })
+     }
+   };
 
   function onResize(event) {
   // Whenever the window is resized, recenter the path:
