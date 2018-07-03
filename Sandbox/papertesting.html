@@ -4,113 +4,11 @@
 <!-- Load the Paper.js library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>	
 <script type="text/javascript" src="js/paper-full.min.js"></script>
+<script type="text/javascript" src="annotation.js"></script> 
 <script type="text/javascript" src="../data/smiley.json"></script> 
+<link href="annotation.css" rel="stylesheet" type="text/css">
+
 <!-- Define inlined PaperScript associate it with myCanvas -->
-
-<script type="text/paperscript" canvas="myCanvas">
-
-
-  //var newPath
-  //Storing SVG data for JSON file in smile
-  var smile = smiley['svgData'];
-
-  //Iterating over the length of the SVG string and storing each stroke in a different thisBinding
-  
-  for (var i = 0; i< smile.length; i++) {
-  this["marker"+i] = new Path(smile[i]);
-  this["marker"+i].strokeColor = 'black';
-  //Increasing stroke width to make it clickable
-  this["marker"+i].strokeWidth = 8;
-  };
-   
-  
-  console.log(this.marker1.exportSVG({asString: true}));
-
-  TestPath = this.marker0; //setting this.marker0 to a new variable name since there are issues otherwise
-
-  //The commented out function below is for segment wise highlighting. You'll notice the need for
-  //changing the this.marker0 variable name here, since "this" refers to something else in the function I think
-  /*TestPath.onMouseEnter = function(event){
-       newPath = new Path(TestPath.segments[0],TestPath.segments[1]);
-       newPath.strokeColor = 'blue';
-       newPath.strokeWidth = 8;} */
-
-  //Click to highlight  
-  TestPath.onClick = function(event){
-       TestPath.strokeColor = 'red';
-  };
-    
-  //Code for hover highlight
-    TestPath.onMouseEnter = function(event){
-       if(TestPath.strokeColor != 'red'){
-       this.strokeColor= 'blue';}
-     };
-
-    TestPath.onMouseLeave = function(event){
-       if(TestPath.strokeColor != 'red'){
-       this.strokeColor = 'black';}
-   };
-
- 
-
-   
-  var myPath;
- 
-
-  
-  function onMouseDown(event) {
-  myPath = new Path();
-  myPath.strokeColor = 'black';
-  console.log('mouse is down');
-  }
-
- 
-  function onMouseDrag(event) {
-  myPath.add(event.point);
-  console.log('dragging mouse');
-
-  }
-
-
- 
-  function onMouseUp(event) {
-  myPath.add(event.point);
-  myPath.strokeColor = 'red';
-  myPath.simplify(10);
-  console.log(myPath.exportSVG({asString: true}));
-  
-
-  CurveData = myPath.curves;
-  showIntersections(myPath, myPath);
-  //console.log(CurveData[5].point1, CurveData[5].point2, CurveData[5].handle1, CurveData[5].handle2);
-  }
-
-  
-  function showIntersections(path1, path2) {
-    var intersections = myPath.getIntersections(myPath);
-    for (var i = 0; i < intersections.length; i++) {
-        new Path.Circle({
-            center: intersections[i].point,
-            radius: 5,
-            fillColor: '#009dec'
-        })
-     }
-   };
-
-  
-  function onResize(event) {
-  // Whenever the window is resized, recenter the path:
-  smilepath.position = view.center;
- 
-    };  
-
-  
-
-    
-
-
-
-</script>
 
  <div class="dropdown">
   <button onclick="myFunction()" class="dropbtn">Dropdown</button>
@@ -121,90 +19,9 @@
   </div>
 </div>
 
-<!--
-<button id="download-to-svg">DOWNLOAD</button>
+
 <script type="text/javascript">
-   document.addEventListener("DOMContentLoaded", function(event) { 
-    document.getElementById("download-to-svg").onclick = function(){
-     var fileName = "custom.svg"
-     var url = "data:image/svg+xml;utf8," + encodeURIComponent(paper.project.exportSVG({asString:true}));
-     var link = document.createElement("a");
-     link.download = fileName;
-     link.href = url;
-     link.click();
-    }
-   });
-</script>
-
--->
-<style type="text/css">
-html,
-body {
-    margin: 0;
-    overflow: hidden;
-    height: 100%;
-    }
- /* Dropdown Button */
- .dropbtn {
-    background-color: #314DFE;
-    color: yellow;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
- }
-
- /* Dropdown button on hover & focus */
- .dropbtn:hover, .dropbtn:focus {
-    background-color: #2980B9;
- }
-
- /* The container <div> - needed to position the dropdown content */
- .dropdown {
-    position: relative;
-    display: inline-block;
-    top: 400px;
-    left: 660px;
-
- }
-
- /* Dropdown Content (Hidden by Default) */
- .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
- }
-
- /* Links inside the dropdown */
- .dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
- }
-
- /* Change color of dropdown links on hover */
- .dropdown-content p:hover {background-color: #ddd}
-
-  /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
- .show {display:block;}   
- 
-
- /* Scale canvas with resize attribute to full size */
-    canvas[resize] {
-    padding-left: 0;
-    padding-right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-    width: 40%;
-    height: 50%;
-  };
-</style>
-<script type="text/javascript">
+  
   /* When the user clicks on the button, 
  toggle between hiding and showing the dropdown content */
  function myFunction() {
@@ -226,6 +43,7 @@ body {
    }
  }
 </script>
+
 </head>
 <body>
 
