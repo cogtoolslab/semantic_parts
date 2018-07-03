@@ -23,40 +23,47 @@ window.onload = function() {
 
   };
    
-  console.log(pathArray[0].exportSVG({asString: true}));
 
-  TestPath = pathArray[0]; //setting this.marker0 to a new variable name since there are issues otherwise
+  console.log(pathArray[2].exportSVG({asString: true}));
+  TestPath = pathArray[2]; //setting this.marker0 to a new variable name since there are issues otherwise
 
   //The commented out function below is for segment wise highlighting. You'll notice the need for
   //changing the this.marker0 variable name here, since "this" refers to something else in the function I think
   /*TestPath.onMouseEnter = function(event){
        newPath = new Path(TestPath.segments[0],TestPath.segments[1]);
        newPath.strokeColor = 'blue';
-       newPath.strokeWidth = 8;} */
+       newPath.strokeWidth = 8;} */  
 
-  //Click to highlight  
+  //highlight  helper functions
+
+  TestPath.alreadyClicked = false;
+
   TestPath.onClick = function(event){
-       TestPath.strokeColor = 'red';
+     TestPath.strokeColor = 'red';
+     TestPath.alreadyClicked = true;
   };
-    
+
   //Code for hover highlight
-    TestPath.onMouseEnter = function(event){
-       if(TestPath.strokeColor != 'red'){
-       this.strokeColor= 'blue';}
-     };
+  TestPath.onMouseEnter = function(event){
+  if(TestPath.alreadyClicked == false){
+   TestPath.strokeColor= 'blue';}
+  };
 
-    TestPath.onMouseLeave = function(event){
-       if(TestPath.strokeColor != 'red'){
-       this.strokeColor = 'black';}
-   };
+  TestPath.onMouseLeave = function(event){
+    // if(TestPath.strokeColor != 'red'){
+    //   console.log(TestPath.strokeColor);
+    //   TestPath.strokeColor = 'black';
+    // }
+    if(TestPath.alreadyClicked == false){
+      console.log(TestPath.strokeColor);
+      TestPath.strokeColor = 'black';
+    }
 
-
-
+  };
    
   var myPath;
 
-
-
+  // drawing helper functions
   function onMouseDown(event) {
   myPath = new Path();
   myPath.strokeColor = 'black';
@@ -69,8 +76,6 @@ window.onload = function() {
   console.log('dragging mouse');
 
   }
-
-
 
   function onMouseUp(event) {
   myPath.add(event.point);
