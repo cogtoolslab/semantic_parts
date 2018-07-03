@@ -40,18 +40,17 @@
   };
     
   //Code for hover highlight
-
-  if(TestPath.strokeColor != 'red'){
     TestPath.onMouseEnter = function(event){
-       this.strokeColor= 'blue';
-     }
+       if(TestPath.strokeColor != 'red'){
+       this.strokeColor= 'blue';}
+     };
+
     TestPath.onMouseLeave = function(event){
-       this.strokeColor = 'black';
-     }
-   } else {
-   TestPath.strokeColor = 'red';
-   }
-    
+       if(TestPath.strokeColor != 'red'){
+       this.strokeColor = 'black';}
+   };
+
+ 
 
    
   var myPath;
