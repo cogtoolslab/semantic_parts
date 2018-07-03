@@ -11,15 +11,10 @@ window.onload = function() {
 
   var pathArray = new Array;
   for (var i = 0; i< smile.length; i++) {
-    // this["marker"+i] = new Path(smile[i]);
-    // this["marker"+i].strokeColor = 'black';
-    // //Increasing stroke width to make it clickable
-    // this["marker"+i].strokeWidth = 8;
-
     pathArray[i] = new Path(smile[i]);
     pathArray[i].strokeColor = 'black';
     //Increasing stroke width to make it clickable
-    pathArray[i].strokeWidth = 8;
+    pathArray[i].strokeWidth = 5;
 
   };
    
