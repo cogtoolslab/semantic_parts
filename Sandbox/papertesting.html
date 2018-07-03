@@ -22,6 +22,7 @@
   //Increasing stroke width to make it clickable
   this["marker"+i].strokeWidth = 8;
   };
+   
   
   console.log(this.marker1.exportSVG({asString: true}));
 
@@ -100,7 +101,7 @@
   function onResize(event) {
   // Whenever the window is resized, recenter the path:
   smilepath.position = view.center;
-  myPath.position = view.center;
+ 
     };  
 
   
@@ -111,7 +112,14 @@
 
 </script>
 
-
+ <div class="dropdown">
+  <button onclick="myFunction()" class="dropbtn">Dropdown</button>
+  <div id="myDropdown" class="dropdown-content">
+    <p> Head</p>
+    <p> Eyes</p>
+    <p> Mouth</p>
+  </div>
+</div>
 
 <!--
 <button id="download-to-svg">DOWNLOAD</button>
@@ -136,13 +144,88 @@ body {
     overflow: hidden;
     height: 100%;
     }
+ /* Dropdown Button */
+ .dropbtn {
+    background-color: #314DFE;
+    color: yellow;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+ }
 
-/* Scale canvas with resize attribute to full size */
+ /* Dropdown button on hover & focus */
+ .dropbtn:hover, .dropbtn:focus {
+    background-color: #2980B9;
+ }
+
+ /* The container <div> - needed to position the dropdown content */
+ .dropdown {
+    position: relative;
+    display: inline-block;
+    top: 400px;
+    left: 660px;
+
+ }
+
+ /* Dropdown Content (Hidden by Default) */
+ .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+ }
+
+ /* Links inside the dropdown */
+ .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+ }
+
+ /* Change color of dropdown links on hover */
+ .dropdown-content p:hover {background-color: #ddd}
+
+  /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+ .show {display:block;}   
+ 
+
+ /* Scale canvas with resize attribute to full size */
     canvas[resize] {
-    width: 50%;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 40%;
     height: 50%;
-};
+  };
 </style>
+<script type="text/javascript">
+  /* When the user clicks on the button, 
+ toggle between hiding and showing the dropdown content */
+ function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+ }
+
+ // Close the dropdown menu if the user clicks outside of it
+ window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+       }
+     }
+   }
+ }
+</script>
 </head>
 <body>
 
