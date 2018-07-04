@@ -59,14 +59,15 @@ window.onload = function() {
   pathArray.alreadyClicked.fill(false);
 
   //Conditional statement for final version
- if(pathArray.alreadyClicked.some(isfalse) = true){
+ if(pathArray.alreadyClicked.some(isfalse) == true){
 
  }
   
-   
+  function onMouseMove(event){
+   console.log(MouseEvent.type);
+  }
  // Code for click highlight
   pathArray[3].onClick = function(event){
-    console.log(feMouseEvent);
      pathArray[3].strokeColor = 'red';
      pathArray.alreadyClicked[3] = true;
   };
