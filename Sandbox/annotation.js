@@ -2,17 +2,11 @@ paper.install(window);
 window.onload = function() { 
   paper.setup('myCanvas');
 
-
-  
-
-
   //var newPath
   //Storing SVG data for JSON file in smile
   var smile = smiley['svgData'];
-  /*base = new CompoundPath(smile.join());
-  base.strokeColor = 'red';
-  base.strokeWidth = 10;*/
-  //Iterating over the length of the SVG string and storing each stroke in a different thisBinding
+  
+  //Sketch Display 
 
   var pathArray = new Array;
   for (var i = 0; i< smile.length; i++) {
@@ -23,19 +17,19 @@ window.onload = function() {
 
   };
 
+
   //Testing objects to create final json file for export
   var testObj = new Object();
   testObj.sub1 =[];
   testObj.sub2 = [];
   for (var i = 0; i<pathArray.length; i++){
     testObj.sub1[i] = i;
-    testObj.sub2[i] = pathArray[i].exportSVG({asString: true}).substring(44, pathArray[i].exportSVG({asString: true}).indexOf('"',44));
-  }
+    svgstring = pathArray[i].exportSVG({asString: true})
+    var start = svgstring.indexOf('d="')+3;
+    testObj.sub2[i] = svgstring.substring(start, svgstring.indexOf('"',start))
+     }
+     //Checking stuff
   console.log(JSON.parse(JSON.stringify(testObj)).sub1);
-  svgstring = pathArray[2].exportSVG({asString: true});
-  var start = svgstring.indexOf('d="')+3;
-  console.log(svgstring.substring(start, svgstring.indexOf('"',start)));
-  console.log(svgstring);
   
 
   //TestPath = pathArray[2]; 
@@ -47,13 +41,7 @@ window.onload = function() {
        newPath.strokeWidth = 8;} */  
 
 
- 
-  //highlight  helper functions
-
-
-
-
-  isfalse = function(element){
+isfalse = function(element){
     if(element == false){
       return true;
     }
@@ -61,6 +49,8 @@ window.onload = function() {
       return false;
     }
   }
+ 
+  //highlight  helper functions
 
   pathArray.alreadyClicked = new Array(pathArray.length);
   pathArray.alreadyClicked.fill(false);
@@ -100,11 +90,10 @@ window.onload = function() {
   }; 
   
 
-
-  function onResize(event) {
+ /* function onResize(event) {
     // Whenever the window is resized, recenter the path:
 
   }; 
   
-};
+};*/
 
