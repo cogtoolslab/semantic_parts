@@ -2,7 +2,7 @@ paper.install(window);
 window.onload = function() { 
   paper.setup('myCanvas');
   
-  //var newPath
+   //var newPath
   //Storing SVG data for JSON file in smile
   var smile = smiley['svgData'];
   
@@ -30,30 +30,36 @@ window.onload = function() {
     testObj.sub2[i] = svgstring.substring(start, svgstring.indexOf('"',start))
      }
      //Checking stuff
-  console.log(JSON.parse(JSON.stringify(testObj)).sub1);
+  console.log(JSON.parse(JSON.stringify(testObj)));
   
-  function onMouseDown(event) {
-   console.log("MD")
-   for(var i= 0; i< pathArray.length; i++){
-   if (pathArray[i].contains(event.point)) {
-    pathArray[i].strokeWidth = 10;
- } else {
-   return;
- };
- };
- };
 
-
- var hitOptions = {
-    segments: true,
+  var hitOptions = {
     stroke: true,
+    segments: true,
     fill: true,
-    tolerance: 5,
+    tolerance: 1,
 };
 
+var path;
+var MasterPath = new Path();
+function onMouseDrag(event) {
+    var hitResult = project.hitTestAll(event.point, hitOptions);
+    console.log('hitResult (' + hitResult.length + ')' , hitResult);
+    if(hitResult){
+    path = new Path({segments: hitResult});
+    MasterPath = MasterPath.unite(path);
+    MasterPath.strokeColor = 'yellow';
+    MasterPath.strokeWidth = 5;
+    console.log("MP",MasterPath._children);
+    //console.log(MasterPath.exportSVG({asString: true}))
+
+    } else {
+    console.log("Oops")
+  }
+}
+
+
   //TestPath = pathArray[2]; 
-  //The commented out function below is for segment wise highlighting. You'll notice the need for
-  //changing the this.marker0 variable name here, since "this" refers to something else in the function I think
   /*TestPath.onMouseEnter = function(event){
        newPath = new Path(TestPath.segments[0],TestPath.segments[1]);
        newPath.strokeColor = 'blue';
@@ -109,7 +115,6 @@ isfalse = function(element){
 
      };
   }; 
-  
 
  /* function onResize(event) {
     // Whenever the window is resized, recenter the path:
