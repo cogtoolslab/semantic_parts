@@ -1,7 +1,7 @@
 paper.install(window);
 window.onload = function() { 
   paper.setup('myCanvas');
-
+  
   //var newPath
   //Storing SVG data for JSON file in smile
   var smile = smiley['svgData'];
@@ -17,6 +17,7 @@ window.onload = function() {
 
   };
 
+ 
 
   //Testing objects to create final json file for export
   var testObj = new Object();
@@ -31,6 +32,24 @@ window.onload = function() {
      //Checking stuff
   console.log(JSON.parse(JSON.stringify(testObj)).sub1);
   
+  function onMouseDown(event) {
+   console.log("MD")
+   for(var i= 0; i< pathArray.length; i++){
+   if (pathArray[i].contains(event.point)) {
+    pathArray[i].strokeWidth = 10;
+ } else {
+   return;
+ };
+ };
+ };
+
+
+ var hitOptions = {
+    segments: true,
+    stroke: true,
+    fill: true,
+    tolerance: 5,
+};
 
   //TestPath = pathArray[2]; 
   //The commented out function below is for segment wise highlighting. You'll notice the need for
@@ -50,6 +69,8 @@ isfalse = function(element){
     }
   }
  
+
+
   //highlight  helper functions
 
   pathArray.alreadyClicked = new Array(pathArray.length);
@@ -94,6 +115,6 @@ isfalse = function(element){
     // Whenever the window is resized, recenter the path:
 
   }; 
-  
-};*/
+  */
+};
 
