@@ -7,7 +7,6 @@ window.onload = function() {
   var smile = smiley['svgData'];
   
   //Sketch Display 
-
   var pathArray = new Array;
   for (var i = 0; i< smile.length; i++) {
     pathArray[i] = new Path(smile[i]);
@@ -17,7 +16,16 @@ window.onload = function() {
 
   };
 
- 
+  console.log(pathArray);
+  // Attach click event handlers to every stroke (i.e., Path)
+  _.map(pathArray, function(p) {
+  p.onClick = function(event) {
+    p.strokeColor = 'red';
+    p.alreadyClicked = true;
+  }
+});
+
+
 
   //Testing objects to create final json file for export
   var testObj = new Object();
@@ -89,32 +97,32 @@ isfalse = function(element){
  
  
 
- // Code for click highlight
-  pathArray[3].onClick = function(event){
-   pathArray[3].strokeColor = 'red';
-   pathArray.alreadyClicked[3] = true;
+ // // Code for click highlight
+ //  pathArray[3].onClick = function(event){
+ //   pathArray[3].strokeColor = 'red';
+ //   pathArray.alreadyClicked[3] = true;
     
 
-  };
-  //Code for hover highlight
+ //  };
+ //  //Code for hover highlight
 
   
-  pathArray[3].onMouseEnter = function(event){
-  if(pathArray.alreadyClicked[3] == false){
-    pathArray[3].strokeColor= 'blue';}
-  };
+ //  pathArray[3].onMouseEnter = function(event){
+ //  if(pathArray.alreadyClicked[3] == false){
+ //    pathArray[3].strokeColor= 'blue';}
+ //  };
 
 
-  pathArray[3].onMouseLeave = function(event){
-    // if(TestPath.strokeColor != 'red'){
-    //   console.log(TestPath.strokeColor);
-    //   TestPath.strokeColor = 'black';
-    // }
-    if(pathArray.alreadyClicked[3] == false){
-      pathArray[3].strokeColor = 'black';
+ //  pathArray[3].onMouseLeave = function(event){
+ //    // if(TestPath.strokeColor != 'red'){
+ //    //   console.log(TestPath.strokeColor);
+ //    //   TestPath.strokeColor = 'black';
+ //    // }
+ //    if(pathArray.alreadyClicked[3] == false){
+ //      pathArray[3].strokeColor = 'black';
 
-     };
-  }; 
+ //     };
+ //  }; 
 
  /* function onResize(event) {
     // Whenever the window is resized, recenter the path:
