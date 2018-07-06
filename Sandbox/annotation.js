@@ -16,15 +16,13 @@ window.onload = function() {
 
   };
 
-  console.log(pathArray);
   // Attach click event handlers to every stroke (i.e., Path)
-  _.map(pathArray, function(p) {
-  p.onClick = function(event) {
-    p.strokeColor = 'red';
-    p.alreadyClicked = true;
-  }
+  _.forEach(pathArray, function(p) {
+    p.onClick = function(event) {
+      p.strokeColor = 'red';
+      p.alreadyClicked = true;
+    }
 });
-
 
 
   //Testing objects to create final json file for export
