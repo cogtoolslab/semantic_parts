@@ -16,17 +16,13 @@ window.onload = function() {
 
   };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
+
   console.log("SEG", pathArray[0].segments);
 
- 
-=======
-=======
->>>>>>> e2a58a809019aa67070347cc7cd8141d46d999f0
-=======
->>>>>>> e2a58a809019aa67070347cc7cd8141d46d999f0
+  for(var i =0;i<pathArray.length;i++){
+    pathArray[i].alreadyClicked =false;
+  }
+
   // Attach click event handlers to every stroke (i.e., Path)
   _.forEach(pathArray, function(p) {
     p.onClick = function(event) {
@@ -34,14 +30,21 @@ window.onload = function() {
       p.alreadyClicked = true;
     }
 });
+  _.forEach(pathArray, function(p) {
+    p.onMouseEnter = function(event) {
+      if(p.alreadyClicked == false){
+      p.strokeColor = 'blue';
+     }
+    }
+});
 
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> e2a58a809019aa67070347cc7cd8141d46d999f0
-=======
->>>>>>> e2a58a809019aa67070347cc7cd8141d46d999f0
-=======
->>>>>>> e2a58a809019aa67070347cc7cd8141d46d999f0
+  _.forEach(pathArray, function(p){
+    p.onMouseLeave = function(event) {
+      if(p.alreadyClicked == false){
+      p.strokeColor = 'black'; 
+    }}
+  });
+
 
   //Testing objects to create final json file for export
   var testObj = new Object();

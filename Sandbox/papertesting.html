@@ -4,127 +4,15 @@
 <!-- Load the Paper.js library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>	
 <script type="text/javascript" src="js/paper-full.min.js"></script>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<script type="text/paperscript" canvas = myCanvas >
-  //var newPath
-  //Storing SVG data for JSON file in smile
-  var smile = smiley['svgData'];
-  
-  //Sketch Display 
 
-  var pathArray = new Array;
-  for (var i = 0; i< smile.length; i++) {
-    pathArray[i] = new Path(smile[i]);
-    pathArray[i].strokeColor = 'black';
-    //Increasing stroke width to make it clickable
-    pathArray[i].strokeWidth = 5;
-
-  };
-  
-    console.log("SEG", pathArray[0].segments);
- 
-
-  //Testing objects to create final json file for export
-  var testObj = new Object();
-  testObj.sub1 =[];
-  testObj.sub2 = [];
-  for (var i = 0; i<pathArray.length; i++){
-    testObj.sub1[i] = i;
-    svgstring = pathArray[i].exportSVG({asString: true})
-    var start = svgstring.indexOf('d="')+3;
-    testObj.sub2[i] = svgstring.substring(start, svgstring.indexOf('"',start))
-     }
-     //Checking stuff
-  console.log(JSON.parse(JSON.stringify(testObj)).sub1);
-  
-
- var i
-
- function onMouseDown(event) {
- console.log("CHECK")
- for (var i=0; i<pathArray.length; i++){
-  (function(){
-  var ii =i
- console.log(ii)
- if(pathArray[ii].hitTest(event.point)) {
-    pathArray[ii].strokeColor = 'blue';
-} else {
-   return;
-}})()}}
-
-
-  //TestPath = pathArray[2]; 
-  /*TestPath.onMouseEnter = function(event){
-       newPath = new Path(TestPath.segments[0],TestPath.segments[1]);
-       newPath.strokeColor = 'blue';
-       newPath.strokeWidth = 8;} */  
-
-
-isfalse = function(element){
-    if(element == false){
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
- 
-
-
-  //highlight  helper functions
-
-  pathArray.alreadyClicked = new Array(pathArray.length);
-  pathArray.alreadyClicked.fill(false);
-
-  //Conditional statement for final version
- if(pathArray.alreadyClicked.some(isfalse) == true){
-
- }
- 
- 
-
- // Code for click highlight
-  pathArray[3].onClick = function(event){
-   pathArray[3].strokeColor = 'red';
-   pathArray.alreadyClicked[3] = true;
-    
-
-  };
-  //Code for hover highlight
-
-  
-  pathArray[3].onMouseEnter = function(event){
-  if(pathArray.alreadyClicked[3] == false){
-    pathArray[3].strokeColor= 'blue';}
-  };
-
-
-  pathArray[3].onMouseLeave = function(event){
-    // if(TestPath.strokeColor != 'red'){
-    //   console.log(TestPath.strokeColor);
-    //   TestPath.strokeColor = 'black';
-    // }
-    if(pathArray.alreadyClicked[3] == false){
-      pathArray[3].strokeColor = 'black';
-
-     };
-  }; 
-  
-</script> 
-=======
 <script type="text/javascript" src="js/lodash.core.min.js"></script>
 <script type="text/javascript" src="annotation.js"></script>
->>>>>>> e2a58a809019aa67070347cc7cd8141d46d999f0
-=======
+
 <script type="text/javascript" src="js/lodash.core.min.js"></script>
 <script type="text/javascript" src="annotation.js"></script>
->>>>>>> e2a58a809019aa67070347cc7cd8141d46d999f0
-=======
+
 <script type="text/javascript" src="js/lodash.core.min.js"></script>
 <script type="text/javascript" src="annotation.js"></script>
->>>>>>> e2a58a809019aa67070347cc7cd8141d46d999f0
 <script type="text/javascript" src="../data/smiley.json"></script> 
 
 <link href="annotation.css" rel="stylesheet" type="text/css">
