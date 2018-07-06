@@ -4,6 +4,7 @@
 <!-- Load the Paper.js library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>	
 <script type="text/javascript" src="js/paper-full.min.js"></script>
+<<<<<<< HEAD
 <script type="text/paperscript" canvas = myCanvas >
   //var newPath
   //Storing SVG data for JSON file in smile
@@ -19,7 +20,8 @@
     pathArray[i].strokeWidth = 5;
 
   };
-
+  
+    console.log("SEG", pathArray[0].segments);
  
 
   //Testing objects to create final json file for export
@@ -36,31 +38,19 @@
   console.log(JSON.parse(JSON.stringify(testObj)).sub1);
   
 
-  var hitOptions = {
-    stroke: true,
-    segments: true,
-    fill: true,
-    tolerance: 1,
-};
+ var i
 
-var path;
-var MasterPath = new Path();
-function onMouseDrag(event) {
-    console.log('********');
-    var hitResult = project.hitTestAll(event.point, hitOptions);
-    console.log('hitResult (' + hitResult.length + ')' , hitResult);
-    if(hitResult){
-    path = new Path({segments: hitResult});
-    MasterPath = MasterPath.unite(path);
-    MasterPath.strokeColor = 'yellow';
-    MasterPath.strokeWidth = 5;
-    console.log("MP",MasterPath._children);
-    //console.log(MasterPath.exportSVG({asString: true}))
-
-    } else {
-    console.log("Oops")
-  }
-}
+ function onMouseDown(event) {
+ console.log("CHECK")
+ for (var i=0; i<pathArray.length; i++){
+  (function(){
+  var ii =i
+ console.log(ii)
+ if(pathArray[ii].hitTest(event.point)) {
+    pathArray[ii].strokeColor = 'blue';
+} else {
+   return;
+}})()}}
 
 
   //TestPath = pathArray[2]; 
@@ -121,6 +111,14 @@ isfalse = function(element){
   }; 
   
 </script> 
+=======
+<script type="text/javascript" src="js/lodash.core.min.js"></script>
+<script type="text/javascript" src="annotation.js"></script>
+>>>>>>> e2a58a809019aa67070347cc7cd8141d46d999f0
+=======
+<script type="text/javascript" src="js/lodash.core.min.js"></script>
+<script type="text/javascript" src="annotation.js"></script>
+>>>>>>> e2a58a809019aa67070347cc7cd8141d46d999f0
 <script type="text/javascript" src="../data/smiley.json"></script> 
 
 <link href="annotation.css" rel="stylesheet" type="text/css">

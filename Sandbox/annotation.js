@@ -7,7 +7,6 @@ window.onload = function() {
   var smile = smiley['svgData'];
   
   //Sketch Display 
-
   var pathArray = new Array;
   for (var i = 0; i< smile.length; i++) {
     pathArray[i] = new Path(smile[i]);
@@ -17,7 +16,26 @@ window.onload = function() {
 
   };
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+  console.log("SEG", pathArray[0].segments);
+
  
+=======
+=======
+>>>>>>> e2a58a809019aa67070347cc7cd8141d46d999f0
+  // Attach click event handlers to every stroke (i.e., Path)
+  _.forEach(pathArray, function(p) {
+    p.onClick = function(event) {
+      p.strokeColor = 'red';
+      p.alreadyClicked = true;
+    }
+});
+
+<<<<<<< HEAD
+>>>>>>> e2a58a809019aa67070347cc7cd8141d46d999f0
+=======
+>>>>>>> e2a58a809019aa67070347cc7cd8141d46d999f0
 
   //Testing objects to create final json file for export
   var testObj = new Object();
@@ -89,32 +107,32 @@ isfalse = function(element){
  
  
 
- // Code for click highlight
-  pathArray[3].onClick = function(event){
-   pathArray[3].strokeColor = 'red';
-   pathArray.alreadyClicked[3] = true;
+ // // Code for click highlight
+ //  pathArray[3].onClick = function(event){
+ //   pathArray[3].strokeColor = 'red';
+ //   pathArray.alreadyClicked[3] = true;
     
 
-  };
-  //Code for hover highlight
+ //  };
+ //  //Code for hover highlight
 
   
-  pathArray[3].onMouseEnter = function(event){
-  if(pathArray.alreadyClicked[3] == false){
-    pathArray[3].strokeColor= 'blue';}
-  };
+ //  pathArray[3].onMouseEnter = function(event){
+ //  if(pathArray.alreadyClicked[3] == false){
+ //    pathArray[3].strokeColor= 'blue';}
+ //  };
 
 
-  pathArray[3].onMouseLeave = function(event){
-    // if(TestPath.strokeColor != 'red'){
-    //   console.log(TestPath.strokeColor);
-    //   TestPath.strokeColor = 'black';
-    // }
-    if(pathArray.alreadyClicked[3] == false){
-      pathArray[3].strokeColor = 'black';
+ //  pathArray[3].onMouseLeave = function(event){
+ //    // if(TestPath.strokeColor != 'red'){
+ //    //   console.log(TestPath.strokeColor);
+ //    //   TestPath.strokeColor = 'black';
+ //    // }
+ //    if(pathArray.alreadyClicked[3] == false){
+ //      pathArray[3].strokeColor = 'black';
 
-     };
-  }; 
+ //     };
+ //  }; 
 
  /* function onResize(event) {
     // Whenever the window is resized, recenter the path:
