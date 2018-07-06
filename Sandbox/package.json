@@ -12,6 +12,7 @@
   "author": "Kushin",
   "license": "MIT",
   "dependencies": {
+    "lodash": "^4.17.10",
     "paper": "^0.11.5"
   }
 }
