@@ -18,10 +18,13 @@ window.onload = function() {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   console.log("SEG", pathArray[0].segments);
 
  
 =======
+=======
+>>>>>>> e2a58a809019aa67070347cc7cd8141d46d999f0
 =======
 >>>>>>> e2a58a809019aa67070347cc7cd8141d46d999f0
   // Attach click event handlers to every stroke (i.e., Path)
@@ -33,6 +36,9 @@ window.onload = function() {
 });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> e2a58a809019aa67070347cc7cd8141d46d999f0
+=======
 >>>>>>> e2a58a809019aa67070347cc7cd8141d46d999f0
 =======
 >>>>>>> e2a58a809019aa67070347cc7cd8141d46d999f0
