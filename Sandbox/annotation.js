@@ -26,9 +26,12 @@ window.onload = function() {
   // Attach click event handlers to every stroke (i.e., Path)
   _.forEach(pathArray, function(p) {
     p.onClick = function(event) {
+      if(p.alreadyClicked==false){
+      
+      $('#menu').menu("enable");
       p.strokeColor = 'red';
       p.alreadyClicked = true;
-    }
+    }}
 });
   _.forEach(pathArray, function(p) {
     p.onMouseEnter = function(event) {
@@ -44,6 +47,9 @@ window.onload = function() {
       p.strokeColor = 'black'; 
     }}
   });
+
+
+
 
 
   //Testing objects to create final json file for export

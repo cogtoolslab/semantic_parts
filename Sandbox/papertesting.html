@@ -1,62 +1,123 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css">
+<link href="annotation.css" rel="stylesheet" type="text/css">
 <!-- Load the Paper.js library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>	
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js" type="text/javascript"></script>	
+<script src ="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type= "text/javascript">
+</script>
 <script type="text/javascript" src="js/paper-full.min.js"></script>
-
 <script type="text/javascript" src="js/lodash.core.min.js"></script>
 <script type="text/javascript" src="annotation.js"></script>
-
-<script type="text/javascript" src="js/lodash.core.min.js"></script>
-<script type="text/javascript" src="annotation.js"></script>
-
 <script type="text/javascript" src="js/lodash.core.min.js"></script>
 <script type="text/javascript" src="annotation.js"></script>
 <script type="text/javascript" src="../data/smiley.json"></script> 
+  <style>
+  .ui-menu { width: 200px; }
+  .ui-widget-header { padding: 0.2em; }
+  .ui-menu {
+    position: relative;
+    display: inline-block;
+    //top: 250px;
+    //left: 1020px;
 
-<link href="annotation.css" rel="stylesheet" type="text/css">
-
- <div class="dropdown">
-  <button onclick="myFunction()" class="dropbtn">Dropdown</button>
-  <div id="myDropdown" class="dropdown-content">
-    <p> Head</p>
-    <p> Eyes</p>
-    <p> Mouth</p>
-  </div>
-</div>
-
-
-<script type="text/javascript">
-  
-  /* When the user clicks on the button, 
- toggle between hiding and showing the dropdown content */
- function myFunction() {
-    document.getElementById("myDropdown").classList.toggle("show");
  }
+  </style>
 
- // Close the dropdown menu if the user clicks outside of it
- window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
-
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-       }
-     }
-   }
- }
-</script>
 
 </head>
 <body>
+
+<div id="dialog-form" title="Enter Part Label">
+  <form>
+    <fieldset>
+      <label for="partName">Part Name</label>
+      <input type="text" name="partName" id="partName" value="Type your part label here" class="text ui-widget-content ui-corner-all">
+      <!-- Allow form submission with keyboard without duplicating the dialog button -->
+      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+    </fieldset>
+  </form>
+</div>
+ 
+ <form id="menu">
+  <li class="ui-widget-header"><div>Options</div></li>
+  <li><div>Face</div></li>
+  <li><div>Mouth</div></li>
+  <li><div>Eye</div></li>
+  <li><div>Other</div></li>
+
+</form>
+
 	<canvas id="myCanvas" style="border: 3px solid #314DFE;" resize="true">   
    
-  </canvas>
-  
+    </canvas>
+ 	<div id = "Test" title ="UI Tests">
+    <p> Testing is fun </p>
+    </div>
+    <script type="text/javascript">
+
+      $("#dialog-form").submit(function(event) {
+      event.preventDefault();
+      });
+
+      $("#Test").dialog({
+      autoOpen: false,
+      modal: true,
+      show: { 
+        effect: "fade",
+        duration: 500
+      },
+      buttons : {
+      	terminate: function(){
+      		$(this).dialog("close");
+      	},
+      }
+     });
+
+     $("#Test").dialog("widget")            
+     .find(".ui-dialog-titlebar-close") 
+     .hide(); 
+     
+
+      $( "#dialog-form" ).dialog({
+      autoOpen: false,
+      height: 400,
+      width: 350,
+      modal: true,
+      buttons: {
+      	Submit: function(){
+      	var UI = $("#partName").val();
+      	console.log(UI);
+      	 $(this).dialog("close");
+      	}
+      }
+    });
+
+
+    $( function() {
+    $( "#menu" ).menu({ 
+      disabled: true,
+      items: "> :not(.ui-widget-header)",
+      select : function(event, ui){
+
+      	var text = ui.item.text();
+      	if(text!='Other'){
+      	console.log(text);}
+      	else if(text == 'Other'){
+      	$("#dialog-form").dialog("open");
+      		}
+      	$("#menu").menu("disable");
+      	console.log($("#partName").text());
+
+      }
+    });
+  } );
+
+
+
+    </script>
+
 </body>
 
 <script>
