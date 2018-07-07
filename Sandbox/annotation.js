@@ -1,9 +1,9 @@
 paper.install(window);
 window.onload = function() { 
   paper.setup('myCanvas');
-  
-   //var newPath
+
   //Storing SVG data for JSON file in smile
+  console.log(smiley);
   var smile = smiley['svgData'];
   var c=0;
   //Sketch Display 
@@ -16,13 +16,14 @@ window.onload = function() {
 
   };
 
-  console.log("SEG", pathArray[0].segments);
-
+//Setting already clicked property of all strokes to false
   for(var i =0;i<pathArray.length;i++){
     pathArray[i].alreadyClicked =false;
   }
 
   // Attach click event handlers to every stroke (i.e., Path)
+
+  //Introducing unclickable variable to mute sketch during menu input
   var unclickable = false;
 
   _.forEach(pathArray, function(p) {
@@ -32,7 +33,7 @@ window.onload = function() {
       unclickable = true
       p.strokeColor = 'red';
       p.alreadyClicked = true;
-      testObj.sub2[c]= p;
+      testObj.SVGstring[c]= p;
       console.log(c,testObj);
      
     }}
@@ -40,7 +41,7 @@ window.onload = function() {
   _.forEach(pathArray, function(p) {
     p.onMouseEnter = function(event) {
       if(p.alreadyClicked == false && unclickable == false){
-      p.strokeColor = 'blue';
+      p.strokeColor = 'yellow';
      }
     }
 });
@@ -56,21 +57,14 @@ window.onload = function() {
 
 
 
-  //Testing objects to create final json file for export
+  //Creating object for final export of stroke and label data
   var testObj = new Object();
-  testObj.sub1 =[];
-  testObj.sub2 = [];
-  /*for (var i = 0; i<pathArray.length; i++){
-    svgstring = pathArray[i].exportSVG({asString: true})
-    var start = svgstring.indexOf('d="')+3;
-    testObj.sub2[i] = svgstring.substring(start, svgstring.indexOf('"',start))
-     }*/
-     //Checking stuff
-     //console.log(JSON.parse(JSON.stringify(testObj)));
-     
+  testObj.partlabel =[];
+  testObj.SVGstring = [];
 
+  //Code for segment level highlight, might return to this 
  
-var path;
+/*var path;
 var MasterPath = new Path();
 function onMouseDrag(event) {
     var hitResult = project.hitTestAll(event.point, hitOptions);
@@ -90,59 +84,22 @@ function onMouseDrag(event) {
 
 
   //TestPath = pathArray[2]; 
-  /*TestPath.onMouseEnter = function(event){
+  TestPath.onMouseEnter = function(event){
        newPath = new Path(TestPath.segments[0],TestPath.segments[1]);
        newPath.strokeColor = 'blue';
        newPath.strokeWidth = 8;} */  
 
 
-isfalse = function(element){
-    if(element == false){
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
- 
 
 
-  //highlight  helper functions
+  //Menu Interface
 
-  pathArray.alreadyClicked = new Array(pathArray.length);
-  pathArray.alreadyClicked.fill(false);
-
-  //Conditional statement for final version
- if(pathArray.alreadyClicked.some(isfalse) == true){
-
- }
-
-
-
-
-
+  //Disabling enter Key
   $("#dialog-form").submit(function(event) {
       event.preventDefault();
       });
-
-      $("#Test").dialog({
-      autoOpen: false,
-      modal: true,
-      show: { 
-        effect: "fade",
-        duration: 500
-      },
-      buttons : {
-        terminate: function(){
-          $(this).dialog("close");
-        },
-      }
-     });
-
-     $("#Test").dialog("widget")            
-     .find(".ui-dialog-titlebar-close") 
-     .hide(); 
      
+ //Free response text box for 'Other' Option
 
       $( "#dialog-form" ).dialog({
       autoOpen: false,
@@ -152,14 +109,14 @@ isfalse = function(element){
       buttons: {
         Submit: function(){
         var UI = $("#partName").val();
-        testObj.sub1[c]=UI
+        testObj.partlabel[c]=UI
          c++;
          $(this).dialog("close")
          if(c==pathArray.length){
         for (var i = 0; i<pathArray.length; i++){
     svgstring = pathArray[i].exportSVG({asString: true})
     var start = svgstring.indexOf('d="')+3;
-    testObj.sub2[i] = svgstring.substring(start, svgstring.indexOf('"',start))
+    testObj.SVGstring[i] = svgstring.substring(start, svgstring.indexOf('"',start))
      }
     console.log(JSON.stringify(testObj));
   }
@@ -170,7 +127,7 @@ isfalse = function(element){
 
 
 
-    $( function() {
+    
     $( "#menu" ).menu({ 
       disabled: true,
       modal: true,
@@ -180,13 +137,13 @@ isfalse = function(element){
         var text = ui.item.text();
         if(text!='Other'){
         console.log(text);
-        testObj.sub1[c]=text;
+        testObj.partlabel[c]=text;
         c++;
         if(c==pathArray.length){
           for (var i = 0; i<pathArray.length; i++){
     svgstring = pathArray[i].exportSVG({asString: true})
     var start = svgstring.indexOf('d="')+3;
-    testObj.sub2[i] = svgstring.substring(start, svgstring.indexOf('"',start))
+    testObj.SVGstring[i] = svgstring.substring(start, svgstring.indexOf('"',start))
      }
     console.log(JSON.stringify(testObj));
   }
@@ -199,40 +156,6 @@ isfalse = function(element){
 
       }
     });
-  } );
-
-
-  
-
- 
- 
-
- // // Code for click highlight
- //  pathArray[3].onClick = function(event){
- //   pathArray[3].strokeColor = 'red';
- //   pathArray.alreadyClicked[3] = true;
-    
-
- //  };
- //  //Code for hover highlight
-
-  
- //  pathArray[3].onMouseEnter = function(event){
- //  if(pathArray.alreadyClicked[3] == false){
- //    pathArray[3].strokeColor= 'blue';}
- //  };
-
-
- //  pathArray[3].onMouseLeave = function(event){
- //    // if(TestPath.strokeColor != 'red'){
- //    //   console.log(TestPath.strokeColor);
- //    //   TestPath.strokeColor = 'black';
- //    // }
- //    if(pathArray.alreadyClicked[3] == false){
- //      pathArray[3].strokeColor = 'black';
-
- //     };
- //  }; 
 
  /* function onResize(event) {
     // Whenever the window is resized, recenter the path:

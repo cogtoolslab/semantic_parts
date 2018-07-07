@@ -13,22 +13,13 @@
 <script type="text/javascript" src="js/lodash.core.min.js"></script>
 <script type="text/javascript" src="annotation.js"></script>
 <script type="text/javascript" src="../data/smiley.json"></script> 
-  <style>
-  .ui-menu { width: 200px; }
-  .ui-widget-header { padding: 0.2em; }
-  .ui-menu {
-    position: relative;
-    display: inline-block;
-    //top: 250px;
-    //left: 1020px;
-
- }
-  </style>
-
 
 </head>
 <body>
-
+<p class = "Instructions">
+	Label the parts of the sketch you see by highlighting them and selecting an appropriate label from the menu<br>
+	You can also make your own label with the "Other option"
+</p>
 <div id="dialog-form" title="Enter Part Label">
   <form>
     <fieldset>
@@ -49,7 +40,7 @@
 
 </form>
 
-	<canvas id="myCanvas" style="border: 3px solid #314DFE;" resize="true">   
+	<canvas id="myCanvas" style="border: 10px solid #314DFE;" resize="false">   
    
     </canvas>
 </body>
