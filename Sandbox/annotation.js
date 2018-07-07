@@ -16,7 +16,6 @@ window.onload = function() {
 
   };
 
-
   console.log("SEG", pathArray[0].segments);
 
   for(var i =0;i<pathArray.length;i++){
@@ -24,18 +23,20 @@ window.onload = function() {
   }
 
   // Attach click event handlers to every stroke (i.e., Path)
+  var unclickable = false;
+
   _.forEach(pathArray, function(p) {
     p.onClick = function(event) {
-      if(p.alreadyClicked==false){
-      
+      if(p.alreadyClicked==false && unclickable == false){
       $('#menu').menu("enable");
+      unclickable = true
       p.strokeColor = 'red';
       p.alreadyClicked = true;
     }}
 });
   _.forEach(pathArray, function(p) {
     p.onMouseEnter = function(event) {
-      if(p.alreadyClicked == false){
+      if(p.alreadyClicked == false && unclickable == false){
       p.strokeColor = 'blue';
      }
     }
@@ -43,10 +44,10 @@ window.onload = function() {
 
   _.forEach(pathArray, function(p){
     p.onMouseLeave = function(event) {
-      if(p.alreadyClicked == false){
+      if(p.alreadyClicked == false && unclickable == false){
       p.strokeColor = 'black'; 
     }}
-  });
+  }); 
 
 
 
@@ -119,6 +120,71 @@ isfalse = function(element){
  if(pathArray.alreadyClicked.some(isfalse) == true){
 
  }
+
+
+
+
+
+  $("#dialog-form").submit(function(event) {
+      event.preventDefault();
+      });
+
+      $("#Test").dialog({
+      autoOpen: false,
+      modal: true,
+      show: { 
+        effect: "fade",
+        duration: 500
+      },
+      buttons : {
+        terminate: function(){
+          $(this).dialog("close");
+        },
+      }
+     });
+
+     $("#Test").dialog("widget")            
+     .find(".ui-dialog-titlebar-close") 
+     .hide(); 
+     
+
+      $( "#dialog-form" ).dialog({
+      autoOpen: false,
+      height: 400,
+      width: 350,
+      modal: true,
+      buttons: {
+        Submit: function(){
+        var UI = $("#partName").val();
+        console.log(UI);
+         $(this).dialog("close");
+        }
+      }
+    });
+
+
+
+    $( function() {
+    $( "#menu" ).menu({ 
+      disabled: true,
+      modal: true,
+      items: "> :not(.ui-widget-header)",
+      select : function(event, ui){
+        unclickable = false;
+        var text = ui.item.text();
+        if(text!='Other'){
+        console.log(text);}
+        else if(text == 'Other'){
+        $("#dialog-form").dialog("open");
+          }
+        $("#menu").menu("disable");
+     
+
+      }
+    });
+  } );
+
+
  
  
 
