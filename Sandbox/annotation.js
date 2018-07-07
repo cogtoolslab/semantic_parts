@@ -5,7 +5,7 @@ window.onload = function() {
    //var newPath
   //Storing SVG data for JSON file in smile
   var smile = smiley['svgData'];
-  
+  var c=0;
   //Sketch Display 
   var pathArray = new Array;
   for (var i = 0; i< smile.length; i++) {
@@ -32,6 +32,9 @@ window.onload = function() {
       unclickable = true
       p.strokeColor = 'red';
       p.alreadyClicked = true;
+      testObj.sub2[c]= p;
+      console.log(c,testObj);
+     
     }}
 });
   _.forEach(pathArray, function(p) {
@@ -57,23 +60,16 @@ window.onload = function() {
   var testObj = new Object();
   testObj.sub1 =[];
   testObj.sub2 = [];
-  for (var i = 0; i<pathArray.length; i++){
-    testObj.sub1[i] = i;
+  /*for (var i = 0; i<pathArray.length; i++){
     svgstring = pathArray[i].exportSVG({asString: true})
     var start = svgstring.indexOf('d="')+3;
     testObj.sub2[i] = svgstring.substring(start, svgstring.indexOf('"',start))
-     }
+     }*/
      //Checking stuff
-  console.log(JSON.parse(JSON.stringify(testObj)));
-  
+     //console.log(JSON.parse(JSON.stringify(testObj)));
+     
 
-  var hitOptions = {
-    stroke: true,
-    segments: true,
-    fill: true,
-    tolerance: 1,
-};
-
+ 
 var path;
 var MasterPath = new Path();
 function onMouseDrag(event) {
@@ -156,8 +152,18 @@ isfalse = function(element){
       buttons: {
         Submit: function(){
         var UI = $("#partName").val();
-        console.log(UI);
-         $(this).dialog("close");
+        testObj.sub1[c]=UI
+         c++;
+         $(this).dialog("close")
+         if(c==pathArray.length){
+        for (var i = 0; i<pathArray.length; i++){
+    svgstring = pathArray[i].exportSVG({asString: true})
+    var start = svgstring.indexOf('d="')+3;
+    testObj.sub2[i] = svgstring.substring(start, svgstring.indexOf('"',start))
+     }
+    console.log(JSON.stringify(testObj));
+  }
+;
         }
       }
     });
@@ -173,7 +179,18 @@ isfalse = function(element){
         unclickable = false;
         var text = ui.item.text();
         if(text!='Other'){
-        console.log(text);}
+        console.log(text);
+        testObj.sub1[c]=text;
+        c++;
+        if(c==pathArray.length){
+          for (var i = 0; i<pathArray.length; i++){
+    svgstring = pathArray[i].exportSVG({asString: true})
+    var start = svgstring.indexOf('d="')+3;
+    testObj.sub2[i] = svgstring.substring(start, svgstring.indexOf('"',start))
+     }
+    console.log(JSON.stringify(testObj));
+  }
+}
         else if(text == 'Other'){
         $("#dialog-form").dialog("open");
           }
@@ -184,6 +201,8 @@ isfalse = function(element){
     });
   } );
 
+
+  
 
  
  
@@ -220,5 +239,6 @@ isfalse = function(element){
 
   }; 
   */
+
 };
 
