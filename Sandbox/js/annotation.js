@@ -1,11 +1,14 @@
 paper.install(window);
 window.onload = function() { 
   paper.setup('myCanvas');
+  var selectedArray;
 
   //Storing SVG data for JSON file in sketch
- sketchNo = 1;
+  sketchNo = 0; 
+
 
   var sketch = data[sketchNo].svgData;
+
   var c=0;
   //Sketch Display 
   var pathArray = new Array;
@@ -13,16 +16,12 @@ window.onload = function() {
     pathArray[i] = new Path(sketch[i]);
     pathArray[i].strokeColor = 'black';
     //Increasing stroke width to make it clickable
-    pathArray[i].strokeWidth = 5;
+    pathArray[i].strokeWidth = 10;
 
   };
-
-   $("#List").empty
-
-  
 //Setting already clicked property of all strokes to false
   for(var i =0;i<pathArray.length;i++){
-    pathArray[i].alreadyClicked =false;
+    pathArray[i].alreadyClicked = false;
   }
 
   // Attach click event handlers to every stroke (i.e., Path)
@@ -33,10 +32,11 @@ window.onload = function() {
   _.forEach(pathArray, function(p) {
     p.onClick = function(event) {
       if(p.alreadyClicked==false && unclickable == false){
-      $('#menu').menu("enable");
+      selectedArray=p;  
+      $('#List').menu("enable");
       unclickable = true
-      p.strokeColor = 'red';
-      p.alreadyClicked = true;
+      p.strokeColor = 'orange';
+     // p.alreadyClicked = true;
       testObj.SVGstring[c]= p;
       console.log(c,testObj);
      
@@ -100,10 +100,13 @@ function onMouseDrag(event) {
 
 
 
-     _.forEach(data[sketchNo].parts, function(p){
+    _.forEach(data[sketchNo].parts, function(p){
         var li = $("<li><div>" + p +"</div></li>" );
         li.appendTo("#List");
+
     });
+     var other = $("<li><div>" + "Other" +"</div></li>" );
+        other.appendTo("#List");
 
 
   //Disabling enter Key
@@ -118,8 +121,23 @@ function onMouseDrag(event) {
       height: 400,
       width: 350,
       modal: true,
-      buttons: {
+      buttons: 
+
+
+       
+       {
+
+          "Back": function(){
+        selectedArray.strokeColor = 'black';
+        unclickable = false;
+        $("#dialog-form").dialog("close");
+       } ,
+
         Submit: function(){
+        console.log(selectedArray);
+        selectedArray.strokeColor = 'green';
+        selectedArray.alreadyClicked = true;
+        unclickable = false;
         var UI = $("#partName").val();
         testObj.partlabel[c]=UI
          c++;
@@ -129,26 +147,33 @@ function onMouseDrag(event) {
     svgstring = pathArray[i].exportSVG({asString: true})
     var start = svgstring.indexOf('d="')+3;
     testObj.SVGstring[i] = svgstring.substring(start, svgstring.indexOf('"',start))
-     $("#List").empty
+    $("#List").empty;
+    sketchNo++;
      }
-    console.log(JSON.stringify(testObj));
+    console.log(JSON.stringify(testObj),sketchNo);
   }
 ;
         }
+      
+     
       }
     });
 
 
 
     
-     $("#List").menu();({ 
+     $("#List").menu({ 
       disabled: true,
       modal: true,
       //items: "> :not(.ui-widget-header)",
       select : function(event, ui){
-        unclickable = false;
+        //unclickable = false;
         var text = ui.item.text();
         if(text!='Other'){
+        unclickable = false;
+        selectedArray.strokeColor= 'green';
+        selectedArray.alreadyClicked=true;
+
         console.log(text);
         testObj.partlabel[c]=text;
         c++;
@@ -157,7 +182,9 @@ function onMouseDrag(event) {
     svgstring = pathArray[i].exportSVG({asString: true})
     var start = svgstring.indexOf('d="')+3;
     testObj.SVGstring[i] = svgstring.substring(start, svgstring.indexOf('"',start));
-     $("#List").empty
+      $("#List").empty;
+      sketchNo++;
+    
      }
     console.log(JSON.stringify(testObj));
   }
@@ -165,7 +192,7 @@ function onMouseDrag(event) {
         else if(text == 'Other'){
         $("#dialog-form").dialog("open");
           }
-        $("#menu").menu("disable");
+        $("#List").menu("disable");
      
 
       }
