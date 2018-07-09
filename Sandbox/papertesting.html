@@ -9,11 +9,10 @@
 </script>
 <script type="text/javascript" src="js/paper-full.min.js"></script>
 <script type="text/javascript" src="js/lodash.core.min.js"></script>
-<!--<script type="text/javascript" src="js/annotation.js"></script> -->
+<script type="text/javascript" src="js/annotation.js"></script> 
 <script type="text/javascript" src="js/lodash.core.min.js"></script>
 <script type="text/javascript" src="../data/data.json">
 </script> 
-
 </head>
 <body>
  <ul id="List"></ul>
@@ -22,16 +21,10 @@
 
  <script type="text/javascript">
 
-  console.log(data[1]["parts"]);
-  var testData = data[1];
-
-     _.forEach(testData.parts, function(p){
-        var li = $("<li><div>" + p +"</div></li>" );
-        li.appendTo("#List");
-    });
+ console.log(data[0].svgData);
 
 
- $("#List").menu();
+
   
    
 

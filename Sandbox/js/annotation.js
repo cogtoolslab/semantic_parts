@@ -2,22 +2,22 @@ paper.install(window);
 window.onload = function() { 
   paper.setup('myCanvas');
 
-  //Storing SVG data for JSON file in smile
- 
- console.log(data[1]);
-  /*var smile = smiley['svgData'];
+  //Storing SVG data for JSON file in sketch
+ sketchNo = 1;
+
+  var sketch = data[sketchNo].svgData;
   var c=0;
   //Sketch Display 
   var pathArray = new Array;
-  for (var i = 0; i< smile.length; i++) {
-    pathArray[i] = new Path(smile[i]);
+  for (var i = 0; i< sketch.length; i++) {
+    pathArray[i] = new Path(sketch[i]);
     pathArray[i].strokeColor = 'black';
     //Increasing stroke width to make it clickable
     pathArray[i].strokeWidth = 5;
 
-  };*/
+  };
 
-  
+   $("#List").empty
 
   
 //Setting already clicked property of all strokes to false
@@ -98,6 +98,14 @@ function onMouseDrag(event) {
 
   //Menu Interface
 
+
+
+     _.forEach(data[sketchNo].parts, function(p){
+        var li = $("<li><div>" + p +"</div></li>" );
+        li.appendTo("#List");
+    });
+
+
   //Disabling enter Key
   $("#dialog-form").submit(function(event) {
       event.preventDefault();
@@ -121,6 +129,7 @@ function onMouseDrag(event) {
     svgstring = pathArray[i].exportSVG({asString: true})
     var start = svgstring.indexOf('d="')+3;
     testObj.SVGstring[i] = svgstring.substring(start, svgstring.indexOf('"',start))
+     $("#List").empty
      }
     console.log(JSON.stringify(testObj));
   }
@@ -131,11 +140,11 @@ function onMouseDrag(event) {
 
 
 
-    /*
-    $( "#menu" ).menu({ 
+    
+     $("#List").menu();({ 
       disabled: true,
       modal: true,
-      items: "> :not(.ui-widget-header)",
+      //items: "> :not(.ui-widget-header)",
       select : function(event, ui){
         unclickable = false;
         var text = ui.item.text();
@@ -147,7 +156,8 @@ function onMouseDrag(event) {
           for (var i = 0; i<pathArray.length; i++){
     svgstring = pathArray[i].exportSVG({asString: true})
     var start = svgstring.indexOf('d="')+3;
-    testObj.SVGstring[i] = svgstring.substring(start, svgstring.indexOf('"',start))
+    testObj.SVGstring[i] = svgstring.substring(start, svgstring.indexOf('"',start));
+     $("#List").empty
      }
     console.log(JSON.stringify(testObj));
   }
@@ -160,7 +170,7 @@ function onMouseDrag(event) {
 
       }
     });
-    */
+    
 
  /* function onResize(event) {
     // Whenever the window is resized, recenter the path:
