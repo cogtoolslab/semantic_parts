@@ -3,8 +3,9 @@ window.onload = function() {
   paper.setup('myCanvas');
 
   //Storing SVG data for JSON file in smile
-  console.log(smiley);
-  var smile = smiley['svgData'];
+ 
+ console.log(data[1]);
+  /*var smile = smiley['svgData'];
   var c=0;
   //Sketch Display 
   var pathArray = new Array;
@@ -14,8 +15,11 @@ window.onload = function() {
     //Increasing stroke width to make it clickable
     pathArray[i].strokeWidth = 5;
 
-  };
+  };*/
 
+  
+
+  
 //Setting already clicked property of all strokes to false
   for(var i =0;i<pathArray.length;i++){
     pathArray[i].alreadyClicked =false;
@@ -127,7 +131,7 @@ function onMouseDrag(event) {
 
 
 
-    
+    /*
     $( "#menu" ).menu({ 
       disabled: true,
       modal: true,
@@ -156,6 +160,7 @@ function onMouseDrag(event) {
 
       }
     });
+    */
 
  /* function onResize(event) {
     // Whenever the window is resized, recenter the path:

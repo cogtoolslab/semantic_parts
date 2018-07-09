@@ -9,13 +9,35 @@
 </script>
 <script type="text/javascript" src="js/paper-full.min.js"></script>
 <script type="text/javascript" src="js/lodash.core.min.js"></script>
-<script type="text/javascript" src="annotation.js"></script>
+<!--<script type="text/javascript" src="js/annotation.js"></script> -->
 <script type="text/javascript" src="js/lodash.core.min.js"></script>
-<script type="text/javascript" src="annotation.js"></script>
-<script type="text/javascript" src="../data/smiley.json"></script> 
+<script type="text/javascript" src="../data/data.json">
+</script> 
 
 </head>
 <body>
+ <ul id="List"></ul>
+
+
+
+ <script type="text/javascript">
+
+  console.log(data[1]["parts"]);
+  var testData = data[1];
+
+     _.forEach(testData.parts, function(p){
+        var li = $("<li><div>" + p +"</div></li>" );
+        li.appendTo("#List");
+    });
+
+
+ $("#List").menu();
+  
+   
+
+
+
+ </script> 
 <p class = "Instructions">
 	Label the parts of the sketch you see by highlighting them and selecting an appropriate label from the menu<br>
 	You can also make your own label with the "Other" option
@@ -31,14 +53,14 @@
   </form>
 </div>
  
- <form id="menu">
+ <!--<form id="menu">
   <li class="ui-widget-header"><div>Options</div></li>
   <li><div>Face</div></li>
   <li><div>Mouth</div></li>
   <li><div>Eye</div></li>
   <li><div>Other</div></li>
 
-</form>
+</form>-->
 
 	<canvas id="myCanvas" style="border: 10px solid #314DFE;" resize="false">   
    

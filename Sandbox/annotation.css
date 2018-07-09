@@ -7,6 +7,11 @@ body {
     height: 100%;
     }
 
+  .ui-dialog-titlebar-close {
+  display: none;
+}
+
+
   p.Instructions{
     text-align: center;
     color: red;
