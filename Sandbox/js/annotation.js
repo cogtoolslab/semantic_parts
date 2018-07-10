@@ -1,11 +1,13 @@
 paper.install(window);
 window.onload = function() { 
   paper.setup('myCanvas');
-  var selectedArray;
+  
 
   //Storing SVG data for JSON file in sketch
   sketchNo = 0; 
-
+var dict = [];
+  var results = [];
+  var selectedArray;
 
   var sketch = data[sketchNo].svgData;
 
@@ -37,8 +39,8 @@ window.onload = function() {
       unclickable = true
       p.strokeColor = 'orange';
      // p.alreadyClicked = true;
-      testObj.SVGstring[c]= p;
-      console.log(c,testObj);
+     //testObj.SVGstring[c]= p;
+  
      
     }}
 });
@@ -62,9 +64,9 @@ window.onload = function() {
 
 
   //Creating object for final export of stroke and label data
-  var testObj = new Object();
-  testObj.partlabel =[];
-  testObj.SVGstring = [];
+  //var testObj = new Object();
+  //testObj.partlabel =[];
+  //testObj.SVGstring = [];
 
   //Code for segment level highlight, might return to this 
  
@@ -139,18 +141,21 @@ function onMouseDrag(event) {
         selectedArray.alreadyClicked = true;
         unclickable = false;
         var UI = $("#partName").val();
-        testObj.partlabel[c]=UI
+        svgstring = selectedArray.exportSVG({asString: true});
+        var start = svgstring.indexOf('d="')+3;
+        dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
+                   "label": UI});
+      
+        //testObj.partlabel[c]=UI
          c++;
          $(this).dialog("close")
          if(c==pathArray.length){
-        for (var i = 0; i<pathArray.length; i++){
-    svgstring = pathArray[i].exportSVG({asString: true})
-    var start = svgstring.indexOf('d="')+3;
-    testObj.SVGstring[i] = svgstring.substring(start, svgstring.indexOf('"',start))
+         var category = data[sketchNo].category
+
+         results = JSON.parse(category+":"+dict );
     $("#List").empty;
+    console.log(results);
     sketchNo++;
-     }
-    console.log(JSON.stringify(testObj),sketchNo);
   }
 ;
         }
@@ -175,18 +180,23 @@ function onMouseDrag(event) {
         selectedArray.alreadyClicked=true;
 
         console.log(text);
-        testObj.partlabel[c]=text;
+        //testObj.partlabel[c]=text;
+        svgstring = selectedArray.exportSVG({asString: true});
+        var start = svgstring.indexOf('d="')+3;
+        dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
+                   "label": text});
         c++;
         if(c==pathArray.length){
-          for (var i = 0; i<pathArray.length; i++){
-    svgstring = pathArray[i].exportSVG({asString: true})
-    var start = svgstring.indexOf('d="')+3;
-    testObj.SVGstring[i] = svgstring.substring(start, svgstring.indexOf('"',start));
+          var category = data[sketchNo].category;
+
+          var tempObj={};
+          tempObj[category] = dict;
+         results.push(tempObj);
+         results = JSON.stringify(results)
+    console.log(results);
+    console.log(JSON.parse(results)[0].smiley);
       $("#List").empty;
       sketchNo++;
-    
-     }
-    console.log(JSON.stringify(testObj));
   }
 }
         else if(text == 'Other'){
