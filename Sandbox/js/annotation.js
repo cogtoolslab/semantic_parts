@@ -179,7 +179,14 @@ window.onload = function() {
     $("#List").empty;
     console.log(results);
     sketchNo++;
-    display();
+     
+      c=0;
+      project.activeLayer.removeChildren();
+      paper.view.draw();
+      //display();
+      if(sketchNo<data.length){
+      $("#List").menu("destroy");
+      trial();}
   }
 ;
         }
