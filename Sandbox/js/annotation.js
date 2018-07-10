@@ -5,15 +5,16 @@ window.onload = function() {
 
   //Storing SVG data for JSON file in sketch
   sketchNo = 0; 
-var dict = [];
+  var dict = [];
   var results = [];
   var selectedArray;
 
   var sketch = data[sketchNo].svgData;
-
+  var pathArray;
   var c=0;
   //Sketch Display 
-  var pathArray = new Array;
+  var display = function display(){
+  pathArray = new Array;
   for (var i = 0; i< sketch.length; i++) {
     pathArray[i] = new Path(sketch[i]);
     pathArray[i].strokeColor = 'black';
@@ -25,7 +26,9 @@ var dict = [];
   for(var i =0;i<pathArray.length;i++){
     pathArray[i].alreadyClicked = false;
   }
+  }
 
+  display();
   // Attach click event handlers to every stroke (i.e., Path)
 
   //Introducing unclickable variable to mute sketch during menu input
@@ -150,12 +153,18 @@ function onMouseDrag(event) {
          c++;
          $(this).dialog("close")
          if(c==pathArray.length){
-         var category = data[sketchNo].category
+          var category = data[sketchNo].category;
 
-         results = JSON.parse(category+":"+dict );
+          var tempObj={};
+          tempObj[category] = dict;
+         results.push(tempObj);
+         results = JSON.stringify(results)
+    console.log(results);
+    console.log(JSON.parse(results)[0].smiley);
     $("#List").empty;
     console.log(results);
     sketchNo++;
+    display();
   }
 ;
         }
@@ -188,7 +197,6 @@ function onMouseDrag(event) {
         c++;
         if(c==pathArray.length){
           var category = data[sketchNo].category;
-
           var tempObj={};
           tempObj[category] = dict;
          results.push(tempObj);
@@ -197,6 +205,8 @@ function onMouseDrag(event) {
     console.log(JSON.parse(results)[0].smiley);
       $("#List").empty;
       sketchNo++;
+      sketch = data[sketchNo].svgData;
+      display();
   }
 }
         else if(text == 'Other'){
