@@ -12,6 +12,7 @@ var selectedArray;
 var sketch;
 var pathArray;
 var c;
+var timeClicked;
 
   //calling the first trial by default
   trial();
@@ -22,6 +23,7 @@ var c;
   //Also contains handlers for highlight and click highlight events
 
   function display(){
+    //displaying the indexed sketch through SVG data
     var sketch = data[sketchNo].svgData;
     pathArray = new Array;
     for (var i = 0; i< sketch.length; i++) {
@@ -30,40 +32,40 @@ var c;
     //Increasing stroke width to make it clickable
     pathArray[i].strokeWidth = 10;
 
-
-    _.forEach(pathArray, function(p) {
-      p.onClick = function(event) {
-        if(p.alreadyClicked==false && unclickable == false){
-          selectedArray=p;  
-          $('#List').menu("enable");
-          unclickable = true
-          p.strokeColor = 'orange';
+   //Click and Hover event handlers
+   _.forEach(pathArray, function(p) {
+    p.onClick = function(event) {
+      if(p.alreadyClicked==false && unclickable == false){
+        selectedArray=p;  
+        timeClicked = Math.floor(Date.now() / 1000);
+        $('#List').menu("enable");
+        unclickable = true
+        p.strokeColor = 'orange';
      // p.alreadyClicked = true;
      //testObj.SVGstring[c]= p;
 
      
    }}
  });
-    _.forEach(pathArray, function(p) {
-      p.onMouseEnter = function(event) {
-        console.log("ENTERED");
-        if(p.alreadyClicked == false && unclickable == false){
-          p.strokeColor = 'yellow';
-        }
+   _.forEach(pathArray, function(p) {
+    p.onMouseEnter = function(event) {
+      console.log("ENTERED");
+      if(p.alreadyClicked == false && unclickable == false){
+        p.strokeColor = 'yellow';
       }
-    });
+    }
+  });
 
-    _.forEach(pathArray, function(p){
-      p.onMouseLeave = function(event) {
-        if(p.alreadyClicked == false && unclickable == false){
-          p.strokeColor = 'black'; 
-        }}
-      }); 
+   _.forEach(pathArray, function(p){
+    p.onMouseLeave = function(event) {
+      if(p.alreadyClicked == false && unclickable == false){
+        p.strokeColor = 'black'; 
+      }}
+    }); 
 
-  };
-//Setting already clicked property of all strokes to false
-for(var i =0;i<pathArray.length;i++){
+  //Setting already clicked property of all strokes to false
   pathArray[i].alreadyClicked = false;
+
 };
 }
 
@@ -80,46 +82,44 @@ for(var i =0;i<pathArray.length;i++){
     var other = $("<li><div>" + "Other" +"</div></li>" );
     other.appendTo("#List");}
 
-   //Function for creating menu widget from the list created by listgen()
+   //Function for creating menu and free response box widgets from the list created by listgen()
 
    function menugen(){
-     $("#dialog-form").submit(function(event) {
+
+    //disabling enter key submit 
+    $("#dialog-form").submit(function(event) {
       event.preventDefault();
     });
-     
 
+     //Populating the menu
      
      $("#List").menu({ 
       disabled: true,
       modal: true,
       //items: "> :not(.ui-widget-header)",
       select : function(event, ui){
-
         var text = ui.item.text();
         if(text!='Other'){
           unclickable = false;
           selectedArray.strokeColor= 'green';
           selectedArray.alreadyClicked=true;
-
-          console.log(text);
-        //testObj.partlabel[c]=text;
-        svgstring = selectedArray.exportSVG({asString: true});
-        var start = svgstring.indexOf('d="')+3;
-        dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-         "label": text});
-        c++;
-        if(c==pathArray.length){
-          var category = data[sketchNo].category;
-          var tempObj={};
-          tempObj[category] = dict;
-          results.push(tempObj);
-          results = JSON.stringify(results)
-          console.log(results);
-          console.log(JSON.parse(results)[0].smiley);
-          sketchNo++;
-          c=0;
-          project.activeLayer.removeChildren();
-          paper.view.draw();
+          svgstring = selectedArray.exportSVG({asString: true});
+          var start = svgstring.indexOf('d="')+3;
+          dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
+           "label": text, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000)});
+          c++;
+          if(c==pathArray.length){
+            var category = data[sketchNo].category;
+            var tempObj={};
+            tempObj[category] = dict;
+            results.push(tempObj);
+            results = JSON.stringify(results)
+            console.log(results);
+            console.log(JSON.parse(results)[0].smiley);
+            sketchNo++;
+            c=0;
+            project.activeLayer.removeChildren();
+            paper.view.draw();
       //display();
       if(sketchNo<data.length){
         $("#List").menu("destroy");
@@ -135,74 +135,55 @@ for(var i =0;i<pathArray.length;i++){
   }
 });
 
+  //Free response dialog box 
 
-     $( "#dialog-form" ).dialog({
-      autoOpen: false,
-      height: 400,
-      width: 350,
-      modal: true,
-      buttons: 
+  $( "#dialog-form" ).dialog({
+    autoOpen: false,
+    height: 400,
+    width: 350,
+    modal: true,
+    buttons: 
+    {
 
+      "Back": function(){
+        selectedArray.strokeColor = 'black';
+        unclickable = false;
+        $("#dialog-form").dialog("close");
+      } ,
 
-
-      {
-
-        "Back": function(){
-          selectedArray.strokeColor = 'black';
-          unclickable = false;
-          $("#dialog-form").dialog("close");
-        } ,
-
-        Submit: function(){
-          console.log(selectedArray);
-          selectedArray.strokeColor = 'green';
-          selectedArray.alreadyClicked = true;
-          unclickable = false;
-          var UI = $("#partName").val();
-          svgstring = selectedArray.exportSVG({asString: true});
-          var start = svgstring.indexOf('d="')+3;
-          dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-           "label": UI});
-
-        //testObj.partlabel[c]=UI
+      Submit: function(){
+        console.log(selectedArray);
+        selectedArray.strokeColor = 'green';
+        selectedArray.alreadyClicked = true;
+        unclickable = false;
+        var UI = $("#partName").val();
+        svgstring = selectedArray.exportSVG({asString: true});
+        var start = svgstring.indexOf('d="')+3;
+        dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
+         "label": UI, "Time clicked" : timeClicked,  "Time labeled": Math.floor(Date.now() / 1000)});
         c++;
         $(this).dialog("close")
         if(c==pathArray.length){
           var category = data[sketchNo].category;
-
           var tempObj={};
           tempObj[category] = dict;
           results.push(tempObj);
           results = JSON.stringify(results)
           console.log(results);
-          console.log(JSON.parse(results)[0].smiley);
-          $("#List").empty;
-          console.log(results);
           sketchNo++;
-
           c=0;
           project.activeLayer.removeChildren();
           paper.view.draw();
-      //display();
-      if(sketchNo<data.length){
-        $("#List").menu("destroy");
-        trial();}
+
+          if(sketchNo<data.length){
+            $("#List").menu("destroy");
+            trial();}
+          }
+          ;
+        }
       }
-      ;
-    }
-
-
-  }
-});
-
-
-
-
-   }    
-
-
-
-
+    });
+}    
 
   //Generating trials using helper functions
 
@@ -214,11 +195,11 @@ for(var i =0;i<pathArray.length;i++){
     pathArray;
     c=0;
 
-  display();
-  listgen();
-  menugen();
+    display();
+    listgen();
+    menugen();
 
-}
+  }
 
   //Code for segment level highlight, might return to this 
 
