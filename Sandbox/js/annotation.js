@@ -30,7 +30,7 @@ var timeClicked;
       pathArray[i] = new Path(sketch[i]);
       pathArray[i].strokeColor = 'black';
     //Increasing stroke width to make it clickable
-    pathArray[i].strokeWidth = 10;
+    pathArray[i].strokeWidth = 5;
 
    //Click and Hover event handlers
    _.forEach(pathArray, function(p) {
