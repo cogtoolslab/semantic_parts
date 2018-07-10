@@ -5,6 +5,7 @@ window.onload = function() {
 //initializing global vars
 
 var sketchNo = 0; 
+var Complete = false;
 var unclickable = false;
 var dict;
 var results;
@@ -13,6 +14,12 @@ var sketch;
 var pathArray;
 var c;
 var timeClicked;
+
+
+   $("#Complete").dialog({
+    autoOpen:false,
+    height: 400,
+    width: 350});
 
   //calling the first trial by default
   trial();
@@ -115,7 +122,6 @@ var timeClicked;
             results.push(tempObj);
             results = JSON.stringify(results)
             console.log(results);
-            console.log(JSON.parse(results)[0].smiley);
             sketchNo++;
             c=0;
             project.activeLayer.removeChildren();
@@ -123,7 +129,10 @@ var timeClicked;
       //display();
       if(sketchNo<data.length){
         $("#List").menu("destroy");
-        trial();}
+        trial();} else {
+            $("#List").menu("destroy");
+            $("#Complete").dialog("open");
+          }
       }
     }
     else if(text == 'Other'){
@@ -134,6 +143,7 @@ var timeClicked;
 
   }
 });
+
 
   //Free response dialog box 
 
@@ -177,7 +187,10 @@ var timeClicked;
 
           if(sketchNo<data.length){
             $("#List").menu("destroy");
-            trial();}
+            trial();} else if(sketchNo==data.length){
+            $("#List").menu("destroy");
+            $("#Complete").dialog("open");
+          }
           }
           ;
         }
