@@ -1,9 +1,6 @@
-paper.install(window);
-window.onload = function() { 
-  paper.setup('myCanvas');
-
-//initializing global vars
-
+//change highlight colors to correspond to menu items
+//check for reloads
+//dialog flexibility
 var sketchNo = 0; 
 var Complete = false;
 var unclickable = false;
@@ -15,11 +12,35 @@ var pathArray;
 var c;
 var timeClicked;
 
+paper.install(window);
+window.onload = function() { 
+  paper.setup('myCanvas');
+
+//initializing global vars
+
+
+
 
    $("#Complete").dialog({
     autoOpen:false,
-    height: 400,
-    width: 350});
+    height: 200,
+    width: 200});
+
+   /* $("#reset").dialog({
+    autoOpen: false,
+    height: 300,
+    width: 300,
+
+    buttons:{
+      "Yes": function(){
+        selectedArray.strokeColor= 'black'; 
+        selectedArray.alreadyClicked = false;
+      }
+
+    },
+    {"No":
+  }
+   }); */
 
   //calling the first trial by default
   trial();
@@ -37,7 +58,7 @@ var timeClicked;
       pathArray[i] = new Path(sketch[i]);
       pathArray[i].strokeColor = 'black';
     //Increasing stroke width to make it clickable
-    pathArray[i].strokeWidth = 5;
+    pathArray[i].strokeWidth = 8;
 
    //Click and Hover event handlers
    _.forEach(pathArray, function(p) {
@@ -52,7 +73,10 @@ var timeClicked;
      //testObj.SVGstring[c]= p;
 
      
-   }}
+   }else if(p.alreadyClicked==true && unclickable==false){
+    $("#reset").dialog("open");
+        
+      }}
  });
    _.forEach(pathArray, function(p) {
     p.onMouseEnter = function(event) {
