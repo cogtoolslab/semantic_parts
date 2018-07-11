@@ -1,22 +1,7 @@
-
-
-jsPsych.plugins['part_annotation'] = (function(){
-
-  var plugin = {};
-
-  plugin.info = {
-    name: 'part_annotation',
-    parameters: {
-    }
-  }
-plugin.trial = function(display_element, trial) {
-//paper.install(window);
-window.onload = function() {
-display_element.innerHTML += '<div><canvas id="myCanvas" style="border: 0px solid #314DFE;" display = "block" width= "300px" height= "300px" resize="false" ></canvas> <ul id="List"></ul><div id="dialog-form" title="Enter Part Label"><form><fieldset><label for="partName">Part Name</label><input type="text" name="partName" id="partName" placeholder="Type your part label here" class="text ui-widget-content ui-corner-all"><!-- Allow form submission with keyboard without duplicating the dialog button --><input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset></form></div></div>'; 
-paper.setup('myCanvas');
-
-
-//var sketchNo = 0; 
+//change highlight colors to correspond to menu items
+//check for reloads
+//dialog flexibility
+var sketchNo = 0; 
 var Complete = false;
 var unclickable = false;
 var dict;
@@ -27,31 +12,47 @@ var pathArray;
 var c;
 var timeClicked;
 
+paper.install(window);
+window.onload = function() { 
+  paper.setup('myCanvas');
 
-
- var end_trial = function() {
-
-
-      // gather the data to store for the trial
-      var trial_data = {
-        //"rt": response.rt,
-        //"stimulus": trial.stimulus,
-        //"key_press": response.key
-      };
-
-      // clear the display
-      display_element.innerHTML = '';
-
-      // move on to the next trial
-      jsPsych.finishTrial(trial_data);
-    };
+//initializing global vars
 
 
 
+
+   $("#Complete").dialog({
+    autoOpen:false,
+    height: 200,
+    width: 200});
+
+   /* $("#reset").dialog({
+    autoOpen: false,
+    height: 300,
+    width: 300,
+
+    buttons:{
+      "Yes": function(){
+        selectedArray.strokeColor= 'black'; 
+        selectedArray.alreadyClicked = false;
+      }
+
+    },
+    {"No":
+  }
+   }); */
+
+  //calling the first trial by default
+  trial();
+
+  //Main Functions
+
+  //This retrieves SVG data and presents the sketch on the canvas
+  //Also contains handlers for highlight and click highlight events
 
   function display(){
     //displaying the indexed sketch through SVG data
-    var sketch = trial.svgData;  //CHANGES var sketch = data[sketchNo].svgData;
+    var sketch = data[sketchNo].svgData;
     pathArray = new Array;
     for (var i = 0; i< sketch.length; i++) {
       pathArray[i] = new Path(sketch[i]);
@@ -68,16 +69,15 @@ var timeClicked;
         $('#List').menu("enable");
         unclickable = true
         p.strokeColor = 'orange';
-        p.alreadyClicked = true;
+     // p.alreadyClicked = true;
      //testObj.SVGstring[c]= p;
 
      
-   }
-  // else if(p.alreadyClicked==true && unclickable==false){
-  // $("#reset").dialog("open");}
-  }
+   }else if(p.alreadyClicked==true && unclickable==false){
+    $("#reset").dialog("open");
+        
+      }}
  });
-
    _.forEach(pathArray, function(p) {
     p.onMouseEnter = function(event) {
       console.log("ENTERED");
@@ -101,10 +101,11 @@ var timeClicked;
 }
 
 
+  //Function for creating lists in HTML from dictionary for menu widget
 
- function listgen(){
+  function listgen(){
     $("#List").empty();
-    _.forEach(trial.parts, function(p){
+    _.forEach(data[sketchNo].parts, function(p){
       var li = $("<li><div>" + p +"</div></li>" );
       li.appendTo("#List");
 
@@ -139,27 +140,23 @@ var timeClicked;
            "label": text, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000)});
           c++;
           if(c==pathArray.length){
-            var category = trial.category;
+            var category = data[sketchNo].category;
             var tempObj={};
             tempObj[category] = dict;
             results.push(tempObj);
             results = JSON.stringify(results)
             console.log(results);
-            //sketchNo++;
-            //c=0;
-            //project.activeLayer.removeChildren();
-            //paper.view.draw();
-                  end_trial();
+            sketchNo++;
+            c=0;
+            project.activeLayer.removeChildren();
+            paper.view.draw();
       //display();
-
-      //if(sketchNo<trial.length){
-      //  $("#List").menu("destroy");
-      //  trial();} else {
-      //      $("#List").menu("destroy");
-      //      $("#Complete").dialog("open");
-      //   }
-
-
+      if(sketchNo<data.length){
+        $("#List").menu("destroy");
+        trial();} else {
+            $("#List").menu("destroy");
+            $("#Complete").dialog("open");
+          }
       }
     }
     else if(text == 'Other'){
@@ -201,41 +198,70 @@ var timeClicked;
         c++;
         $(this).dialog("close")
         if(c==pathArray.length){
-          var category = trial.category;
+          var category = data[sketchNo].category;
           var tempObj={};
           tempObj[category] = dict;
           results.push(tempObj);
           results = JSON.stringify(results)
           console.log(results);
-          //c=0;
-          //project.activeLayer.removeChildren();
-          //paper.view.draw();
-          end_trial();
+          sketchNo++;
+          c=0;
+          project.activeLayer.removeChildren();
+          paper.view.draw();
 
-         // if(sketchNo<trial.length){
-         //   $("#List").menu("destroy");
-         //   trial();} else if(sketchNo==trial.length){
-         //   $("#List").menu("destroy");
-         //   $("#Complete").dialog("open");
-         // }
+          if(sketchNo<data.length){
+            $("#List").menu("destroy");
+            trial();} else if(sketchNo==data.length){
+            $("#List").menu("destroy");
+            $("#Complete").dialog("open");
+          }
           }
           ;
         }
       }
     });
 }    
-}
 
+  //Generating trials using helper functions
 
+  function trial(){
+    dict = [];
+    results = [];
+    selectedArray;
+    sketch;
+    pathArray;
+    c=0;
 
+    display();
+    listgen();
+    menugen();
 
+  }
 
+  //Code for segment level highlight, might return to this 
 
+/*var path;
+var MasterPath = new Path();
+function onMouseDrag(event) {
+    var hitResult = project.hitTestAll(event.point, hitOptions);
+    console.log('hitResult (' + hitResult.length + ')' , hitResult);
+    if(hitResult){
+    path = new Path({segments: hitResult});
+    MasterPath = MasterPath.unite(path);
+    MasterPath.strokeColor = 'yellow';
+    MasterPath.strokeWidth = 5;
+    console.log("MP",MasterPath._children);
+    //console.log(MasterPath.exportSVG({asString: true}))
 
+    } else {
+    console.log("Oops")
+  }
+}}
+ function onResize(event) {
+    // Whenever the window is resized, recenter the path:
 
-}
- return plugin;
-}
-)();
+  }; 
+  */
 
- 
+};
+
