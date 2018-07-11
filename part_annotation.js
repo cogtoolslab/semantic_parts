@@ -17,15 +17,15 @@ paper.setup('myCanvas');
 
 
 //var sketchNo = 0; 
-var Complete = false;
 var unclickable = false;
-var dict;
-var results;
+var dict=[];
+var results=[];
 var selectedArray;
 var sketch;
 var pathArray;
-var c;
+var c=0;
 var timeClicked;
+var timeLabeled;
 
 
 
@@ -44,6 +44,7 @@ var timeClicked;
 
       // move on to the next trial
       jsPsych.finishTrial(trial_data);
+      jsPsych.pauseExperiment();
     };
 
 
@@ -147,8 +148,8 @@ var timeClicked;
             console.log(results);
             //sketchNo++;
             //c=0;
-            //project.activeLayer.removeChildren();
-            //paper.view.draw();
+            project.activeLayer.removeChildren();
+            paper.view.draw();
                   end_trial();
       //display();
 
@@ -208,8 +209,8 @@ var timeClicked;
           results = JSON.stringify(results)
           console.log(results);
           //c=0;
-          //project.activeLayer.removeChildren();
-          //paper.view.draw();
+          project.activeLayer.removeChildren();
+          paper.view.draw();
           end_trial();
 
          // if(sketchNo<trial.length){
