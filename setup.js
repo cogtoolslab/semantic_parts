@@ -11,7 +11,7 @@ function setupExp(){
   var socket = io.connect();
 
   socket.on('onConnected', function(d) {
-    var numTrials = d.numTrials;
+    var numTrials = d.num_trials;
     var id = d.id;
     console.log(d);
 
