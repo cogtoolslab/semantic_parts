@@ -97,7 +97,7 @@ function sendStim(socket, data) {
       console.log(`error getting stims: ${error} ${body}`);
       console.log(`falling back to local stimList`);
       socket.emit('stimulus', {
-        stim: _.sampleSize(require('./sketchpad_basic_recog_meta.js'), 1)
+        stim: _.sampleSize(require('./data/data.json'), 1)
       });
     }
   });
