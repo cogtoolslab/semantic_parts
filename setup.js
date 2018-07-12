@@ -54,6 +54,7 @@ function setupExp(){
     };
 
     var main_on_start = function(trial) {
+      console.log("main on star being called");
       oldCallback = newCallback;
 
       var newCallback = function(d) {
@@ -65,7 +66,6 @@ function setupExp(){
 
 	console.log('trial after:')
 	console.log(trial);
-
 	// trial.svgData = d.svgData;
     	// parts: data[i].parts,
     	// category: data[i].category
