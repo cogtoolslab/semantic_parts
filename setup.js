@@ -13,6 +13,7 @@ function setupExp(){
   socket.on('onConnected', function(d) {
     var numTrials = d.numTrials;
     var id = d.id;
+    console.log(d);
 
     var tmp = {
       type: 'part_annotation',
