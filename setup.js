@@ -56,13 +56,15 @@ function setupExp(){
     var main_on_start = function(trial) {
       console.log("main on star being called");
       oldCallback = newCallback;
-      jsPsych.pauseExperiment();
       var newCallback = function(d) {
-	console.log('data')
-	console.log(d);
-	console.log('trial before:')
-	console.log(trial);
-	_.extend(trial, d);
+	// console.log('data')
+	// console.log(d);
+	// console.log('trial before:')
+	// console.log(trial);
+	trial.svgData = d.svgData;
+	trial.parts = d.parts;
+	trial.category = d.category;
+	//_.extend(trial, d);
 
 	console.log('trial after:')
 	console.log(trial);
@@ -90,14 +92,11 @@ function setupExp(){
     }
 
     console.log(trials);
+    jsPsych.pauseExperiment();
     jsPsych.init({
       timeline: trials,
       default_iti: 5000,
       show_progress_bar: true
     });
-
-
-  
-    
   });
 }
