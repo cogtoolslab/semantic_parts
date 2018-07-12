@@ -45,7 +45,6 @@ jsPsych.plugins['part_annotation'] = (function(){
 
       // move on to the next trial
       jsPsych.finishTrial(trial_data);
-      jsPsych.pauseExperiment();
     };
 
     function display(){

@@ -56,7 +56,7 @@ function setupExp(){
     var main_on_start = function(trial) {
       console.log("main on star being called");
       oldCallback = newCallback;
-
+      jsPsych.pauseExperiment();
       var newCallback = function(d) {
 	console.log('data')
 	console.log(d);
