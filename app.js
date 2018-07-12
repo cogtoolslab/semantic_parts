@@ -83,7 +83,7 @@ var UUID = function() {
 };
 
 function sendStim(socket, data) {
-  sendPostRequest('http://localhost:6000/db/getstims', {
+  sendPostRequest('http://localhost:6001/db/getstims', {
     json: {
       dbname: 'stimuli',
       colname: 'svg_annotation_demo',
@@ -105,7 +105,7 @@ function sendStim(socket, data) {
 
 var writeDataToMongo = function(data) {
   sendPostRequest(
-    'http://localhost:6000/db/insert',
+    'http://localhost:6001/db/insert',
     { json: data },
     (error, res, body) => {
       if (!error && res.statusCode === 200) {
