@@ -1,11 +1,16 @@
 html,
 body {
 
-    
+    background-color: black;
     margin: 0;
     overflow: hidden;
     height: 100%;
     }
+
+
+  .ui-dialog-titlebar-close {
+  display: none;
+}
 
   p.Instructions{
     text-align: center;
@@ -18,10 +23,10 @@ body {
   .ui-menu { width: 200px; }
   .ui-widget-header { padding: 0.2em; }
   .ui-menu {
-    position: relative;
+    position: fixed;
     display: inline-block;
     top: 250px;
-    left: 950px;
+    left: 880px;
 }
 
  
@@ -33,6 +38,6 @@ body {
     margin-left: auto;
     margin-right: auto;
     display: block;
-    width: 30%;
-    height: 50%;
+    width: 300px;
+    height: 300px;
   };
