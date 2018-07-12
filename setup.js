@@ -1,68 +1,102 @@
+var oldCallback;
 
 function sendData() {
-	console.log('sending data to mturk');
-	jsPsych.turk.submitToTurk({});
+  console.log('sending data to mturk');
+  jsPsych.turk.submitToTurk({});
 }
 
 var data = data;
 
-
-var tmp = {
-	type: 'part_annotation',
-	iterationName: 'pilot0',
-	num_trials: data.length
-};
-
-
-var trials = new Array(tmp.num_trials + 2);
-
 function setupExp(){
+  var socket = io.connect();
 
-	consentHTML = {
-		'str1' : '<p> Hey do you want to do this?</p>' }
-    instructionsHTML = {
-    	'str1' :'<p> Annotate stuff for us please</p>' }
+  socket.on('onConnected', function(d) {
+    var numTrials = d.numTrials;
+    var id = d.id;
 
-    	var intro = {
-    		type: 'instructions',
-    		pages: [
-    		consentHTML.str1,
-    		instructionsHTML.str1
-    		],
-    		show_clickable_nav: true
-    	}
+    var tmp = {
+      type: 'part_annotation',
+      iterationName: 'pilot0',
+      num_trials: numTrials
+    };
 
-    	var goodbye = {
-    		type: 'instructions',
-    		pages: [
-    		'Thanks for participating in our experiment! You are all done. Please click the button to submit this HIT.'
-    		],
-    		show_clickable_nav: true,
-    		on_finish: function() { sendData();}
-    	}
+    var trials = new Array(tmp.num_trials + 2);
+    
+    var consentHTML = {
+      'str1' : '<p> Hey do you want to do this?</p>' };
+    var instructionsHTML = {
+      'str1' :'<p> Annotate stuff for us please</p>' };
 
-    	trials[0] = intro;
-    	trials[tmp.num_trials +1] = goodbye;
+    var intro = {
+      type: 'instructions',
+      pages: [
+    	consentHTML.str1,
+    	instructionsHTML.str1
+      ],
+      show_clickable_nav: true
+    };
+    
+    var goodbye = {
+      type: 'instructions',
+      pages: [
+    	'Thanks for participating in our experiment! You are all done. Please click the button to submit this HIT.'
+      ],
+      show_clickable_nav: true,
+      on_finish: function() { sendData();}
+    };
 
-    	for(var i = 0; i< tmp.num_trials; i++){
-            var k = i+1
-    		trials[k] = {
-    			type: tmp.type,
-    			trialNum: i,
-    			svgData: data[i].svgData,
-    			parts: data[i].parts,
-    			category: data[i].category
-    			//on_finish: main_on_finish,
-    			//on_start: main_on_start
-    		}
+    trials[0] = intro;
+    trials[tmp.num_trials +1] = goodbye;
 
-    	}
+    var main_on_finish = function(data)  {
+      socket.emit('currentData', data);
+    };
 
-         console.log(trials);
-    	jsPsych.init({
-    		timeline: trials,
-    		default_iti: 5000,
-    		show_progress_bar: true
-    	});
+    var main_on_start = function(trial) {
+      oldCallback = newCallback;
+
+      var newCallback = function(d) {
+	console.log('data')
+	console.log(d);
+	console.log('trial before:')
+	console.log(trial);
+	_.extend(trial, d);
+
+	console.log('trial after:')
+	console.log(trial);
+
+	// trial.svgData = d.svgData;
+    	// parts: data[i].parts,
+    	// category: data[i].category
+      	jsPsych.resumeExperiment();
+      };
+      socket.removeListener('stimulus', oldCallback);
+      socket.on('stimulus', newCallback);
+
+      // call server for stims
+      socket.emit('getStim', {gameID: id});
+    };
+    
+    for(var i = 0; i< tmp.num_trials; i++){
+      var k = i+1
+      trials[k] = {
+    	type: tmp.type,
+    	trialNum: i,    	
+    	on_finish: main_on_finish,
+    	on_start: main_on_start
+      };
 
     }
+
+    console.log(trials);
+    jsPsych.init({
+      timeline: trials,
+      default_iti: 5000,
+      show_progress_bar: true
+    });
+
+
+    var
+    
+  });
+}
