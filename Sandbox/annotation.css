@@ -23,7 +23,7 @@ body {
   .ui-menu { width: 200px; }
   .ui-widget-header { padding: 0.2em; }
   .ui-menu {
-    position: relative;
+    position: fixed;
     display: inline-block;
     top: 250px;
     left: 880px;

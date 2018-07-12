@@ -8,16 +8,16 @@ jsPsych.plugins['part_annotation'] = (function(){
     parameters: {
     }
   }
-plugin.trial = function(display_element, trial) {
+  plugin.trial = function(display_element, trial) {
 //paper.install(window);
 //window.onload = function() {
-display_element.innerHTML += '<div><canvas id="myCanvas" style="border: 2px solid #314DFE;" display = "block" width= "300px" height= "300px" resize="false" ></canvas> <ul id="List"></ul><div id="dialog-form" title="Enter Part Label"><form><fieldset><label for="partName">Part Name</label><input type="text" name="partName" id="partName" placeholder="Type your part label here" class="text ui-widget-content ui-corner-all"><!-- Allow form submission with keyboard without duplicating the dialog button --><input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset></form></div></div>'; 
-paper.setup('myCanvas');
+  display_element.innerHTML += '<div><canvas id="myCanvas" style="border: 2px solid #314DFE;" display = "block" width= "300px" height= "300px" resize="false" ></canvas> <ul id="List"></ul><div id="dialog-form" title="Enter Part Label"><form><fieldset><label for="partName">Part Name</label><input type="text" name="partName" id="partName" placeholder="Type your part label here" class="text ui-widget-content ui-corner-all"><!-- Allow form submission with keyboard without duplicating the dialog button --><input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset></form></div></div>'; 
+  paper.setup('myCanvas');
 
 
-listgen();
-menugen();
-display();
+  listgen();
+  menugen();
+  display();
 
 //var sketchNo = 0; 
 var unclickable = false;
@@ -32,10 +32,11 @@ var timeLabeled;
 
 
 
- var end_trial = function() {
+var end_trial = function() {
 
 
       // gather the data to store for the trial
+      display_element.innerHTML ='';
       var trial_data = {
         //"rt": response.rt,
         //"stimulus": trial.stimulus,
@@ -53,7 +54,7 @@ var timeLabeled;
 
 
 
-  function display(){
+    function display(){
     //displaying the indexed sketch through SVG data
     var sketch = trial.svgData;  //CHANGES var sketch = data[sketchNo].svgData;
     pathArray = new Array;
@@ -79,8 +80,8 @@ var timeLabeled;
    }
   // else if(p.alreadyClicked==true && unclickable==false){
   // $("#reset").dialog("open");}
-  }
- });
+}
+});
 
    _.forEach(pathArray, function(p) {
     p.onMouseEnter = function(event) {
@@ -106,24 +107,24 @@ var timeLabeled;
 
 
 //generating the menu 
- function listgen(){
-   console.log("I'm working");
-    $("#List").empty();
-    _.forEach(trial.parts, function(p){
-      var li = $("<li><div>" + p +"</div></li>" );
-      li.appendTo("#List");
+function listgen(){
+ console.log("I'm working");
+ $("#List").empty();
+ _.forEach(trial.parts, function(p){
+  var li = $("<li><div>" + p +"</div></li>" );
+  li.appendTo("#List");
 
-    });
-    var other = $("<li><div>" + "Other" +"</div></li>" );
-    other.appendTo("#List");
+});
+ var other = $("<li><div>" + "Other" +"</div></li>" );
+ other.appendTo("#List");
 
-    console.log(display_element.querySelector('#List'));
-  }
+ console.log(display_element.querySelector('#List'));
+}
 
    //Function for creating menu and free response box widgets from the list created by listgen()
 
    function menugen(){
-   console.log("Menu gen working");
+     console.log("Menu gen working");
     //disabling enter key submit 
     $("#dialog-form").submit(function(event) {
       event.preventDefault();
@@ -157,19 +158,21 @@ var timeLabeled;
             //c=0;
             project.activeLayer.removeChildren();
             paper.view.draw();
-                  end_trial();
+            $("#List").menu("destroy");
+            $("#dialog-form").dialog("destroy");
+            end_trial();
       //display();
 
-   
-      $("#List").menu("destroy");
-    
+      
+      
+      
 
-      }
     }
-    else if(text == 'Other'){
+  }
+  else if(text == 'Other'){
     $("#dialog-form").dialog("open");
-    }
-    $("#List").menu("disable");
+  }
+    //$("#List").menu("disable");
 
 
   }
@@ -204,7 +207,7 @@ var timeLabeled;
          "label": UI, "Time clicked" : timeClicked,  "Time labeled": Math.floor(Date.now() / 1000)});
         c++;
         $(this).dialog("close")
-        if(c==pathArray.length){s
+        if(c==pathArray.length){
           var category = trial.category;
           var tempObj={};
           tempObj[category] = dict;
@@ -214,6 +217,8 @@ var timeLabeled;
           //c=0;
           project.activeLayer.removeChildren();
           paper.view.draw();
+          $("#dialog-form").dialog("destroy");
+          $("#List").menu("destroy");
           end_trial();
 
          // if(sketchNo<trial.length){
@@ -222,16 +227,15 @@ var timeLabeled;
          //   $("#List").menu("destroy");
          //   $("#Complete").dialog("open");
          // }
-          }
-          ;
-        }
-      }
-    });
+       }
+       ;
+     }
+   }
+ });
 }    
 }
 //}
- return plugin;
+return plugin;
 }
 )();
 
- 

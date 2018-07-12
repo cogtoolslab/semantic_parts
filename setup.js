@@ -61,7 +61,7 @@ function setupExp(){
          console.log(trials);
     	jsPsych.init({
     		timeline: trials,
-    		default_iti: 100,
+    		default_iti: 5000,
     		show_progress_bar: true
     	});
 

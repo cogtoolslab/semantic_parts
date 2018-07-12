@@ -18,12 +18,12 @@
 }
 
  .ui-menu { width: 200px; }
-  .ui-widget-header { padding: 0.2em; }
-  .ui-menu {
+ .ui-widget-header { padding: 0.2em; }
+ .ui-menu {
     position: relative;
     display: inline-block;
-    top: 250px;
-    left: 880px;
+    bottom: 200px;
+    left: 260px;
 }
 
 canvas[resize] {
