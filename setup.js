@@ -1,35 +1,33 @@
 
-paper.setup('myCanvas');
-
 function sendData() {
 	console.log('sending data to mturk');
 	jsPsych.turk.submitToTurk({});
 }
 
+var data = data;
+
+
 var tmp = {
 	type: 'part_annotation',
 	iterationName: 'pilot0',
-	num_trials: num_trials,
+	num_trials: data.length
 };
 
 
 var trials = new Array(tmp.num_trials + 2);
 
-function setup(){
+function setupExp(){
 
 	consentHTML = {
-		'str1' :  }
-    // add welcome page
+		'str1' : '<p> Hey do you want to do this?</p>' }
     instructionsHTML = {
-    	'str1' : }
+    	'str1' :'<p> Annotate stuff for us please</p>' }
 
     	var intro = {
     		type: 'instructions',
     		pages: [
     		consentHTML.str1,
-
-    		instructionsHTML.str1,
-
+    		instructionsHTML.str1
     		],
     		show_clickable_nav: true
     	}
@@ -47,27 +45,24 @@ function setup(){
     	trials[tmp.num_trials +1] = goodbye;
 
     	for(var i = 0; i< tmp.num_trials; i++){
-
-    		trials[] = {
+            var k = i+1
+    		trials[k] = {
     			type: tmp.type,
     			trialNum: i,
-    			svgData: undefined
-    			parts: undefined,
-    			category: undefined
+    			svgData: data[i].svgData,
+    			parts: data[i].parts,
+    			category: data[i].category
     			//on_finish: main_on_finish,
     			//on_start: main_on_start
     		}
 
     	}
 
-
+         console.log(trials);
     	jsPsych.init({
     		timeline: trials,
     		default_iti: 100,
     		show_progress_bar: true
     	});
-
-
-
 
     }
