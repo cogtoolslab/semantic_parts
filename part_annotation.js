@@ -14,10 +14,12 @@ jsPsych.plugins['part_annotation'] = (function(){
     display_element.innerHTML += '<div><canvas id="myCanvas" style="border: 2px solid #314DFE;" display = "block" width= "300px" height= "300px" resize="false" ></canvas> <ul id="List"></ul><div id="dialog-form" title="Enter Part Label"><form><fieldset><label for="partName">Part Name</label><input type="text" name="partName" id="partName" placeholder="Type your part label here" class="text ui-widget-content ui-corner-all"><!-- Allow form submission with keyboard without duplicating the dialog button --><input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset></form></div></div>'; 
     paper.setup('myCanvas');
 
-    listgen();
-    menugen();
-    display();
-
+    setTimeout(function() {
+      listgen();
+      menugen();
+      display();
+    }, 1000);
+    
     //var sketchNo = 0; 
     var unclickable = false;
     var dict=[];
@@ -37,6 +39,8 @@ jsPsych.plugins['part_annotation'] = (function(){
 	wID: turkInfo.workerId,
 	hitID: turkInfo.hitId,
 	aID : turkInfo.assignmentId,
+	dbname: 'svgAnnotation',
+	colname: 'examples',
         results: results
       });
 
@@ -44,8 +48,8 @@ jsPsych.plugins['part_annotation'] = (function(){
       display_element.innerHTML = '';
 
       // move on to the next trial
-      jsPsych.pauseExperiment();
       jsPsych.finishTrial(trial_data);
+      jsPsych.pauseExperiment();
     };
 
     function display(){
