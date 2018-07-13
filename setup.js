@@ -53,10 +53,13 @@ function setupExp(){
 
     var main_on_start = function(trial) {
       oldCallback = newCallback;
-      var newCallback = function(d) {
-	trial.svgData = d.svgData;
-	trial.parts = d.parts;
-	trial.category = d.category;
+      var newCallback = function(stim) {
+	console.log('data from server');
+	console.log(d);
+	//var stim = d.stim[0];
+	trial.svgData = stim.svgData;
+	trial.parts = stim.parts;
+	trial.category = stim.category;
 
       	jsPsych.resumeExperiment();
       };
@@ -64,11 +67,15 @@ function setupExp(){
       socket.on('stimulus', newCallback);
 
       // call server for stims
-      socket.emit('getStim', {gameID: id});
+      console.log('getting stim');
+      console.log(trial);
+      if(trial.trialNum > 0) {
+	socket.emit('getStim', {gameID: id});
+      }
     };
     
     // Pre-load first round's stim
-    socket.on('stimulus', function(firstStim) {
+    socket.on('stimulus', function(data) {
       for(var i = 0; i< tmp.num_trials; i++){
 	var k = i+1;
 	trials[k] = {
@@ -80,8 +87,9 @@ function setupExp(){
       }
 
       // Set up first trial with pre-loaded stim
-      _.extend(trials[1], firstStim);
-      _.omit(trials[1], ['on_start']);
+      //var stim = data.stim[0];
+      _.extend(trials[1], data);
+      //_.omit(trials[1], ['on_start']);
 
       // start game
       jsPsych.init({
