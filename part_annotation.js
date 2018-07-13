@@ -44,8 +44,8 @@ jsPsych.plugins['part_annotation'] = (function(){
       display_element.innerHTML = '';
 
       // move on to the next trial
-      jsPsych.finishTrial(trial_data);
       jsPsych.pauseExperiment();
+      jsPsych.finishTrial(trial_data);
     };
 
     function display(){
@@ -216,15 +216,12 @@ jsPsych.plugins['part_annotation'] = (function(){
               //   $("#List").menu("destroy");
               //   $("#Complete").dialog("open");
               // }
-	    }
-	    ;
+	    };
 	  }
 	}
       });
-    }    
+    } 
   }
-  //}
   return plugin;
-}
-				     )();
+})();
 
