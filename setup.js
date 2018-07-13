@@ -52,6 +52,9 @@ function setupExp(){
     };
 
     var main_on_start = function(trial) {
+
+      console.log("main on start being called");
+
       oldCallback = newCallback;
       var newCallback = function(stim) {
 	console.log('data from server');
