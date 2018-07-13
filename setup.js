@@ -54,23 +54,12 @@ function setupExp(){
     };
 
     var main_on_start = function(trial) {
-      console.log("main on star being called");
       oldCallback = newCallback;
       var newCallback = function(d) {
-	// console.log('data')
-	// console.log(d);
-	// console.log('trial before:')
-	// console.log(trial);
 	trial.svgData = d.svgData;
 	trial.parts = d.parts;
 	trial.category = d.category;
-	//_.extend(trial, d);
 
-	console.log('trial after:')
-	console.log(trial);
-	// trial.svgData = d.svgData;
-    	// parts: data[i].parts,
-    	// category: data[i].category
       	jsPsych.resumeExperiment();
       };
       socket.removeListener('stimulus', oldCallback);
@@ -80,23 +69,29 @@ function setupExp(){
       socket.emit('getStim', {gameID: id});
     };
     
-    for(var i = 0; i< tmp.num_trials; i++){
-      var k = i+1
-      trials[k] = {
-    	type: tmp.type,
-    	trialNum: i,    	
-    	on_finish: main_on_finish,
-    	on_start: main_on_start
-      };
+    // Pre-load first round's stim
+    socket.on('stimulus', function(firstStim) {
+      for(var i = 0; i< tmp.num_trials; i++){
+	var k = i+1;
+	trials[k] = {
+    	  type: tmp.type,
+    	  trialNum: i,    	
+    	  on_finish: main_on_finish,
+    	  on_start: main_on_start
+	};
+      }
 
-    }
+      // Set up first trial with pre-loaded stim
+      _.extend(trials[1], firstStim);
+      _.omit(trials[1], ['on_start']);
 
-    console.log(trials);
-    jsPsych.pauseExperiment();
-    jsPsych.init({
-      timeline: trials,
-      default_iti: 5000,
-      show_progress_bar: true
+      // start game
+      jsPsych.init({
+	timeline: trials,
+	default_iti: 5000,
+	show_progress_bar: true
+      });
     });
+    socket.emit('getStim', {gameID: id});
   });
 }
