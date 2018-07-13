@@ -5,8 +5,6 @@ function sendData() {
   jsPsych.turk.submitToTurk({});
 }
 
-var data = data;
-
 function setupExp(){
   var socket = io.connect();
 
