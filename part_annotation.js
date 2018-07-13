@@ -39,6 +39,8 @@ jsPsych.plugins['part_annotation'] = (function(){
 	wID: turkInfo.workerId,
 	hitID: turkInfo.hitId,
 	aID : turkInfo.assignmentId,
+	dbname: 'svgAnnotation',
+	colname: 'examples',
         results: results
       });
 
