@@ -6,7 +6,8 @@ __pycache__/
 *node_modules/
 # C extensions
 *.so
-*.DS_Store
+.DS_Store
+.R.app.history
 
 auth.txt
 auth.json
