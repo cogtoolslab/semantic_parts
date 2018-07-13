@@ -54,7 +54,7 @@ function setupExp(){
     };
 
     var main_on_start = function(trial) {
-      console.log("main on star being called");
+      console.log("main on start being called");
       oldCallback = newCallback;
       var newCallback = function(d) {
 	// console.log('data')
