@@ -304,12 +304,14 @@ window.jsPsych = (function() {
   }
 
   core.pauseExperiment = function(){
+    console.log('pausing experiment');
     paused = true;
   }
 
   core.resumeExperiment = function(){
     paused = false;
     if(waiting){
+      console.log('resuming experiment');
       waiting = false;
       nextTrial();
     }
@@ -769,6 +771,7 @@ window.jsPsych = (function() {
 
   function nextTrial() {
     // if experiment is paused, don't do anything.
+    console.log('paused: ' + paused);
     if(paused) {
       waiting = true;
       return;
