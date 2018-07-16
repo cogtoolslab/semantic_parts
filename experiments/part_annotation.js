@@ -52,6 +52,20 @@ jsPsych.plugins['part_annotation'] = (function(){
       jsPsych.pauseExperiment();
     };
 
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+function setRandomColor(li) {
+  li.css("background-color", getRandomColor());
+}
+
+
     function display(){
       //displaying the indexed sketch through SVG data
       var sketch = trial.svgData;  //CHANGES var sketch = data[sketchNo].svgData;
@@ -110,19 +124,21 @@ jsPsych.plugins['part_annotation'] = (function(){
       $("#List").empty();
       _.forEach(trial.parts, function(p){
 	var li = $("<li><div>" + p +"</div></li>" );
-	li.appendTo("#List");
+	setRandomColor(li);
+  li.appendTo("#List");
+
 
       });
       var other = $("<li><div>" + "Other" +"</div></li>" );
+      setRandomColor(other);
       other.appendTo("#List");
-
       console.log(display_element.querySelector('#List'));
     }
 
     //Function for creating menu and free response box widgets from the list created by listgen()
 
     function menugen(){
-      console.log("Menu gen working");
+
       //disabling enter key submit 
       $("#dialog-form").submit(function(event) {
 	event.preventDefault();
@@ -138,7 +154,7 @@ jsPsych.plugins['part_annotation'] = (function(){
           var text = ui.item.text();
           if(text!='Other'){
             unclickable = false;
-            selectedArray.strokeColor= 'green';
+            selectedArray.strokeColor= ui.item.css("background-color");
             selectedArray.alreadyClicked=true;
             svgstring = selectedArray.exportSVG({asString: true});
             var start = svgstring.indexOf('d="')+3;
@@ -190,7 +206,7 @@ jsPsych.plugins['part_annotation'] = (function(){
 
 	  Submit: function(){
             console.log(selectedArray);
-            selectedArray.strokeColor = 'green';
+            selectedArray.strokeColor = ui.item.css("background-color");
             selectedArray.alreadyClicked = true;
             unclickable = false;
             var UI = $("#partName").val();
