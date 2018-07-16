@@ -122,15 +122,17 @@ function setRandomColor(li) {
     function listgen(){
       console.log("I'm working");
       $("#List").empty();
-      _.forEach(trial.parts, function(p){
+ console.log(trial.parts);
+   _.forEach(trial.parts, function(p){
+
 	var li = $("<li><div>" + p +"</div></li>" );
-	setRandomColor(li);
+	//setRandomColor(li);
   li.appendTo("#List");
 
 
       });
       var other = $("<li><div>" + "Other" +"</div></li>" );
-      setRandomColor(other);
+      //setRandomColor(other);
       other.appendTo("#List");
       console.log(display_element.querySelector('#List'));
     }
