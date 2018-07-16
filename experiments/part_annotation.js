@@ -68,7 +68,7 @@ function setRandomColor(li) {
 
     function display(){
       //displaying the indexed sketch through SVG data
-      var sketch = trial.svgData;  //CHANGES var sketch = data[sketchNo].svgData;
+      var sketch = trial.svg;  //CHANGES var sketch = data[sketchNo].svgData;
       pathArray = new Array;
       for (var i = 0; i< sketch.length; i++) {
       	pathArray[i] = new Path(sketch[i]);
