@@ -36,11 +36,11 @@ jsPsych.plugins['part_annotation'] = (function(){
 
       // gather the data to store for the trial
       var trial_data = _.extend({}, trial, {
-	wID: turkInfo.workerId,
-	hitID: turkInfo.hitId,
-	aID : turkInfo.assignmentId,
-	dbname: 'svgAnnotation',
-	colname: 'examples',
+      	wID: turkInfo.workerId,
+      	hitID: turkInfo.hitId,
+      	aID : turkInfo.assignmentId,
+      	dbname: 'svgAnnotation',
+      	colname: 'examples',
         results: results
       });
 
@@ -71,21 +71,21 @@ function setRandomColor(li) {
       var sketch = trial.svgData;  //CHANGES var sketch = data[sketchNo].svgData;
       pathArray = new Array;
       for (var i = 0; i< sketch.length; i++) {
-	pathArray[i] = new Path(sketch[i]);
-	pathArray[i].strokeColor = 'black';
-	//Increasing stroke width to make it clickable
-	pathArray[i].strokeWidth = 8;
+      	pathArray[i] = new Path(sketch[i]);
+      	pathArray[i].strokeColor = 'black';
+      	//Increasing stroke width to make it clickable
+      	pathArray[i].strokeWidth = 8;
 
-	//Click and Hover event handlers
-	_.forEach(pathArray, function(p) {
-	  p.onClick = function(event) {
-	    if(p.alreadyClicked==false && unclickable == false){
-              selectedArray=p;  
-              timeClicked = Math.floor(Date.now() / 1000);
-              $('#List').menu("enable");
-              unclickable = true
-              p.strokeColor = 'orange';
-              p.alreadyClicked = true;
+  	//Click and Hover event handlers
+  	_.forEach(pathArray, function(p) {
+  	  p.onClick = function(event) {
+  	    if(p.alreadyClicked==false && unclickable == false){
+                selectedArray=p;  
+                timeClicked = Math.floor(Date.now() / 1000);
+                $('#List').menu("enable");
+                unclickable = true
+                p.strokeColor = 'orange';
+                p.alreadyClicked = true;
 	      //testObj.SVGstring[c]= p;
 
 	      
@@ -141,16 +141,16 @@ function setRandomColor(li) {
 
       //disabling enter key submit 
       $("#dialog-form").submit(function(event) {
-	event.preventDefault();
+	       event.preventDefault();
       });
 
       //Populating the menu
       
       $("#List").menu({ 
-	disabled: true,
-	modal: true,
-	//items: "> :not(.ui-widget-header)",
-	select : function(event, ui){
+    	disabled: true,
+    	modal: true,
+    	//items: "> :not(.ui-widget-header)",
+    	select : function(event, ui){
           var text = ui.item.text();
           if(text!='Other'){
             unclickable = false;
@@ -161,7 +161,7 @@ function setRandomColor(li) {
             dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
 		       "label": text, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000)});
             c++;
-            if(c==pathArray.length){
+            if(c==pathArray.length) {
               var category = trial.category;
               var tempObj={};
               tempObj[category] = dict;
@@ -175,13 +175,13 @@ function setRandomColor(li) {
               $("#List").menu("destroy");
               $("#dialog-form").dialog("destroy");
               end_trial(results);
-	      //display();
-	    }
-	  }
-	  else if(text == 'Other'){
-	    $("#dialog-form").dialog("open");
-	  }
-	  //$("#List").menu("disable");
+	            //display();
+	          }
+      	  }
+      	  else if(text == 'Other'){
+      	    $("#dialog-form").dialog("open");
+      	  }
+	       //$("#List").menu("disable");
 
 
 	}
@@ -191,12 +191,12 @@ function setRandomColor(li) {
       //Free response dialog box 
 
       $( "#dialog-form" ).dialog({
-	autoOpen: false,
-	height: 400,
-	width: 350,
-	modal: true,
-	buttons: 
-	{
+      	autoOpen: false,
+      	height: 400,
+      	width: 350,
+      	modal: true,
+      	buttons: 
+	   {
 
 	  "Back": function(){
             selectedArray.strokeColor = 'black';
