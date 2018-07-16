@@ -11,6 +11,7 @@ var sketch;
 var pathArray;
 var c;
 var timeClicked;
+var otherColor;
 
 paper.install(window);
 window.onload = function() { 
@@ -49,6 +50,18 @@ window.onload = function() {
 
   //This retrieves SVG data and presents the sketch on the canvas
   //Also contains handlers for highlight and click highlight events
+  function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+function setRandomColor(li) {
+  li.css("background-color", getRandomColor());
+}
 
   function display(){
     //displaying the indexed sketch through SVG data
@@ -73,10 +86,12 @@ window.onload = function() {
      //testObj.SVGstring[c]= p;
 
      
-   }else if(p.alreadyClicked==true && unclickable==false){
-    $("#reset").dialog("open");
+   }
+   //else if(p.alreadyClicked==true && unclickable==false){
+   // $("#reset").dialog("open");
         
-      }}
+   //   }
+    }
  });
    _.forEach(pathArray, function(p) {
     p.onMouseEnter = function(event) {
@@ -107,10 +122,12 @@ window.onload = function() {
     $("#List").empty();
     _.forEach(data[sketchNo].parts, function(p){
       var li = $("<li><div>" + p +"</div></li>" );
+      setRandomColor(li);
       li.appendTo("#List");
 
     });
     var other = $("<li><div>" + "Other" +"</div></li>" );
+    setRandomColor(other);
     other.appendTo("#List");}
 
    //Function for creating menu and free response box widgets from the list created by listgen()
@@ -132,7 +149,7 @@ window.onload = function() {
         var text = ui.item.text();
         if(text!='Other'){
           unclickable = false;
-          selectedArray.strokeColor= 'green';
+          selectedArray.strokeColor= ui.item.css("background-color");
           selectedArray.alreadyClicked=true;
           svgstring = selectedArray.exportSVG({asString: true});
           var start = svgstring.indexOf('d="')+3;
@@ -160,6 +177,8 @@ window.onload = function() {
       }
     }
     else if(text == 'Other'){
+     
+      otherColor = ui.item.css("background-color");
       $("#dialog-form").dialog("open");
     }
     $("#List").menu("disable");
@@ -185,9 +204,8 @@ window.onload = function() {
         $("#dialog-form").dialog("close");
       } ,
 
-      Submit: function(){
-        console.log(selectedArray);
-        selectedArray.strokeColor = 'green';
+      Submit: function(ui){
+        selectedArray.strokeColor = otherColor;
         selectedArray.alreadyClicked = true;
         unclickable = false;
         var UI = $("#partName").val();
@@ -196,7 +214,8 @@ window.onload = function() {
         dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
          "label": UI, "Time clicked" : timeClicked,  "Time labeled": Math.floor(Date.now() / 1000)});
         c++;
-        $(this).dialog("close")
+        console.log(selectedArray);
+        $(this).dialog("close");
         if(c==pathArray.length){
           var category = data[sketchNo].category;
           var tempObj={};
