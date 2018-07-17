@@ -74,7 +74,7 @@ function setRandomColor(li) {
       	pathArray[i].strokeColor = 'black';
       	//Increasing stroke width to make it clickable
       	pathArray[i].strokeWidth = 8;
-       //console.log(sketch[2]);
+       console.log(sketch);
 
   	//Click and Hover event handlers
   	_.forEach(pathArray, function(p) {
