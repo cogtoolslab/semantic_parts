@@ -65,7 +65,6 @@ function setRandomColor(li) {
   li.css("background-color", getRandomColor());
 }
 
-
     function display(){
       //displaying the indexed sketch through SVG data
       var sketch = trial.svg;  //CHANGES var sketch = data[sketchNo].svgData;
@@ -81,12 +80,12 @@ function setRandomColor(li) {
   	_.forEach(pathArray, function(p) {
   	  p.onClick = function(event) {
   	    if(p.alreadyClicked==false && unclickable == false){
-                selectedArray=p;  
-                timeClicked = Math.floor(Date.now() / 1000);
-                $('#List').menu("enable");
-                unclickable = true
-                p.strokeColor = 'orange';
-                p.alreadyClicked = true;
+            selectedArray=p;  
+            timeClicked = Math.floor(Date.now() / 1000);
+            $('#List').menu("enable");
+            unclickable = true
+            p.strokeColor = 'orange';
+            p.alreadyClicked = true;
 	      //testObj.SVGstring[c]= p;
 
 	      
@@ -123,13 +122,13 @@ function setRandomColor(li) {
     function listgen(){
       console.log("I'm working");
       $("#List").empty();
- console.log(trial.parts);
-   _.forEach(trial.parts, function(p){
+      console.log(trial.parts);
+      console.log(typeof trial.parts);      
+      _.forEach(trial.parts, function(p){
 
-	var li = $("<li><div>" + p +"</div></li>" );
-	//setRandomColor(li);
-  li.appendTo("#List");
-
+      	var li = $("<li><div>" + p +"</div></li>" );
+      	//setRandomColor(li);
+        li.appendTo("#List");
 
       });
       var other = $("<li><div>" + "Other" +"</div></li>" );
