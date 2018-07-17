@@ -12,7 +12,8 @@ var pathArray;
 var c;
 var timeClicked;
 var otherColor;
-
+var colors = ["#E69F00","#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"];
+var colNo = 0;
 paper.install(window);
 window.onload = function() { 
   paper.setup('myCanvas');
@@ -60,7 +61,8 @@ window.onload = function() {
 }
 
 function setRandomColor(li) {
-  li.css("background-color", getRandomColor());
+  li.css("background-color", colors[colNo]);
+  colNo++;
 }
 
   function display(){
