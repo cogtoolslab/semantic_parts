@@ -71,9 +71,10 @@ jsPsych.plugins['part_annotation'] = (function(){
     function display(){
       //displaying the indexed sketch through SVG data
       var sketch = trial.svg;  //CHANGES var sketch = data[sketchNo].svgData;
-      sketch = sketch.replace('["', "");
-      sketch = sketch.replace('"]',"");
-      sketch = sketch.toString().split('", "')
+      //sketch = sketch.replace('["', "");
+      //sketch = sketch.replace('"]',"");
+      //sketch = sketch.toString().split('", "')
+      
       console.log(sketch);
       pathArray = new Array;
       for (var i = 0; i< sketch.length; i++) {
