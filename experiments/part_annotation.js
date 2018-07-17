@@ -9,6 +9,12 @@ jsPsych.plugins['part_annotation'] = (function(){
     }
   }
   plugin.trial = function(display_element, trial) {
+     var tool = new Tool();
+
+     tool.onMouseDrag = function(event){
+        console.log("checking for drag");
+     }
+
     //paper.install(window);
     //window.onload = function() {
       display_element.innerHTML += '<div><canvas id="myCanvas" style="border: 2px solid #314DFE;" display = "block" width= "300px" height= "300px" resize="false" ></canvas> <ul id="List"></ul><div id="dialog-form" title="Enter Part Label"><form><fieldset><label for="partName">Part Name</label><input type="text" name="partName" id="partName" placeholder="Type your part label here" class="text ui-widget-content ui-corner-all"><!-- Allow form submission with keyboard without duplicating the dialog button --><input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset></form></div></div>'; 
@@ -69,12 +75,16 @@ jsPsych.plugins['part_annotation'] = (function(){
     }
 
     function display(){
+
+
+
       //displaying the indexed sketch through SVG data
       var sketch = trial.svg;  //CHANGES var sketch = data[sketchNo].svgData;
       //sketch = sketch.replace('["', "");
       //sketch = sketch.replace('"]',"");
       //sketch = sketch.toString().split('", "')
-      
+
+
       console.log(sketch);
       pathArray = new Array;
       for (var i = 0; i< sketch.length; i++) {
