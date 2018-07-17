@@ -102,6 +102,10 @@ jsPsych.plugins['part_annotation'] = (function(){
 	  }
 	});
 
+    function onMouseDrag(event){
+      console.log("dragging");
+    }
+
    _.forEach(pathArray, function(p) {
      p.onMouseEnter = function(event) {
        console.log("ENTERED");
