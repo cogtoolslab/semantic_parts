@@ -49,6 +49,7 @@ jsPsych.plugins['part_annotation'] = (function(){
       	aID : turkInfo.assignmentId,
       	dbname: 'svgAnnotation',
       	colname: 'examples',
+        iterationName: 'testing',
         results: results
       });
 
@@ -145,11 +146,7 @@ jsPsych.plugins['part_annotation'] = (function(){
       console.log("I'm working");
       $("#List").empty();
       console.log(trial.parts.toString().split(','));
-<<<<<<< HEAD
-      partList = trial.parts.toString().split(',');
-=======
       var partList = trial.parts.toString().split(',');
->>>>>>> 355bbfe4c3e89634e9d4d0d0de7c05488dac0385
       _.forEach(partList, function(p){
 
       	var li = $("<li><div>" + p +"</div></li>" );
@@ -226,7 +223,7 @@ jsPsych.plugins['part_annotation'] = (function(){
       	buttons: 
         {
 
-         "Back": function(){
+        "Back": function(){
           selectedArray.strokeColor = 'black';
           unclickable = false;
           $("#dialog-form").dialog("close");
@@ -251,12 +248,12 @@ jsPsych.plugins['part_annotation'] = (function(){
             results.push(tempObj);
             results = JSON.stringify(results)
             console.log(results);
-              //c=0;
-              project.activeLayer.removeChildren();
-              paper.view.draw();
-              $("#dialog-form").dialog("destroy");
-              $("#List").menu("destroy");
-              end_trial();
+            //c=0;
+            project.activeLayer.removeChildren();
+            paper.view.draw();
+            $("#dialog-form").dialog("destroy");
+            $("#List").menu("destroy");
+            end_trial();
 
               // if(sketchNo<trial.length){
               //   $("#List").menu("destroy");
