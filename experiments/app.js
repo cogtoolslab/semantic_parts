@@ -96,9 +96,7 @@ function sendStim(socket, data) {
     } else {
       console.log(`error getting stims: ${error} ${body}`);
       console.log(`falling back to local stimList`);
-      socket.emit('stimulus', {
-        stim: _.sampleSize(require('./data/data.json'), 1)
-      });
+      socket.emit('stimulus', _.sample(require('./data/data.json')));
     }
   });
 }
