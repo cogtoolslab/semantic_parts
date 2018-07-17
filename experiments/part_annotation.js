@@ -74,7 +74,7 @@ function setRandomColor(li) {
       	pathArray[i].strokeColor = 'black';
       	//Increasing stroke width to make it clickable
       	pathArray[i].strokeWidth = 8;
-      console.log(sketch[2]);
+       //console.log(sketch[2]);
 
   	//Click and Hover event handlers
   	_.forEach(pathArray, function(p) {
@@ -122,9 +122,9 @@ function setRandomColor(li) {
     function listgen(){
       console.log("I'm working");
       $("#List").empty();
-      console.log(trial.parts);
-      console.log(typeof trial.parts);      
-      _.forEach(trial.parts, function(p){
+	console.log(trial.parts.toString().split(','));
+	var partList = trial.parts.toString().split(',');
+      _.forEach(partList, function(p){
 
       	var li = $("<li><div>" + p +"</div></li>" );
       	//setRandomColor(li);
