@@ -57,7 +57,9 @@ function setupExp(){
 
       oldCallback = newCallback;
       var newCallback = function(stim) {
-      	_.extend(trials[1], stim);
+        console.log('received stim')
+        console.log(stim)
+//      	_.extend(trials[1], stim);
       	trial.svg = stim.svg;
       	trial.parts = stim.parts;
       	trial.category = stim.category;
