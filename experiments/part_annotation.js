@@ -11,15 +11,15 @@ jsPsych.plugins['part_annotation'] = (function(){
   plugin.trial = function(display_element, trial) {
     //paper.install(window);
     //window.onload = function() {
-    display_element.innerHTML += '<div><canvas id="myCanvas" style="border: 2px solid #314DFE;" display = "block" width= "300px" height= "300px" resize="false" ></canvas> <ul id="List"></ul><div id="dialog-form" title="Enter Part Label"><form><fieldset><label for="partName">Part Name</label><input type="text" name="partName" id="partName" placeholder="Type your part label here" class="text ui-widget-content ui-corner-all"><!-- Allow form submission with keyboard without duplicating the dialog button --><input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset></form></div></div>'; 
-    paper.setup('myCanvas');
+      display_element.innerHTML += '<div><canvas id="myCanvas" style="border: 2px solid #314DFE;" display = "block" width= "300px" height= "300px" resize="false" ></canvas> <ul id="List"></ul><div id="dialog-form" title="Enter Part Label"><form><fieldset><label for="partName">Part Name</label><input type="text" name="partName" id="partName" placeholder="Type your part label here" class="text ui-widget-content ui-corner-all"><!-- Allow form submission with keyboard without duplicating the dialog button --><input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset></form></div></div>'; 
+      paper.setup('myCanvas');
 
-    setTimeout(function() {
-      listgen();
-      menugen();
-      display();
-    }, 1000);
-    
+      setTimeout(function() {
+        listgen();
+        menugen();
+        display();
+      }, 1000);
+
     //var sketchNo = 0; 
     var unclickable = false;
     var dict=[];
@@ -30,6 +30,8 @@ jsPsych.plugins['part_annotation'] = (function(){
     var c=0;
     var timeClicked;
     var timeLabeled;
+    var colors = ["#E69F00","#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"];
+    var colNo = 0;
 
     var end_trial = function(results) {
       var turkInfo = jsPsych.turk.turkInfo();
@@ -52,18 +54,19 @@ jsPsych.plugins['part_annotation'] = (function(){
       jsPsych.pauseExperiment();
     };
 
-function getRandomColor() {
-  var letters = '0123456789ABCDEF';
-  var color = '#';
-  for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-}
+    function getRandomColor() {
+      var letters = '0123456789ABCDEF';
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
 
-function setRandomColor(li) {
-  li.css("background-color", getRandomColor());
-}
+    function setRandomColor(li) {
+      li.css("background-color", colors[colNo]);
+      colNo++
+    }
 
     function display(){
       //displaying the indexed sketch through SVG data
@@ -78,18 +81,18 @@ function setRandomColor(li) {
       	pathArray[i].strokeColor = 'black';
       	//Increasing stroke width to make it clickable
       	pathArray[i].strokeWidth = 8;
-      
+
 
   	//Click and Hover event handlers
   	_.forEach(pathArray, function(p) {
-  	  p.onClick = function(event) {
-  	    if(p.alreadyClicked==false && unclickable == false){
-            selectedArray=p;  
-            timeClicked = Math.floor(Date.now() / 1000);
-            $('#List').menu("enable");
-            unclickable = true
-            p.strokeColor = 'orange';
-            p.alreadyClicked = true;
+     p.onClick = function(event) {
+       if(p.alreadyClicked==false && unclickable == false){
+        selectedArray=p;  
+        timeClicked = Math.floor(Date.now() / 1000);
+        $('#List').menu("enable");
+        unclickable = true
+        p.strokeColor = 'orange';
+        p.alreadyClicked = true;
 	      //testObj.SVGstring[c]= p;
 
 	      
@@ -99,44 +102,44 @@ function setRandomColor(li) {
 	  }
 	});
 
-	_.forEach(pathArray, function(p) {
-	  p.onMouseEnter = function(event) {
-	    console.log("ENTERED");
-	    if(p.alreadyClicked == false && unclickable == false){
-              p.strokeColor = 'yellow';
-	    }
-	  }
-	});
+   _.forEach(pathArray, function(p) {
+     p.onMouseEnter = function(event) {
+       console.log("ENTERED");
+       if(p.alreadyClicked == false && unclickable == false){
+        p.strokeColor = 'yellow';
+      }
+    }
+  });
 
-	_.forEach(pathArray, function(p){
-	  p.onMouseLeave = function(event) {
-	    if(p.alreadyClicked == false && unclickable == false){
-              p.strokeColor = 'black'; 
-	    }}
-	}); 
+   _.forEach(pathArray, function(p){
+     p.onMouseLeave = function(event) {
+       if(p.alreadyClicked == false && unclickable == false){
+        p.strokeColor = 'black'; 
+      }}
+    }); 
 
 	//Setting already clicked property of all strokes to false
 	pathArray[i].alreadyClicked = false;
 
-      };
-    }
+};
+}
 
 
     //generating the menu 
     function listgen(){
       console.log("I'm working");
       $("#List").empty();
-	console.log(trial.parts.toString().split(','));
-	var partList = trial.parts.toString().split(',');
+      console.log(trial.parts.toString().split(','));
+      var partList = trial.parts.toString().split(',');
       _.forEach(partList, function(p){
 
       	var li = $("<li><div>" + p +"</div></li>" );
-      	//setRandomColor(li);
+      	setRandomColor(li);
         li.appendTo("#List");
 
       });
       var other = $("<li><div>" + "Other" +"</div></li>" );
-      //setRandomColor(other);
+      setRandomColor(other);
       other.appendTo("#List");
       console.log(display_element.querySelector('#List'));
     }
@@ -147,33 +150,33 @@ function setRandomColor(li) {
 
       //disabling enter key submit 
       $("#dialog-form").submit(function(event) {
-	       event.preventDefault();
+        event.preventDefault();
       });
 
       //Populating the menu
       
       $("#List").menu({ 
-    	disabled: true,
-    	modal: true,
+       disabled: true,
+       modal: true,
     	//items: "> :not(.ui-widget-header)",
     	select : function(event, ui){
-          var text = ui.item.text();
-          if(text!='Other'){
-            unclickable = false;
-            selectedArray.strokeColor= ui.item.css("background-color");
-            selectedArray.alreadyClicked=true;
-            svgstring = selectedArray.exportSVG({asString: true});
-            var start = svgstring.indexOf('d="')+3;
-            dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-		       "label": text, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000)});
-            c++;
-            if(c==pathArray.length) {
-              var category = trial.category;
-              var tempObj={};
-              tempObj[category] = dict;
-              results.push(tempObj);
-              results = JSON.stringify(results)
-              console.log(results);
+        var text = ui.item.text();
+        if(text!='Other'){
+          unclickable = false;
+          selectedArray.strokeColor= ui.item.css("background-color");
+          selectedArray.alreadyClicked=true;
+          svgstring = selectedArray.exportSVG({asString: true});
+          var start = svgstring.indexOf('d="')+3;
+          dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
+           "label": text, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000)});
+          c++;
+          if(c==pathArray.length) {
+            var category = trial.category;
+            var tempObj={};
+            tempObj[category] = dict;
+            results.push(tempObj);
+            results = JSON.stringify(results)
+            console.log(results);
               //sketchNo++;
               //c=0;
               project.activeLayer.removeChildren();
@@ -183,15 +186,15 @@ function setRandomColor(li) {
               end_trial(results);
 	            //display();
 	          }
-      	  }
-      	  else if(text == 'Other'){
-      	    $("#dialog-form").dialog("open");
-      	  }
-	       //$("#List").menu("disable");
+         }
+         else if(text == 'Other'){
+           $("#dialog-form").dialog("open");
+         }
+         $("#List").menu("disable");
 
 
-	}
-      });
+       }
+     });
 
 
       //Free response dialog box 
@@ -202,33 +205,33 @@ function setRandomColor(li) {
       	width: 350,
       	modal: true,
       	buttons: 
-	   {
+        {
 
-	  "Back": function(){
-            selectedArray.strokeColor = 'black';
-            unclickable = false;
-            $("#dialog-form").dialog("close");
-	  } ,
+         "Back": function(){
+          selectedArray.strokeColor = 'black';
+          unclickable = false;
+          $("#dialog-form").dialog("close");
+        } ,
 
-	  Submit: function(){
-            console.log(selectedArray);
-            selectedArray.strokeColor = ui.item.css("background-color");
-            selectedArray.alreadyClicked = true;
-            unclickable = false;
-            var UI = $("#partName").val();
-            svgstring = selectedArray.exportSVG({asString: true});
-            var start = svgstring.indexOf('d="')+3;
-            dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-		       "label": UI, "Time clicked" : timeClicked,  "Time labeled": Math.floor(Date.now() / 1000)});
-            c++;
-            $(this).dialog("close")
-            if(c==pathArray.length){
-              var category = trial.category;
-              var tempObj={};
-              tempObj[category] = dict;
-              results.push(tempObj);
-              results = JSON.stringify(results)
-              console.log(results);
+        Submit: function(){
+          console.log(selectedArray);
+          selectedArray.strokeColor = ui.item.css("background-color");
+          selectedArray.alreadyClicked = true;
+          unclickable = false;
+          var UI = $("#partName").val();
+          svgstring = selectedArray.exportSVG({asString: true});
+          var start = svgstring.indexOf('d="')+3;
+          dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
+           "label": UI, "Time clicked" : timeClicked,  "Time labeled": Math.floor(Date.now() / 1000)});
+          c++;
+          $(this).dialog("close")
+          if(c==pathArray.length){
+            var category = trial.category;
+            var tempObj={};
+            tempObj[category] = dict;
+            results.push(tempObj);
+            results = JSON.stringify(results)
+            console.log(results);
               //c=0;
               project.activeLayer.removeChildren();
               paper.view.draw();
@@ -242,9 +245,9 @@ function setRandomColor(li) {
               //   $("#List").menu("destroy");
               //   $("#Complete").dialog("open");
               // }
-	    };
-	  }
-	}
+            };
+          }
+        }
       });
     } 
   }
