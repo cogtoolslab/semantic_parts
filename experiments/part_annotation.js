@@ -68,13 +68,17 @@ function setRandomColor(li) {
     function display(){
       //displaying the indexed sketch through SVG data
       var sketch = trial.svg;  //CHANGES var sketch = data[sketchNo].svgData;
+      sketch = sketch.replace('["', "");
+      sketch = sketch.replace('"]',"");
+      sketch = sketch.toString().split('", "')
+      console.log(sketch);
       pathArray = new Array;
       for (var i = 0; i< sketch.length; i++) {
       	pathArray[i] = new Path(sketch[i]);
       	pathArray[i].strokeColor = 'black';
       	//Increasing stroke width to make it clickable
       	pathArray[i].strokeWidth = 8;
-       console.log(trial.svg.toString().split('", "'));
+      
 
   	//Click and Hover event handlers
   	_.forEach(pathArray, function(p) {
