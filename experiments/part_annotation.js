@@ -122,9 +122,9 @@ function setRandomColor(li) {
     function listgen(){
       console.log("I'm working");
       $("#List").empty();
-      console.log(trial.parts);
-      console.log(typeof trial.parts);      
-      _.forEach(trial.parts, function(p){
+      console.log(trial.parts.toString().split(','));
+      partList = trial.parts.toString().split(',');
+      _.forEach(partList, function(p){
 
       	var li = $("<li><div>" + p +"</div></li>" );
       	//setRandomColor(li);
