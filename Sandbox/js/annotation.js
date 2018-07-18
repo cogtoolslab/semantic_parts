@@ -80,68 +80,110 @@ $("#Complete").dialog({
     pathArray[i].strokeWidth = 8;
     pathArray[i].alreadyClicked = false;
     pathArray[i].highlit=false;
+    pathArray[i].strokeNum=i;
 
   };
+  
+
 
    //Click and Hover event handlers
+
+   //highlight remover
+
+   _
+
    _.forEach(pathArray, function(p) {
     p.onClick = function(event) {
+    
       if(p.alreadyClicked==false && unclickable == false){
-        selectedArray[0]=p;  
+        selectedArray[numLitStrokes]=p;  
         timeClicked = Math.floor(Date.now() / 1000);
         $('#List').menu("enable");
         unclickable = true
-        selectedArray.strokeColor = 'orange';
+        selectedArray[numLitStrokes].strokeColor = 'orange';
+        numLitStrokes++;
      // p.alreadyClicked = true;
      //testObj.SVGstring[c]= p;
+     console.log("selecting new stroke");
 
 
    }
+   else if(p.alreadyClicked==true&&unclickable==false){
+        p.strokeColor= 'black';
+        p.alreadyClicked= false;
+        c--;
+        if(dict.length>0){
+
+        for(var i=0; i<dict.length; i++){
+          //console.log( "this is lit stroke num", p.strokeNum)
+             if(p.strokeNum==dict[i].strokeNum){
+                console.log(dict);
+                dict.splice(i,1);
+                console.log(dict);
+                break;
+                //console.log(dict);
+              }
+              }
+            }
+        }else if(p.alreadyClicked== false && unclickable==true && p.highlit==true){
+          p.strokeColor='black';
+          selectedArray.splice(selectedArray.indexOf(p),1);
+          p.highlit=false;
+          if(selectedArray.length==0){
+            unclickable=false;
+
+          }
+
+        }else if(p.alreadyClicked== false && unclickable==true && p.highlit==false){
+        selectedArray[numLitStrokes]=p;  
+        timeClicked = Math.floor(Date.now() / 1000);
+        $('#List').menu("enable");
+        unclickable = true
+        selectedArray[numLitStrokes].strokeColor = 'orange';
+        numLitStrokes++;
+
+        }
+
+      }
    //else if(p.alreadyClicked==true && unclickable==false){
    // $("#reset").dialog("open");
 
    //   }
- }
+ 
 });
 
    tool.onMouseDrag= function(event){
-     dragStat=true;
      console.log("MD");
-     if(dragStat==true){
-     _.forEach(pathArray, function(p) {
-      p.onMouseEnter = function(event) {
-        if(p.alreadyClicked == false && unclickable == false && p.highlit==false){
-          p.highlit=true;
-          selectedArray[numLitStrokes]=p;
-          selectedArray[numLitStrokes].strokeColor = 'yellow';
-          numLitStrokes++
-        }
+     dragStat=true;
+
+     }
+
+     tool.onMouseUp = function(event){
+      if(dragStat==true && selectedArray.length!=0){
+        console.log("Mouse is up");
+        timeClicked = Math.floor(Date.now() / 1000);
+        $('#List').menu("enable");
+        unclickable = true;
+        //numLitStrokes=0;
+        _.forEach(selectedArray, function(p){
+          //p.highlit = false;
+          p.strokeColor = 'orange';})
       }
-
-    });
-
-   }}
-
-   tool.onMouseUp = function(event){
-
-    console.log(selectedArray, numLitStrokes);
-     numLitStrokes=0
-    if(dragStat=true){
-      timeClicked = Math.floor(Date.now() / 1000);
-      $('#List').menu("enable");
-      unclickable = true;
       dragStat=false;
-      _.forEach(selectedArray, function(p){
-        p.highlit = false;
-        p.strokeColor = 'orange';})
-       }
 
     }
 
     _.forEach(pathArray, function(p) {
       p.onMouseEnter = function(event) {
-
-        if(p.alreadyClicked == false && unclickable == false){
+        console.log("general mouse enter", dragStat);
+        
+         if(p.alreadyClicked == false && unclickable == false && p.highlit==false && dragStat==true){
+          console.log("drag mouse enter", dragStat);
+            p.highlit=true;
+            selectedArray[numLitStrokes]=p;
+            selectedArray[numLitStrokes].strokeColor = 'yellow';
+            numLitStrokes++
+        } else if (p.alreadyClicked == false && unclickable == false&& dragStat==false){
           p.strokeColor = 'yellow';
         }
       }
@@ -149,7 +191,7 @@ $("#Complete").dialog({
 
     _.forEach(pathArray, function(p){
       p.onMouseLeave = function(event) {
-        if(p.alreadyClicked == false && unclickable == false && dragStat == false){
+        if(p.alreadyClicked == false && unclickable == false && dragStat==false){
           p.strokeColor = 'black'; 
         }}
       }); 
@@ -190,50 +232,58 @@ $("#Complete").dialog({
       //items: "> :not(.ui-widget-header)",
       select : function(event, ui){
         var text = ui.item.text();
+
         dragStat = false;
         if(text!='Other'){
-          unclickable = false;
+          //unclickable = false;
           _.forEach(selectedArray,function(p){ 
+            p.highlit=false;
             p.strokeColor= ui.item.css("background-color");
-            p.alreadyClicked=true;});
-          
-          //svgstring = selectedArray.exportSVG({asString: true});
-          //var start = svgstring.indexOf('d="')+3;
-          //dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-          // "label": text, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000)});
+            p.alreadyClicked=true;
+            svgstring = p.exportSVG({asString: true});
+            var start = svgstring.indexOf('d="')+3;
+            numLitStrokes=0;
+            dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
+             "label": text, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000), "strokeNum" : p.strokeNum});
+
+          });        
           c=c+selectedArray.length;
           selectedArray=[];
+          console.log("dragStat after click", dragStat)
           if(c==pathArray.length){
             var category = data[sketchNo].category;
             var tempObj={};
             tempObj[category] = dict;
             results.push(tempObj);
+
+            //console.log(dict[0].label);
             results = JSON.stringify(results)
             console.log(results);
+            
             sketchNo++;
             c=0;
             project.activeLayer.removeChildren();
             paper.view.draw();
-      //display();
-      if(sketchNo<data.length){
-        $("#List").menu("destroy");
-        trial();} else {
-          $("#List").menu("destroy");
-          $("#Complete").dialog("open");
+            //display();
+            if(sketchNo<data.length){
+              $("#List").menu("destroy");
+              trial();} else {
+                $("#List").menu("destroy");
+                $("#Complete").dialog("open");
+              }
+            }
+          }
+          else if(text == 'Other'){
+
+            otherColor = ui.item.css("background-color");
+            $("#dialog-form").dialog("open");
+          }
+
+          $("#List").menu("disable");
+
+
         }
-      }
-    }
-    else if(text == 'Other'){
-
-      otherColor = ui.item.css("background-color");
-      $("#dialog-form").dialog("open");
-    }
-
-    $("#List").menu("disable");
-
-
-  }
-});
+      });
 
 
   //Free response dialog box 
