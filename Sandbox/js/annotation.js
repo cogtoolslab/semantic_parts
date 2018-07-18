@@ -6,7 +6,7 @@ var Complete = false;
 var unclickable = false;
 var dict;
 var results;
-var selectedArray;
+var selectedArray=[];
 var sketch;
 var pathArray;
 var c;
@@ -14,19 +14,23 @@ var timeClicked;
 var otherColor;
 var colors = ["#E69F00","#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"];
 var colNo = 0;
+var dragStat = false;
+var numLitStrokes=0;
 paper.install(window);
 window.onload = function() { 
   paper.setup('myCanvas');
 
 //initializing global vars
 
+var tool = new Tool();
 
 
 
-   $("#Complete").dialog({
-    autoOpen:false,
-    height: 200,
-    width: 200});
+
+$("#Complete").dialog({
+  autoOpen:false,
+  height: 200,
+  width: 200});
 
    /* $("#reset").dialog({
     autoOpen: false,
@@ -42,7 +46,7 @@ window.onload = function() {
     },
     {"No":
   }
-   }); */
+}); */
 
   //calling the first trial by default
   trial();
@@ -52,18 +56,18 @@ window.onload = function() {
   //This retrieves SVG data and presents the sketch on the canvas
   //Also contains handlers for highlight and click highlight events
   function getRandomColor() {
-  var letters = '0123456789ABCDEF';
-  var color = '#';
-  for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
   }
-  return color;
-}
 
-function setRandomColor(li) {
-  li.css("background-color", colors[colNo]);
-  colNo++;
-}
+  function setRandomColor(li) {
+    li.css("background-color", colors[colNo]);
+    colNo++;
+  }
 
   function display(){
     //displaying the indexed sketch through SVG data
@@ -74,47 +78,84 @@ function setRandomColor(li) {
       pathArray[i].strokeColor = 'black';
     //Increasing stroke width to make it clickable
     pathArray[i].strokeWidth = 8;
+    pathArray[i].alreadyClicked = false;
+    pathArray[i].highlit=false;
+
+  };
 
    //Click and Hover event handlers
    _.forEach(pathArray, function(p) {
     p.onClick = function(event) {
       if(p.alreadyClicked==false && unclickable == false){
-        selectedArray=p;  
+        selectedArray[0]=p;  
         timeClicked = Math.floor(Date.now() / 1000);
         $('#List').menu("enable");
         unclickable = true
-        p.strokeColor = 'orange';
+        selectedArray.strokeColor = 'orange';
      // p.alreadyClicked = true;
      //testObj.SVGstring[c]= p;
 
-     
+
    }
    //else if(p.alreadyClicked==true && unclickable==false){
    // $("#reset").dialog("open");
-        
-   //   }
-    }
- });
-   _.forEach(pathArray, function(p) {
-    p.onMouseEnter = function(event) {
-      console.log("ENTERED");
-      if(p.alreadyClicked == false && unclickable == false){
-        p.strokeColor = 'yellow';
-      }
-    }
-  });
 
-   _.forEach(pathArray, function(p){
-    p.onMouseLeave = function(event) {
-      if(p.alreadyClicked == false && unclickable == false){
-        p.strokeColor = 'black'; 
-      }}
-    }); 
+   //   }
+ }
+});
+
+   tool.onMouseDrag= function(event){
+     dragStat=true;
+     console.log("MD");
+     if(dragStat==true){
+     _.forEach(pathArray, function(p) {
+      p.onMouseEnter = function(event) {
+        if(p.alreadyClicked == false && unclickable == false && p.highlit==false){
+          p.highlit=true;
+          selectedArray[numLitStrokes]=p;
+          selectedArray[numLitStrokes].strokeColor = 'yellow';
+          numLitStrokes++
+        }
+      }
+
+    });
+
+   }}
+
+   tool.onMouseUp = function(event){
+
+    console.log(selectedArray, numLitStrokes);
+     numLitStrokes=0
+    if(dragStat=true){
+      timeClicked = Math.floor(Date.now() / 1000);
+      $('#List').menu("enable");
+      unclickable = true;
+      dragStat=false;
+      _.forEach(selectedArray, function(p){
+        p.highlit = false;
+        p.strokeColor = 'orange';})
+       }
+
+    }
+
+    _.forEach(pathArray, function(p) {
+      p.onMouseEnter = function(event) {
+
+        if(p.alreadyClicked == false && unclickable == false){
+          p.strokeColor = 'yellow';
+        }
+      }
+    });
+
+    _.forEach(pathArray, function(p){
+      p.onMouseLeave = function(event) {
+        if(p.alreadyClicked == false && unclickable == false && dragStat == false){
+          p.strokeColor = 'black'; 
+        }}
+      }); 
 
   //Setting already clicked property of all strokes to false
-  pathArray[i].alreadyClicked = false;
 
-};
 }
 
 
@@ -149,15 +190,19 @@ function setRandomColor(li) {
       //items: "> :not(.ui-widget-header)",
       select : function(event, ui){
         var text = ui.item.text();
+        dragStat = false;
         if(text!='Other'){
           unclickable = false;
-          selectedArray.strokeColor= ui.item.css("background-color");
-          selectedArray.alreadyClicked=true;
-          svgstring = selectedArray.exportSVG({asString: true});
-          var start = svgstring.indexOf('d="')+3;
-          dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-           "label": text, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000)});
-          c++;
+          _.forEach(selectedArray,function(p){ 
+            p.strokeColor= ui.item.css("background-color");
+            p.alreadyClicked=true;});
+          
+          //svgstring = selectedArray.exportSVG({asString: true});
+          //var start = svgstring.indexOf('d="')+3;
+          //dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
+          // "label": text, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000)});
+          c=c+selectedArray.length;
+          selectedArray=[];
           if(c==pathArray.length){
             var category = data[sketchNo].category;
             var tempObj={};
@@ -173,16 +218,17 @@ function setRandomColor(li) {
       if(sketchNo<data.length){
         $("#List").menu("destroy");
         trial();} else {
-            $("#List").menu("destroy");
-            $("#Complete").dialog("open");
-          }
+          $("#List").menu("destroy");
+          $("#Complete").dialog("open");
+        }
       }
     }
     else if(text == 'Other'){
-     
+
       otherColor = ui.item.css("background-color");
       $("#dialog-form").dialog("open");
     }
+
     $("#List").menu("disable");
 
 
@@ -233,9 +279,9 @@ function setRandomColor(li) {
           if(sketchNo<data.length){
             $("#List").menu("destroy");
             trial();} else if(sketchNo==data.length){
-            $("#List").menu("destroy");
-            $("#Complete").dialog("open");
-          }
+              $("#List").menu("destroy");
+              $("#Complete").dialog("open");
+            }
           }
           ;
         }
@@ -248,7 +294,7 @@ function setRandomColor(li) {
   function trial(){
     dict = [];
     results = [];
-    selectedArray;
+    selectedArray=[];
     sketch;
     pathArray;
     c=0;
