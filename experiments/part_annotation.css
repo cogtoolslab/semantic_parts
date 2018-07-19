@@ -22,14 +22,16 @@
  .ui-menu {
     position: relative;
     display: inline-block;
-    bottom: 200px;
-    left: 260px;
+    margin-bottom: auto;
+    left: 255px;
+    bottom: 305px; 
 }
 
 canvas[resize] {
     padding-left: 0;
     padding-right: 0;
     margin-left: auto;
+    margin-bottom: auto
     margin-right: auto;
     display: block;
     width: 300px;

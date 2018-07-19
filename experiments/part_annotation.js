@@ -26,11 +26,11 @@ jsPsych.plugins['part_annotation'] = (function(){
       var colNo = 0;
       var numLitStrokes=0;    
       var timeLabeled;
-      var colors = ["#E69F00","#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"];
+      var colors = ["#ff6666","#ffaa80","#ffb3ba","#ffdfba", "#ffffba", "#baffc9", "#bae1ff", "#bf80ff"];
 
 
       setTimeout(function() {
-        display_element.innerHTML += '<div><canvas id="myCanvas" style="border: 2px solid #314DFE;" display = "block" width= "300px" height= "300px" resize="false" ></canvas> <ul id="List"></ul><div id="dialog-form" title="Enter Part Label"><form><fieldset><label for="partName">Part Name</label><input type="text" name="partName" id="partName" placeholder="Type your part label here" class="text ui-widget-content ui-corner-all"><!-- Allow form submission with keyboard without duplicating the dialog button --><input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset></form></div></div>'; 
+        display_element.innerHTML += '<div><canvas id="myCanvas" style="border: 2px solid #000000;" display = "block" width= "300px" height= "300px" resize="false" ></canvas> <ul id="List"></ul><div id="dialog-form" title="Enter Part Label"><form><fieldset><label for="partName">Part Name</label><input type="text" name="partName" id="partName" placeholder="Type your part label here" class="text ui-widget-content ui-corner-all"><!-- Allow form submission with keyboard without duplicating the dialog button --><input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset></form></div></div>'; 
         paper.setup('myCanvas');
         listgen();
         menugen();
@@ -125,7 +125,13 @@ jsPsych.plugins['part_annotation'] = (function(){
           if(p.strokeNum==dict[i].strokeNum){
            for(var j=0; j<$('#List li').length-1;j++){
             if($('li div')[j].innerHTML==dict[i].label){
-              $($('li div')[j]).css("background-color", "red")
+              $($('li div')[j]).css("background-color", "#660000");
+              $($('li div')[j]).css("color", "#f4d142");
+              $($('li div')[j]).css("border-width", 3);
+              $($('li div')[j]).css("border-color", "black");
+              $($('li div')[j]).css("text-shadow", "2px 2px 2px");
+
+              
             }}
             console.log(dict);
             dict.splice(i,1);
@@ -289,10 +295,13 @@ jsPsych.plugins['part_annotation'] = (function(){
           c=c+selectedArray.length;
           selectedArray=[];
           if(c==pathArray.length){
-            var category = trial.category;
-            var tempObj={};
-            tempObj[category] = dict;
-            results.push(tempObj);
+           var dataURL = document.getElementById('myCanvas').toDataURL();
+           dataURL = dataURL.replace('data:image/png;base64,',''); 
+           var category = trial.category;
+           var tempObj={};
+           tempObj[category] = dict;
+           tempObj["png"] = dataURL
+           results.push(tempObj);
 
             //console.log(dict[0].label);
             results = JSON.stringify(results)
@@ -337,7 +346,7 @@ jsPsych.plugins['part_annotation'] = (function(){
       } ,
 
       Submit: function(ui){
-        
+
         clickable = true;
 
 
@@ -358,23 +367,27 @@ jsPsych.plugins['part_annotation'] = (function(){
         $(this).dialog("close");
         console.log(c);
         if(c==pathArray.length){
+          var dataURL = document.getElementById('myCanvas').toDataURL();
+          dataURL = dataURL.replace('data:image/png;base64,',''); 
           var category = trial.category;
           var tempObj={};
           tempObj[category] = dict;
+          tempObj["png"] = dataURL;
           results.push(tempObj);
+          console.log(results);
           results = JSON.stringify(results)
           console.log(results);
-        project.activeLayer.removeChildren();
-        paper.view.draw();
-        $("#List").menu("destroy");
-        $("#dialog-form").dialog("destroy");
-        end_trial();
+          project.activeLayer.removeChildren();
+          paper.view.draw();
+          $("#List").menu("destroy");
+          $("#dialog-form").dialog("destroy");
+          end_trial();
 
+        }
+        ;
       }
-      ;
     }
-  }
-});
+  });
 }    
 
 }
