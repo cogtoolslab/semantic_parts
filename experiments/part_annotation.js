@@ -243,7 +243,6 @@ jsPsych.plugins['part_annotation'] = (function(){
       var partList = trial.parts.toString().split(',');
       _.forEach(partList, function(p){
         var li = $("<li><div>" + p +"</div></li>" );
-        console.log(li);
         setRandomColor(li);
         li.appendTo("#List");
 
@@ -270,6 +269,7 @@ jsPsych.plugins['part_annotation'] = (function(){
       modal: true,
       //items: "> :not(.ui-widget-header)",
       select : function(event, ui){
+        console.log(dict);
         clickable = true;
         listgen();
         $("#List").menu("refresh");
@@ -287,9 +287,7 @@ jsPsych.plugins['part_annotation'] = (function(){
 
           });        
           c=c+selectedArray.length;
-          console.log(selectedArray);
           selectedArray=[];
-          console.log("dragStat after click", dragStat)
           if(c==pathArray.length){
             var category = trial.category;
             var tempObj={};
@@ -299,7 +297,7 @@ jsPsych.plugins['part_annotation'] = (function(){
             //console.log(dict[0].label);
             results = JSON.stringify(results)
             console.log(results);
-            //c=0;
+
             project.activeLayer.removeChildren();
             paper.view.draw();
             $("#List").menu("destroy");
@@ -309,7 +307,6 @@ jsPsych.plugins['part_annotation'] = (function(){
           }
         }
         else if(text == 'Other'){
-          console.log(selectedArray);
           otherColor = ui.item.css("background-color");
             //p.strokeColor = ui.item.css("background-color");
             $("#dialog-form").dialog("open");
@@ -340,7 +337,6 @@ jsPsych.plugins['part_annotation'] = (function(){
       } ,
 
       Submit: function(ui){
-        console.log(selectedArray);
         
         clickable = true;
 
@@ -358,7 +354,6 @@ jsPsych.plugins['part_annotation'] = (function(){
 
         });        
         c=c+selectedArray.length;
-        console.log(selectedArray);
         selectedArray=[];
         $(this).dialog("close");
         console.log(c);
@@ -369,7 +364,6 @@ jsPsych.plugins['part_annotation'] = (function(){
           results.push(tempObj);
           results = JSON.stringify(results)
           console.log(results);
-        //c=0;
         project.activeLayer.removeChildren();
         paper.view.draw();
         $("#List").menu("destroy");
