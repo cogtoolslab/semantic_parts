@@ -2,7 +2,8 @@
 jsPsych.plugins['part_annotation'] = (function(){
 
   var plugin = {};
-
+  var dragStat=false;
+  var selectedArray=[];
   plugin.info = {
     name: 'part_annotation',
     parameters: {
@@ -13,21 +14,9 @@ jsPsych.plugins['part_annotation'] = (function(){
 
     //paper.install(window);
     //window.onload = function() {
-      display_element.innerHTML += '<div><canvas id="myCanvas" style="border: 2px solid #314DFE;" display = "block" width= "300px" height= "300px" resize="false" ></canvas> <ul id="List"></ul><div id="dialog-form" title="Enter Part Label"><form><fieldset><label for="partName">Part Name</label><input type="text" name="partName" id="partName" placeholder="Type your part label here" class="text ui-widget-content ui-corner-all"><!-- Allow form submission with keyboard without duplicating the dialog button --><input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset></form></div></div>'; 
-      paper.setup('myCanvas');
-
-      setTimeout(function() {
-        listgen();
-        menugen();
-        display();
-      }, 1000);
-
-    //var sketchNo = 0; 
-
+      
     var dict=[];
-    var dragStat = false;
     var results=[];
-    var selectedArray=[];
     var sketch;
     var pathArray;
     var c=0;
@@ -38,9 +27,21 @@ jsPsych.plugins['part_annotation'] = (function(){
     var numLitStrokes=0;    
     var timeLabeled;
     var colors = ["#E69F00","#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"];
-    var colNo = 0;
+  
+
+      setTimeout(function() {
+      display_element.innerHTML += '<div><canvas id="myCanvas" style="border: 2px solid #314DFE;" display = "block" width= "300px" height= "300px" resize="false" ></canvas> <ul id="List"></ul><div id="dialog-form" title="Enter Part Label"><form><fieldset><label for="partName">Part Name</label><input type="text" name="partName" id="partName" placeholder="Type your part label here" class="text ui-widget-content ui-corner-all"><!-- Allow form submission with keyboard without duplicating the dialog button --><input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset></form></div></div>'; 
+      paper.setup('myCanvas');
+        listgen();
+        menugen();
+        display();
+      }, 1000);
+
+    //var sketchNo = 0; 
+
 
     var end_trial = function(results) {
+       selectedArray=[];
       var turkInfo = jsPsych.turk.turkInfo();
 
       // gather the data to store for the trial
@@ -59,7 +60,6 @@ jsPsych.plugins['part_annotation'] = (function(){
 
       // move on to the next trial
       jsPsych.finishTrial(trial_data);
-      jsPsych.pauseExperiment();
     };
 
     function setRandomColor(li) {
@@ -186,9 +186,10 @@ jsPsych.plugins['part_annotation'] = (function(){
 
  }  }
    tool.onMouseUp = function(event){
-       if(clickable == true){
+     console.log("clickable:",clickable,"drag stat:", dragStat, "selectedArray:", selectedArray)
+    if(clickable == true){
     if(dragStat==true && selectedArray.length!=0){
-      console.log("Mouse is up");
+      console.log("Mouse is up+ selectedArray", selectedArray);
       timeClicked = Math.floor(Date.now() / 1000);
       $('#List').menu("enable");
         //unclickable = true;
@@ -199,18 +200,20 @@ jsPsych.plugins['part_annotation'] = (function(){
        
       }
        dragStat=false;
-      console.log(dragStat);
+
+     // console.log(sele);
 
    } }
 
     _.forEach(pathArray, function(p) {
       p.onMouseEnter = function(event) {
            if(clickable == true){
-        console.log(p.alreadyClicked, p.highlit, dragStat);
+        //console.log(p.alreadyClicked, p.highlit, dragStat);
         if(p.alreadyClicked == false && p.highlit==false && dragStat==true){
-          console.log("drag mouse enter", dragStat);
+        
           p.highlit=true;
           selectedArray[numLitStrokes]=p;
+          console.log(selectedArray);
           selectedArray[numLitStrokes].strokeColor = 'yellow';
           numLitStrokes++
         } else if (p.alreadyClicked == false && p.highlit==false && dragStat==false){
@@ -221,8 +224,9 @@ jsPsych.plugins['part_annotation'] = (function(){
     }});
 
     _.forEach(pathArray, function(p){
-         if(clickable == true){
+        
       p.onMouseLeave = function(event) {
+         if(clickable == true){
         if(p.alreadyClicked == false && p.highlit==false && dragStat==false){
           p.strokeColor = 'black'; 
         }}
@@ -354,6 +358,7 @@ jsPsych.plugins['part_annotation'] = (function(){
 
           });        
           c=c+selectedArray.length;
+            selectedArray=[];
         $(this).dialog("close");
         console.log(c);
         if(c==pathArray.length){
