@@ -30,7 +30,14 @@ jsPsych.plugins['part_annotation'] = (function(){
 
 
       setTimeout(function() {
-        display_element.innerHTML += '<div><canvas id="myCanvas" style="border: 2px solid #000000;" display = "block" width= "300px" height= "300px" resize="false" ></canvas> <ul id="List"></ul><div id="dialog-form" title="Enter Part Label"><form><fieldset><label for="partName">Part Name</label><input type="text" name="partName" id="partName" placeholder="Type your part label here" class="text ui-widget-content ui-corner-all"><!-- Allow form submission with keyboard without duplicating the dialog button --><input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset></form></div></div>'; 
+        display_element.innerHTML += '<div><canvas id="myCanvas" style="border: 2px solid #000000;" display = "block" \
+        width= "300px" height= "300px" resize="false" ></canvas> \
+        <ul id="List"></ul><div id="dialog-form" title="Enter Part Label">\
+        <form><fieldset><label for="partName">Part Name</label>\
+        <input type="text" name="partName" id="partName" placeholder="Type your part label here" class="text ui-widget-content ui-corner-all"> \
+        <!-- Allow form submission with keyboard without duplicating the dialog button --><input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset>\
+        </form></div> <div class="progress"><div id= "progressbar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">80%</div></div>\
+        </div>'; 
         paper.setup('myCanvas');
         listgen();
         menugen();
@@ -95,8 +102,7 @@ jsPsych.plugins['part_annotation'] = (function(){
    _.forEach(pathArray, function(p) {
 
     p.onClick = function(event) {
-      if(clickable == true){
-
+      if(clickable == true){ 
         if(p.alreadyClicked==false && p.highlit==false){
           p.highlit=true;
           selectedArray[numLitStrokes]=p;  
@@ -281,6 +287,9 @@ jsPsych.plugins['part_annotation'] = (function(){
         $("#List").menu("refresh");
         var text = ui.item.text();
         if(text!='Other'){
+          $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
+          $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
+          console.log($('.progress-bar').html((c/pathArray.length)*100));
           _.forEach(selectedArray,function(p){ 
             p.highlit=false;
             p.strokeColor= ui.item.css("background-color");
@@ -348,6 +357,8 @@ jsPsych.plugins['part_annotation'] = (function(){
       Submit: function(ui){
 
         clickable = true;
+        $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
+        $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
 
 
         _.forEach(selectedArray,function(p){ 
