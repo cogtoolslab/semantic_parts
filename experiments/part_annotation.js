@@ -32,6 +32,7 @@ jsPsych.plugins['part_annotation'] = (function(){
     var pathArray;
     var c=0;
     var timeClicked;
+    var clickable=true;
     var otherColor;
     var colNo = 0;
     var numLitStrokes=0;    
@@ -81,6 +82,7 @@ jsPsych.plugins['part_annotation'] = (function(){
   };
 
   
+    
   
 
 
@@ -91,7 +93,9 @@ jsPsych.plugins['part_annotation'] = (function(){
    _
 
    _.forEach(pathArray, function(p) {
+  
     p.onClick = function(event) {
+      if(clickable == true){
 
       if(p.alreadyClicked==false && p.highlit==false){
         p.highlit=true;
@@ -108,6 +112,7 @@ jsPsych.plugins['part_annotation'] = (function(){
 
    }
    else if(p.alreadyClicked==true){
+    clickable = false;
     p.strokeColor= 'orange';
     selectedArray[numLitStrokes]=p;
     console.log(dict);
@@ -165,7 +170,7 @@ jsPsych.plugins['part_annotation'] = (function(){
 
       } */
 
-    }
+    }}
    //else if(p.alreadyClicked==true && unclickable==false){
    // $("#reset").dialog("open");
 
@@ -175,11 +180,13 @@ jsPsych.plugins['part_annotation'] = (function(){
 
   
    tool.onMouseDrag= function(event){
+       if(clickable == true){
      dragStat=true;
      console.log("MD", dragStat);
 
-   }
+ }  }
    tool.onMouseUp = function(event){
+       if(clickable == true){
     if(dragStat==true && selectedArray.length!=0){
       console.log("Mouse is up");
       timeClicked = Math.floor(Date.now() / 1000);
@@ -194,10 +201,11 @@ jsPsych.plugins['part_annotation'] = (function(){
        dragStat=false;
       console.log(dragStat);
 
-    }
+   } }
 
     _.forEach(pathArray, function(p) {
       p.onMouseEnter = function(event) {
+           if(clickable == true){
         console.log(p.alreadyClicked, p.highlit, dragStat);
         if(p.alreadyClicked == false && p.highlit==false && dragStat==true){
           console.log("drag mouse enter", dragStat);
@@ -210,17 +218,18 @@ jsPsych.plugins['part_annotation'] = (function(){
           p.strokeColor = 'yellow';
         }
       }
-    });
+    }});
 
     _.forEach(pathArray, function(p){
+         if(clickable == true){
       p.onMouseLeave = function(event) {
         if(p.alreadyClicked == false && p.highlit==false && dragStat==false){
           p.strokeColor = 'black'; 
         }}
-      }); 
+     } }); 
+}
 
-
-  }
+  
 
 
 
@@ -258,6 +267,7 @@ jsPsych.plugins['part_annotation'] = (function(){
       modal: true,
       //items: "> :not(.ui-widget-header)",
       select : function(event, ui){
+        clickable = true;
         listgen();
         $("#List").menu("refresh");
         var text = ui.item.text();
@@ -328,6 +338,7 @@ jsPsych.plugins['part_annotation'] = (function(){
 
       Submit: function(ui){
         console.log(selectedArray);
+          clickable = true;
 
 
  _.forEach(selectedArray,function(p){ 
