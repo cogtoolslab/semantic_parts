@@ -3,7 +3,6 @@
 //dialog flexibility
 var sketchNo = 0; 
 var Complete = false;
-//var unclickable = false;
 var dict;
 var results;
 var selectedArray=[];
