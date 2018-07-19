@@ -24,17 +24,17 @@ jsPsych.plugins['part_annotation'] = (function(){
 
     //var sketchNo = 0; 
 
-    var dict;
-    var results;
+    var dict=[];
+    var dragStat = false;
+    var results=[];
     var selectedArray=[];
     var sketch;
     var pathArray;
-    var c;
+    var c=0;
     var timeClicked;
     var otherColor;
     var colNo = 0;
-    var dragStat = false;
-    var numLitStrokes=0;    var timeClicked;
+    var numLitStrokes=0;    
     var timeLabeled;
     var colors = ["#E69F00","#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"];
     var colNo = 0;
@@ -65,7 +65,7 @@ jsPsych.plugins['part_annotation'] = (function(){
       li.css("background-color", colors[colNo]);
       colNo++;
     }
-    function display(){
+    function display(){  
     //displaying the indexed sketch through SVG data
     var sketch = trial.svg;
     pathArray = new Array;
@@ -73,12 +73,14 @@ jsPsych.plugins['part_annotation'] = (function(){
       pathArray[i] = new Path(sketch[i]);
       pathArray[i].strokeColor = 'black';
     //Increasing stroke width to make it clickable
-    pathArray[i].strokeWidth = 8;
+    pathArray[i].strokeWidth = 7;
     pathArray[i].alreadyClicked = false;
     pathArray[i].highlit=false;
     pathArray[i].strokeNum=i;
 
   };
+
+  
   
 
 
@@ -112,7 +114,7 @@ jsPsych.plugins['part_annotation'] = (function(){
     //p.alreadyClicked= false;
     c--;
     if(dict.length>0){
-    $('#List').menu("enable");
+      $('#List').menu("enable");
       for(var i=0; i<dict.length; i++){
           //console.log( "this is lit stroke num", p.strokeNum)
           if(p.strokeNum==dict[i].strokeNum){
@@ -126,9 +128,9 @@ jsPsych.plugins['part_annotation'] = (function(){
 
             if(dict.length==0){
              // $('#List').menu("disable");
-              console.log($('#List li').length);
-            }
-            break;
+             console.log($('#List li').length);
+           }
+           break;
                 //console.log(dict);
               }
             }
@@ -171,12 +173,12 @@ jsPsych.plugins['part_annotation'] = (function(){
 
  });
 
+  
    tool.onMouseDrag= function(event){
-     console.log("MD");
      dragStat=true;
+     console.log("MD", dragStat);
 
    }
-
    tool.onMouseUp = function(event){
     if(dragStat==true && selectedArray.length!=0){
       console.log("Mouse is up");
@@ -186,16 +188,17 @@ jsPsych.plugins['part_annotation'] = (function(){
         //numLitStrokes=0;
         _.forEach(selectedArray, function(p){
           p.highlit = true;
-          p.strokeColor = 'orange';})
+          p.strokeColor = 'orange';});
+       
       }
-      dragStat=false;
+       dragStat=false;
+      console.log(dragStat);
 
     }
 
     _.forEach(pathArray, function(p) {
       p.onMouseEnter = function(event) {
-        console.log("general mouse enter", dragStat);
-        
+        console.log(p.alreadyClicked, p.highlit, dragStat);
         if(p.alreadyClicked == false && p.highlit==false && dragStat==true){
           console.log("drag mouse enter", dragStat);
           p.highlit=true;
@@ -203,6 +206,7 @@ jsPsych.plugins['part_annotation'] = (function(){
           selectedArray[numLitStrokes].strokeColor = 'yellow';
           numLitStrokes++
         } else if (p.alreadyClicked == false && p.highlit==false && dragStat==false){
+          console.log("general enter", dragStat)
           p.strokeColor = 'yellow';
         }
       }
@@ -216,25 +220,25 @@ jsPsych.plugins['part_annotation'] = (function(){
       }); 
 
 
-}
+  }
 
 
 
     //generating the menu 
-   function listgen(){
-    colNo=0
-    $("#List").empty();
-    var partList = trial.parts.toString().split(',');
-    _.forEach(partList, function(p){
-      var li = $("<li><div>" + p +"</div></li>" );
-      console.log(li);
-      setRandomColor(li);
-      li.appendTo("#List");
+    function listgen(){
+      colNo=0
+      $("#List").empty();
+      var partList = trial.parts.toString().split(',');
+      _.forEach(partList, function(p){
+        var li = $("<li><div>" + p +"</div></li>" );
+        console.log(li);
+        setRandomColor(li);
+        li.appendTo("#List");
 
-    });
-    var other = $("<li><div>" + "Other" +"</div></li>" );
-    setRandomColor(other);
-    other.appendTo("#List");}
+      });
+      var other = $("<li><div>" + "Other" +"</div></li>" );
+      setRandomColor(other);
+      other.appendTo("#List");}
     //Function for creating menu and free response box widgets from the list created by listgen()
 
 
@@ -254,18 +258,10 @@ jsPsych.plugins['part_annotation'] = (function(){
       modal: true,
       //items: "> :not(.ui-widget-header)",
       select : function(event, ui){
-        colNo = 0; //not needed in final version
-        //console.log($($("#List li")).css("background-color"))
-        //_.forEach($("#List li"), function(p){
-        // setRandomColor($(p));
-        //})
         listgen();
         $("#List").menu("refresh");
         var text = ui.item.text();
-
-        dragStat = false;
         if(text!='Other'){
-          //unclickable = false;
           _.forEach(selectedArray,function(p){ 
             p.highlit=false;
             p.strokeColor= ui.item.css("background-color");
@@ -278,6 +274,7 @@ jsPsych.plugins['part_annotation'] = (function(){
 
           });        
           c=c+selectedArray.length;
+          console.log(c);
           selectedArray=[];
           console.log("dragStat after click", dragStat)
           if(c==pathArray.length){
@@ -289,27 +286,27 @@ jsPsych.plugins['part_annotation'] = (function(){
             //console.log(dict[0].label);
             results = JSON.stringify(results)
             console.log(results);
-            c=0;
+            //c=0;
             project.activeLayer.removeChildren();
             paper.view.draw();
-                $("#List").menu("destroy");
-                $("#Complete").dialog("open");
-                $("#dialog-form").dialog("destroy");
-                end_trial();
-            }
+            $("#List").menu("destroy");
+            $("#Complete").dialog("open");
+            $("#dialog-form").dialog("destroy");
+            end_trial();
+          }
         }
         else if(text == 'Other'){
 
           otherColor = ui.item.css("background-color");
             //p.strokeColor = ui.item.css("background-color");
             $("#dialog-form").dialog("open");
+          }
+
+          $("#List").menu("disable");
+
+
         }
-
-        $("#List").menu("disable");
-
-
-    }
-});
+      });
 
 
   //Free response dialog box 
@@ -326,27 +323,36 @@ jsPsych.plugins['part_annotation'] = (function(){
         selectedArray.strokeColor = 'black';
         //unclickable = false;
         $("#dialog-form").dialog("close");
-    } ,
+        $("#List").menu("enable");
+      } ,
 
-    Submit: function(ui){
-      selectedArray.strokeColor = otherColor;
-      selectedArray.alreadyClicked = true;
-      var UI = $("#partName").val();
-      svgstring = selectedArray.exportSVG({asString: true});
-      var start = svgstring.indexOf('d="')+3;
-      dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-        "label": UI, "Time clicked" : timeClicked,  "Time labeled": Math.floor(Date.now() / 1000), "strokeNum" : p.strokeNum});
-      c++;
-      $(this).dialog("close");
-      if(c==pathArray.length){
-        var category = data[sketchNo].category;
-        var tempObj={};
-        tempObj[category] = dict;
-        results.push(tempObj);
-        results = JSON.stringify(results)
-        console.log(results);
-        sketchNo++;
-        c=0;
+      Submit: function(ui){
+        console.log(selectedArray);
+
+
+ _.forEach(selectedArray,function(p){ 
+            p.highlit=false;
+            p.strokeColor= otherColor;
+            p.alreadyClicked=true;
+            var UI = $("#partName").val();
+            svgstring = p.exportSVG({asString: true});
+            var start = svgstring.indexOf('d="')+3;
+            numLitStrokes=0;
+            dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
+              "label": UI, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000), "strokeNum" : p.strokeNum});
+
+          });        
+          c=c+selectedArray.length;
+        $(this).dialog("close");
+        console.log(c);
+        if(c==pathArray.length){
+          var category = trial.category;
+          var tempObj={};
+          tempObj[category] = dict;
+          results.push(tempObj);
+          results = JSON.stringify(results)
+          console.log(results);
+        //c=0;
         project.activeLayer.removeChildren();
         paper.view.draw();
         $("#List").menu("destroy");
@@ -356,11 +362,11 @@ jsPsych.plugins['part_annotation'] = (function(){
       }
       ;
     }
-}
+  }
 });
 }    
 
-  }
-  return plugin;
+}
+return plugin;
 })();
 
