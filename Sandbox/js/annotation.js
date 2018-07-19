@@ -3,7 +3,7 @@
 //dialog flexibility
 var sketchNo = 0; 
 var Complete = false;
-var unclickable = false;
+//var unclickable = false;
 var dict;
 var results;
 var selectedArray=[];
@@ -94,79 +94,102 @@ $("#Complete").dialog({
 
    _.forEach(pathArray, function(p) {
     p.onClick = function(event) {
-    
-      if(p.alreadyClicked==false && unclickable == false){
+
+      if(p.alreadyClicked==false && p.highlit==false){
+        p.highlit=true;
         selectedArray[numLitStrokes]=p;  
         timeClicked = Math.floor(Date.now() / 1000);
         $('#List').menu("enable");
-        unclickable = true
+        //unclickable = true
         selectedArray[numLitStrokes].strokeColor = 'orange';
         numLitStrokes++;
      // p.alreadyClicked = true;
      //testObj.SVGstring[c]= p;
-     console.log("selecting new stroke");
+     console.log(selectedArray);
 
 
    }
-   else if(p.alreadyClicked==true&&unclickable==false){
-        p.strokeColor= 'black';
-        p.alreadyClicked= false;
-        c--;
-        if(dict.length>0){
-
-        for(var i=0; i<dict.length; i++){
+   else if(p.alreadyClicked==true){
+    p.strokeColor= 'orange';
+    selectedArray[numLitStrokes]=p;
+    console.log(dict);
+    //p.alreadyClicked= false;
+    c--;
+    if(dict.length>0){
+    $('#List').menu("enable");
+      for(var i=0; i<dict.length; i++){
           //console.log( "this is lit stroke num", p.strokeNum)
-             if(p.strokeNum==dict[i].strokeNum){
-                console.log(dict);
-                dict.splice(i,1);
-                console.log(dict);
-                break;
+          if(p.strokeNum==dict[i].strokeNum){
+           for(var j=0; j<$('#List li').length-1;j++){
+            if($('li div')[j].innerHTML==dict[i].label){
+              $($('li div')[j]).css("background-color", "red")
+            }}
+            console.log(dict);
+            dict.splice(i,1);
+            console.log(dict);
+
+            if(dict.length==0){
+             // $('#List').menu("disable");
+              console.log($('#List li').length);
+            }
+            break;
                 //console.log(dict);
               }
-              }
             }
-        }else if(p.alreadyClicked== false && unclickable==true && p.highlit==true){
+          } 
+        }
+        else if(p.alreadyClicked== false && p.highlit==true){
+          numLitStrokes--;
           p.strokeColor='black';
-          selectedArray.splice(selectedArray.indexOf(p),1);
           p.highlit=false;
-          if(selectedArray.length==0){
-            unclickable=false;
+          if(selectedArray.length>0){
+            for(var i=0; i<selectedArray.length;i++){
+              if(p.strokeNum==selectedArray[i].strokeNum){
+               selectedArray.splice(i,1);
+               if(selectedArray.length==0){
+                 $('#List').menu("disable");
+               }
+             } }}
+             console.log(selectedArray);
 
-          }
 
-        }else if(p.alreadyClicked== false && unclickable==true && p.highlit==false){
+
+
+           }
+       /* else if(p.alreadyClicked== false && p.highlit==false){
+         p.highlit == true; 
         selectedArray[numLitStrokes]=p;  
         timeClicked = Math.floor(Date.now() / 1000);
         $('#List').menu("enable");
-        unclickable = true
+        //unclickable = true
         selectedArray[numLitStrokes].strokeColor = 'orange';
         numLitStrokes++;
 
-        }
+      } */
 
-      }
+    }
    //else if(p.alreadyClicked==true && unclickable==false){
    // $("#reset").dialog("open");
 
    //   }
- 
-});
+
+ });
 
    tool.onMouseDrag= function(event){
      console.log("MD");
      dragStat=true;
 
-     }
+   }
 
-     tool.onMouseUp = function(event){
-      if(dragStat==true && selectedArray.length!=0){
-        console.log("Mouse is up");
-        timeClicked = Math.floor(Date.now() / 1000);
-        $('#List').menu("enable");
-        unclickable = true;
+   tool.onMouseUp = function(event){
+    if(dragStat==true && selectedArray.length!=0){
+      console.log("Mouse is up");
+      timeClicked = Math.floor(Date.now() / 1000);
+      $('#List').menu("enable");
+        //unclickable = true;
         //numLitStrokes=0;
         _.forEach(selectedArray, function(p){
-          //p.highlit = false;
+          p.highlit = true;
           p.strokeColor = 'orange';})
       }
       dragStat=false;
@@ -177,13 +200,13 @@ $("#Complete").dialog({
       p.onMouseEnter = function(event) {
         console.log("general mouse enter", dragStat);
         
-         if(p.alreadyClicked == false && unclickable == false && p.highlit==false && dragStat==true){
+        if(p.alreadyClicked == false && p.highlit==false && dragStat==true){
           console.log("drag mouse enter", dragStat);
-            p.highlit=true;
-            selectedArray[numLitStrokes]=p;
-            selectedArray[numLitStrokes].strokeColor = 'yellow';
-            numLitStrokes++
-        } else if (p.alreadyClicked == false && unclickable == false&& dragStat==false){
+          p.highlit=true;
+          selectedArray[numLitStrokes]=p;
+          selectedArray[numLitStrokes].strokeColor = 'yellow';
+          numLitStrokes++
+        } else if (p.alreadyClicked == false && p.highlit==false && dragStat==false){
           p.strokeColor = 'yellow';
         }
       }
@@ -191,7 +214,7 @@ $("#Complete").dialog({
 
     _.forEach(pathArray, function(p){
       p.onMouseLeave = function(event) {
-        if(p.alreadyClicked == false && unclickable == false && dragStat==false){
+        if(p.alreadyClicked == false && p.highlit==false && dragStat==false){
           p.strokeColor = 'black'; 
         }}
       }); 
@@ -204,9 +227,11 @@ $("#Complete").dialog({
   //Function for creating lists in HTML from dictionary for menu widget
 
   function listgen(){
+    colNo=0
     $("#List").empty();
     _.forEach(data[sketchNo].parts, function(p){
       var li = $("<li><div>" + p +"</div></li>" );
+      console.log(li);
       setRandomColor(li);
       li.appendTo("#List");
 
@@ -231,6 +256,13 @@ $("#Complete").dialog({
       modal: true,
       //items: "> :not(.ui-widget-header)",
       select : function(event, ui){
+        colNo = 0; //not needed in final version
+        //console.log($($("#List li")).css("background-color"))
+        //_.forEach($("#List li"), function(p){
+        // setRandomColor($(p));
+        //})
+        listgen();
+        $("#List").menu("refresh");
         var text = ui.item.text();
 
         dragStat = false;
@@ -298,14 +330,14 @@ $("#Complete").dialog({
 
       "Back": function(){
         selectedArray.strokeColor = 'black';
-        unclickable = false;
+        //unclickable = false;
         $("#dialog-form").dialog("close");
       } ,
 
       Submit: function(ui){
         selectedArray.strokeColor = otherColor;
         selectedArray.alreadyClicked = true;
-        unclickable = false;
+        //unclickable = false;
         var UI = $("#partName").val();
         svgstring = selectedArray.exportSVG({asString: true});
         var start = svgstring.indexOf('d="')+3;
