@@ -26,7 +26,7 @@ jsPsych.plugins['part_annotation'] = (function(){
       var colNo = 0;
       var numLitStrokes=0;    
       var timeLabeled;
-      var colors = ["#ff6666","#ffaa80","#ffb3ba","#ffdfba", "#ffffba", "#baffc9", "#bae1ff", "#bf80ff"];
+      var colors = ["#ff6666","#ffaa80","#ffb3ba","#ffdfba", "#ffffba", "#baffc9", "#bae1ff", "#bf80ff", "#f9bcff"];
 
 
       setTimeout(function() {
