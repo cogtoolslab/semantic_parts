@@ -287,9 +287,7 @@ jsPsych.plugins['part_annotation'] = (function(){
         $("#List").menu("refresh");
         var text = ui.item.text();
         if(text!='Other'){
-          $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
-          $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
-          console.log($('.progress-bar').html((c/pathArray.length)*100));
+
           _.forEach(selectedArray,function(p){ 
             p.highlit=false;
             p.strokeColor= ui.item.css("background-color");
@@ -302,6 +300,9 @@ jsPsych.plugins['part_annotation'] = (function(){
 
           });        
           c=c+selectedArray.length;
+          $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
+          $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
+           $('.progress-bar').html(Math.round((c/pathArray.length)*100) +'% complete');
           selectedArray=[];
           if(c==pathArray.length){
            var dataURL = document.getElementById('myCanvas').toDataURL();
@@ -357,9 +358,6 @@ jsPsych.plugins['part_annotation'] = (function(){
       Submit: function(ui){
 
         clickable = true;
-        $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
-        $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
-
 
         _.forEach(selectedArray,function(p){ 
           p.highlit=false;
@@ -374,6 +372,9 @@ jsPsych.plugins['part_annotation'] = (function(){
 
         });        
         c=c+selectedArray.length;
+        $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
+        $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
+        $('.progress-bar').html(Math.round((c/pathArray.length)*100) +'% complete');
         selectedArray=[];
         $(this).dialog("close");
         console.log(c);
