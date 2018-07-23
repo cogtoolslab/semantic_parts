@@ -151,7 +151,7 @@ function setColor(li) {
    pathArray = new Array;
    for (var i = 0; i< sketch.length; i++) {
     pathArray[i] = new Path(sketch[i]);
-    pathArray[i].strokeColor = "rgb(150,150,150)";
+    pathArray[i].strokeColor = "rgb(0,0,0)";
     pathArray[i].strokeWidth = 5;
       //already clicked tracks if a stroke has been labeled
       pathArray[i].alreadyClicked = false;
@@ -180,7 +180,7 @@ function setColor(li) {
           selectedArray[numLitStrokes]=p;  
           timeClicked = Math.floor(Date.now() / 1000);
           $('#List').menu("enable");
-          selectedArray[numLitStrokes].strokeColor = "rgb(0,0,0)";
+          selectedArray[numLitStrokes].strokeColor = "rgb(150,150,150)";
           numLitStrokes++;}
         //Reselecint an already labeled stroke  
         else if(p.alreadyClicked==true){
@@ -244,7 +244,7 @@ tool.onMouseDrag= function(event){
       $('#List').menu("enable");
       _.forEach(selectedArray, function(p){
         p.highlit = true;
-        p.strokeColor = "rgb(0,0,0)";});
+        p.strokeColor = "rgb(150,150,150)";});
     }
     dragStat=false;
 
