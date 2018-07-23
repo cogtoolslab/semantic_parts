@@ -180,10 +180,10 @@ function setColor(li) {
           selectedArray[numLitStrokes]=p;  
           timeClicked = Math.floor(Date.now() / 1000);
           $('#List').menu("enable");
-          selectedArray[numLitStrokes].strokeColor = "rgb(150,150,150)";
+          selectedArray[numLitStrokes].strokeColor = "rgb(175,175,175)";
           numLitStrokes++;}
         //Reselecint an already labeled stroke  
-        else if(p.alreadyClicked==true){
+        else if(p.alreadyClicked==true && selectedArray.length==0){
           clickable = false;
           p.strokeColor= '#660000';
           selectedArray[numLitStrokes]=p;
@@ -208,7 +208,7 @@ function setColor(li) {
         //Deselecting a stroke that was accidentally highlighted
         else if(p.alreadyClicked== false && p.highlit==true){
           numLitStrokes--;
-          p.strokeColor='black';
+          p.strokeColor= "rgb(0,0,0)";
           p.highlit=false;
           if(selectedArray.length>0){
             for(var i=0; i<selectedArray.length;i++){
@@ -244,7 +244,7 @@ tool.onMouseDrag= function(event){
       $('#List').menu("enable");
       _.forEach(selectedArray, function(p){
         p.highlit = true;
-        p.strokeColor = "rgb(150,150,150)";});
+        p.strokeColor = "rgb(175,175,175)";});
     }
     dragStat=false;
 
@@ -351,7 +351,7 @@ tool.onMouseDrag= function(event){
           $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
           $('.progress-bar').html(c+" out of " +pathArray.length +' labeled');
 
-          if(c>(0.7*pathArray.length)){
+          if(c>(0.6*pathArray.length)){
             for( var i = 0; i<pathArray.length; i++){
               if(pathArray[i].alreadyClicked == false){
                 pathArray[i].strokeWidth = 10;
