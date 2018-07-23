@@ -316,6 +316,7 @@ tool.onMouseDrag= function(event){
 
           _.forEach(selectedArray,function(p){ 
             p.highlit=false;
+            p.sendToBack();
             //Setting stroke color to the color of the menu item
             p.strokeColor= ui.item.css("background-color");
             p.alreadyClicked=true;
