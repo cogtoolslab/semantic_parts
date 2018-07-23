@@ -257,7 +257,7 @@ tool.onMouseDrag= function(event){
         if(p.alreadyClicked == false && p.highlit==false && dragStat==true){
           p.highlit=true;
           selectedArray[numLitStrokes]=p;
-          selectedArray[numLitStrokes].strokeColor = "rgb(50,50,50)";
+          selectedArray[numLitStrokes].strokeColor = "rgb(75,75,75)";
           numLitStrokes++
         }
         //When entering a stroke while not dragging 
@@ -273,7 +273,7 @@ tool.onMouseDrag= function(event){
     p.onMouseLeave = function(event) {
      if(clickable == true){
       if(p.alreadyClicked == false && p.highlit==false && dragStat==false){
-        p.strokeColor = "rgb(150,150,150)"; 
+        p.strokeColor = "rgb(0,0,0)"; 
       }}
     } }); 
 }
