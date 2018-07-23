@@ -16,7 +16,8 @@ jsPsych.plugins['part_annotation'] = (function(){
    //More initializations
    var dict=[];
    var results=[];
-   var sketch;
+   var tempSketch=[];
+   var sketch=[];
    var pathArray;
    var c=0;
    var timeClicked;
@@ -25,7 +26,7 @@ jsPsych.plugins['part_annotation'] = (function(){
    var colNo = 0;
    var numLitStrokes=0;    
    var timeLabeled;
-      //Setting colors for the menu items ROYGBIV from left to right
+    //Setting colors for the menu items ROYGBIV from left to right
       var colors = ["#ff6666","#ffaa80","#ffb3ba","#ffdfba", "#ffffba", "#baffc9", "#bae1ff", "#bf80ff", "#f9bcff"];
 
 
@@ -77,20 +78,55 @@ function setColor(li) {
 
     //Main Display function for Canvas events
     function display(){  
+
     //Displaying the sketch and setting stroke properties
-    var sketch = trial.svg;
+    var svg = trial.svg;
+    var splineArray=[];
+    _.forEach(svg, function(f){
+     splineArray = splineArray.concat(Snap.path.toAbsolute(f));
+
+    });
+    console.log("This is the spline master array", splineArray);
+    var numSplines = 0;
+    for(var i=0; i<splineArray.length;i++){
+     if(splineArray[i][0]=='M'){
+    tempSketch[numSplines] = splineArray[i].concat(splineArray[i+1]);
+    numSplines++;
+    i++
+    } else {
+    splineArray[i].unshift("M",splineArray[i][1],splineArray[i][2]);
+    tempSketch[numSplines] = splineArray[i];
+    numSplines++;
+
+    }
+    }
+    var numSplines = 0
+    _.forEach(tempSketch, function(f){
+      sketch[numSplines]=f.toString();
+      numSplines++
+    })
+
+    console.log(sketch);
+    //_.forEach(tempsketch,)
+    //var tempA= sketch[index].concat(sketch[index+1]);
+    //tempA = tempA.toString()
+    //var tempA = tempA.replace(/"/gi,'');
+
+    //console.log(tempA);
+   tempPath = new Path(tempSketch[1].toString());
+   tempPath.strokeColor = 'black';
     pathArray = new Array;
     for (var i = 0; i< sketch.length; i++) {
       pathArray[i] = new Path(sketch[i]);
-      pathArray[i].strokeColor = 'black';
-      pathArray[i].strokeWidth = 7;
+      pathArray[i].strokeColor = "rgb(125,125,125)";
+      pathArray[i].strokeWidth = 4;
       //already clicked tracks if a stroke has been labeled
       pathArray[i].alreadyClicked = false;
       //highlit tracks whether a stroke is ready to be labeled
       pathArray[i].highlit=false;
       //Appending a stroke number to each stroke
       pathArray[i].strokeNum=i;
-
+      
     };
 
 
@@ -111,7 +147,7 @@ function setColor(li) {
           selectedArray[numLitStrokes]=p;  
           timeClicked = Math.floor(Date.now() / 1000);
           $('#List').menu("enable");
-          selectedArray[numLitStrokes].strokeColor = 'orange';
+          selectedArray[numLitStrokes].strokeColor = "rgb(0,0,0)";
           numLitStrokes++;}
         //Reselecint an already labeled stroke  
         else if(p.alreadyClicked==true){
@@ -189,13 +225,13 @@ tool.onMouseDrag= function(event){
         if(p.alreadyClicked == false && p.highlit==false && dragStat==true){
           p.highlit=true;
           selectedArray[numLitStrokes]=p;
-          selectedArray[numLitStrokes].strokeColor = 'yellow';
+          selectedArray[numLitStrokes].strokeColor = "rgb(75,75,75)";
           numLitStrokes++
         }
         //When entering a stroke while not dragging 
         else if (p.alreadyClicked == false && p.highlit==false && dragStat==false){
           console.log("general enter", dragStat)
-          p.strokeColor = 'yellow';
+          p.strokeColor = "rgb(75,75,75)";
         }
       }
     }});
@@ -205,7 +241,7 @@ tool.onMouseDrag= function(event){
     p.onMouseLeave = function(event) {
      if(clickable == true){
       if(p.alreadyClicked == false && p.highlit==false && dragStat==false){
-        p.strokeColor = 'black'; 
+        p.strokeColor = "rgb(125,125,125)"; 
       }}
     } }); 
 }
@@ -254,7 +290,7 @@ tool.onMouseDrag= function(event){
         //Retrieving text element of selected option
         var text = ui.item.text();
         if(text!='Other'){
-          
+
           _.forEach(selectedArray,function(p){ 
             p.highlit=false;
             //Setting stroke color to the color of the menu item
@@ -265,6 +301,15 @@ tool.onMouseDrag= function(event){
             numLitStrokes=0;
             dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
               "label": text, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000), "strokeNum" : p.strokeNum});
+
+
+
+
+
+
+
+
+
 
           });        
           c=c+selectedArray.length;
