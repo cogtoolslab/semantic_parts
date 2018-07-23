@@ -354,7 +354,7 @@ tool.onMouseDrag= function(event){
           if(c>(0.6*pathArray.length)){
             for( var i = 0; i<pathArray.length; i++){
               if(pathArray[i].alreadyClicked == false){
-                pathArray[i].strokeWidth = 10;
+                pathArray[i].strokeWidth = 12;
               }
             }
           }
