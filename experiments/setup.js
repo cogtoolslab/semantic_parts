@@ -36,6 +36,7 @@ function setupExp(){
       show_clickable_nav: true
     };
     
+    
     var goodbye = {
       type: 'instructions',
       pages: [

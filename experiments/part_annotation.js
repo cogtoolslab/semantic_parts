@@ -343,13 +343,22 @@ tool.onMouseDrag= function(event){
 
 
 
-
           });        
+
           c=c+selectedArray.length;
           //Progress bar update
           $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
           $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
           $('.progress-bar').html(c+" out of " +pathArray.length +' labeled');
+
+          if(c>(0.7*pathArray.length)){
+            for( var i = 0; i<pathArray.length; i++){
+              if(pathArray[i].alreadyClicked == false){
+                pathArray[i].strokeWidth = 10;
+              }
+            }
+          }
+
           selectedArray=[];
           if(c==pathArray.length){
            //Getting png "snapshot" of the fully labeled sketch 
