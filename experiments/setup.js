@@ -24,65 +24,76 @@ function setupExp(){
     
     var consentHTML = {
       'str1' : '<p> Hey do you want to do this?</p>' };
-    var instructionsHTML = {
-      'str1' :'<p> Annotate stuff for us please</p>' };
+      var instructionsHTML = {
+        'str1' :'<p> Annotate stuff for us please</p>' };
 
-    var intro = {
-      type: 'instructions',
-      pages: [
-    	consentHTML.str1,
-    	instructionsHTML.str1
-      ],
-      show_clickable_nav: true
-    };
-    
-    
-    var goodbye = {
-      type: 'instructions',
-      pages: [
-    	'Thanks for participating in our experiment! You are all done. Please click the button to submit this HIT.'
-      ],
-      show_clickable_nav: true,
-      on_finish: function() { sendData();}
-    };
+        var intro = {
+          type: 'instructions',
+          pages: [
+          consentHTML.str1,
+          instructionsHTML.str1
+          ],
+          show_clickable_nav: true
+        };
+        console.log(data.parts);
+        var comprehensionTrial = {
+          type : 'part_annotation',
+          num_trials: 1
+        }
+        trials[1] = comprehensionTrial;
+        trials[1].svg = data.svg;
+        trials[1].parts = data.parts;
+        trials[1].category = data.category;
 
-    trials[0] = intro;
-    trials[tmp.num_trials +1] = goodbye;
 
-    var main_on_finish = function(data)  {
-      socket.emit('currentData', data);
-    };
 
-    var main_on_start = function(trial) {
+        var goodbye = {
+          type: 'instructions',
+          pages: [
+          'Thanks for participating in our experiment! You are all done. Please click the button to submit this HIT.'
+          ],
+          show_clickable_nav: true,
+          on_finish: function() { sendData();}
+        };
 
-      console.log("main on start being called");
+        trials[0] = intro;
+        
+        trials[tmp.num_trials +1] = goodbye;
 
-      oldCallback = newCallback;
-      var newCallback = function(stim) {
-        console.log('received stim')
-        console.log(stim)
+        var main_on_finish = function(data)  {
+          socket.emit('currentData', data);
+        };
+
+        var main_on_start = function(trial) {
+
+          console.log("main on start being called");
+
+          oldCallback = newCallback;
+          var newCallback = function(stim) {
+            console.log('received stim')
+            console.log(stim)
 //      	_.extend(trials[1], stim);
-      	trial.svg = stim.svg;
-      	trial.parts = stim.parts;
-      	trial.category = stim.category;
+trial.svg = stim.svg;
+trial.parts = stim.parts;
+trial.category = stim.category;
 
-      	jsPsych.resumeExperiment();
-      };
-      socket.removeListener('stimulus', oldCallback);
-      socket.on('stimulus', newCallback);
+jsPsych.resumeExperiment();
+};
+socket.removeListener('stimulus', oldCallback);
+socket.on('stimulus', newCallback);
 
-      socket.emit('getStim', {gameID: id});
-    };
-    
-    for(var i = 0; i< tmp.num_trials; i++){
-      var k = i+1;
-      trials[k] = {
-    	type: tmp.type,
-    	trialNum: i,    	
-    	on_finish: main_on_finish,
-    	on_start: main_on_start
-      };
-    }
+socket.emit('getStim', {gameID: id});
+};
+
+for(var i = 0; i< tmp.num_trials; i++){
+  var k = i+2;
+  trials[k] = {
+   type: tmp.type,
+   trialNum: i,    	
+   on_finish: main_on_finish,
+   on_start: main_on_start
+ };
+}
 
 
     // start game

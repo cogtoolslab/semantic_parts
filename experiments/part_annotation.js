@@ -153,6 +153,7 @@ function setColor(li) {
     pathArray[i] = new Path(sketch[i]);
     pathArray[i].strokeColor = "rgb(0,0,0)";
     pathArray[i].strokeWidth = 5;
+   
       //already clicked tracks if a stroke has been labeled
       pathArray[i].alreadyClicked = false;
       //highlit tracks whether a stroke is ready to be labeled
