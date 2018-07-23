@@ -31,22 +31,26 @@ jsPsych.plugins['part_annotation'] = (function(){
     var colors = ["#ff6666","#ffaa80","#ffb3ba","#ffdfba", "#ffffba", "#baffc9", "#bae1ff", "#bf80ff", "#f9bcff"];
 
     var left = [255, 153, 51];
-    console.log(left[1]);
     var right = [0, 204, 153];
     
     
 
 
     //Putting function calls and HTML elements of the jsPsych display element within a 1 second timeout
+
     setTimeout(function() {
-      display_element.innerHTML += '<div><canvas id="myCanvas" style="border: 2px solid #000000;" display = "block" \
-      width= "300px" height= "300px" resize="false" ></canvas> \
+      display_element.innerHTML += '<div><canvas id="myCanvas" style="border: 2px solid #000000;"  \
+      width= "300px" height= "300px" resize="true" ></canvas> \
       <ul id="List"></ul><div id="dialog-form" title="Enter Part Label">\
       <form><fieldset><label for="partName">Part Name</label>\
       <input type="text" name="partName" id="partName" placeholder="Type your part label here" class="text ui-widget-content ui-corner-all"> \
+      <div id ="confirmContinue" title= "Move on to next sketch?">Clicking continue will load the next sketch for annotation. Please make sure you have labeled all the parts that you can. \
+      Click back to continue labeling the sketch.</div>\
       <!-- Allow form submission with keyboard without duplicating the dialog button --><input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset>\
       </form></div> <div class="progress"><div id= "progressbar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div></div>\
+      <button id = "nextButton" type="button">Next Sketch</button> \
       </div>'; 
+      display_element.innerHTML += "<p id='Title' style='color:red;'>"+ trial.category+"</p>";
       paper.setup('myCanvas');
       listgen();
       menugen();
@@ -54,8 +58,7 @@ jsPsych.plugins['part_annotation'] = (function(){
     }, 1000);
     
 
- 
-   
+
 
 
 
@@ -95,15 +98,15 @@ var end_trial = function(results) {
 
 
     function color_interpolate (left, right, colNo) {
-        var partList = trial.parts.toString().split(',');
-        var components = [];
-        for (var i = 0; i < 3; i++) {
-            console.log(partList.length);
-            components[i] = Math.round(left[i] + (right[i] - left[i]) * colNo/(partList.length+1));
-        }
-        return('"'+"rgb"+"("+components[0]+","+components[1]+","+components[2]+")"+'"');
+      var partList = trial.parts.toString().split(',');
+      var components = [];
+      for (var i = 0; i < 3; i++) {
+        console.log(partList.length);
+        components[i] = Math.round(left[i] + (right[i] - left[i]) * colNo/(partList.length+1));
+      }
+      return('"'+"rgb"+"("+components[0]+","+components[1]+","+components[2]+")"+'"');
     }
-   
+
 
 
 //function for setting the color of the menu items
@@ -115,35 +118,41 @@ function setColor(li) {
     //Main Display function for Canvas events
     function display(){  
 
+      $("#nextButton").click(function(){
+        $('#confirmContinue').dialog("open")}
+        );
+
+
+
     //Displaying the sketch and setting stroke properties
     var svg = trial.svg;
-  splineArray = Snap.path.toAbsolute(svg);
-   var copy = Snap.path.toAbsolute(svg);
-   var numSplines = 0;
-   for(i=0; i<splineArray.length; i++){
-    if(splineArray[i][0]=='M'){
-    tempSketch[numSplines] = (splineArray[i].concat(splineArray[i+1]));
-    numSplines++;
-    i++
-    } else if (splineArray[i][0]=='C'){
-     splineArray[i].unshift("M",copy[i-1][5],copy[i-1][6]); 
-     tempSketch[numSplines] = splineArray[i];
-     numSplines++;
-    }
+    splineArray = Snap.path.toAbsolute(svg);
+    var copy = Snap.path.toAbsolute(svg);
+    var numSplines = 0;
+    for(i=0; i<splineArray.length; i++){
+      if(splineArray[i][0]=='M'){
+        tempSketch[numSplines] = (splineArray[i].concat(splineArray[i+1]));
+        numSplines++;
+        i++
+      } else if (splineArray[i][0]=='C'){
+       splineArray[i].unshift("M",copy[i-1][5],copy[i-1][6]); 
+       tempSketch[numSplines] = splineArray[i];
+       numSplines++;
+     }
    }
- var numSplines = 0
-    _.forEach(tempSketch, function(f){
-      sketch[numSplines]=f.toString();
-      numSplines++
-    })
+   var numSplines = 0
+   _.forEach(tempSketch, function(f){
+    sketch[numSplines]=f.toString();
+    numSplines++
+  })
 
-    console.log(sketch);
-  
-    pathArray = new Array;
-    for (var i = 0; i< sketch.length; i++) {
-      pathArray[i] = new Path(sketch[i]);
-      pathArray[i].strokeColor = "rgb(150,150,150)";
-      pathArray[i].strokeWidth = 5;
+   console.log(sketch);
+
+   pathArray = new Array;
+   for (var i = 0; i< sketch.length; i++) {
+    pathArray[i] = new Path(sketch[i]);
+    pathArray[i].strokeColor = "rgb(150,150,150)";
+    pathArray[i].strokeWidth = 5;
       //already clicked tracks if a stroke has been labeled
       pathArray[i].alreadyClicked = false;
       //highlit tracks whether a stroke is ready to be labeled
@@ -359,7 +368,7 @@ tool.onMouseDrag= function(event){
             project.activeLayer.removeChildren();
             paper.view.draw();
             $("#List").menu("destroy");
-            $("#Complete").dialog("open");
+            $("#confirmContinue").dialog("destroy");
             $("#dialog-form").dialog("destroy");
             end_trial();
           }
@@ -378,6 +387,48 @@ tool.onMouseDrag= function(event){
 
 
   //Free response dialog box 
+
+  $("#confirmContinue").dialog({
+    autoOpen: false,
+    height: 400,
+    width: 350,
+    modal: true,
+    buttons : {
+      "Back": function(){
+       $("#confirmContinue").dialog("close");
+     },
+     "Continue" : function(){
+      var dataURL = document.getElementById('myCanvas').toDataURL();
+      dataURL = dataURL.replace('data:image/png;base64,',''); 
+      var category = trial.category;
+      _.forEach(pathArray, function(p){
+        if(p.alreadyClicked==false){
+          svgstring = p.exportSVG({asString: true});
+          var start = svgstring.indexOf('d="')+3;
+          dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
+            "label": "NA", "strokeColor": p.strokeColor, "Time clicked" : "NA", "Time labeled": Math.floor(Date.now() / 1000), "strokeNum" : p.strokeNum});
+
+        }
+      })
+      var tempObj={};
+      tempObj[category] = dict;
+      tempObj["png"] = dataURL;
+      results.push(tempObj);
+      console.log(results);
+      results = JSON.stringify(results)
+      console.log(results);
+      //resetting canvas and menu elements
+      project.activeLayer.removeChildren();
+      paper.view.draw();
+      $("#List").menu("destroy");
+      $("#dialog-form").dialog("destroy");
+      $("#confirmContinue").dialog("destroy");
+      end_trial();
+
+
+        }
+      }
+    })
 
   $( "#dialog-form" ).dialog({
     autoOpen: false,
@@ -433,6 +484,7 @@ tool.onMouseDrag= function(event){
           paper.view.draw();
           $("#List").menu("destroy");
           $("#dialog-form").dialog("destroy");
+          $("#confirmContinue").dialog("destroy");
           end_trial();
 
         }
