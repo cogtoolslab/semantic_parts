@@ -20,7 +20,7 @@ function setupExp(){
       num_trials: numTrials
     };
 
-    var trials = new Array(tmp.num_trials + 2);
+    var trials = new Array(tmp.num_trials + 3);
     
     var consentHTML = {
       'str1' : '<p> In this HIT you will see some sketches. Your task will be to label the constituent strokes of these sketches using an interactive menu and/or a free response box.</p>',
@@ -34,7 +34,8 @@ function setupExp(){
         'str3':"<p> There are two main ways of highlighting strokes : Clicking on a stroke to highlight it or clicking and dragging the mouse across multiple strokes to highligh a family of strokes. \
         Once you've highlighted all the strokes you want to, click on one of the menu labels to assign that label to the highlighter strokes. Repeat this process until all strokes are labeled.</p>",
         'str4': "<p> As you continue to label strokes, unselected strokes will get thicker to help guide your attention to potential smaller strokes, which you may have missed. \
-        You can click on already highlighted strokes to un-highlight them before clicking on a menu label. Similarly, if you want to relabel an already labeled stroke, click on it and choose a new label from the menu.</p>"};
+        You can click on already highlighted strokes to un-highlight them before clicking on a menu label. Similarly, if you want to relabel an already labeled stroke, click on it and choose a new label from the menu.</p>",
+        'str5':"<p>Click next to start a practice trial. Label all the parts of the sketch that appears with appropriate labels. Make sure to try out the different selection and deselection tools to familiarize yourself before the actual trials.</p>"};
 
         var intro = {
           type: 'instructions',
@@ -46,6 +47,7 @@ function setupExp(){
           instructionsHTML.str2,
           instructionsHTML.str3,
           instructionsHTML.str4,
+          instructionsHTML.str5
           ],
           show_clickable_nav: true
         };
@@ -68,6 +70,14 @@ function setupExp(){
         trials[1].parts = data.parts;
         trials[1].category = data.category;
 
+        trials[2] ={
+          type: 'instructions',
+          pages:[
+          'Good job! You should now have a grasp on what the trials will look like.',
+          ' You will now see several sketches of different classes. Please try and label their parts to the best of your ability. Once you are finished, the HIT will be automatically submitted for approval. Good luck!'],
+           show_clickable_nav: true
+        }
+
 
 
         var goodbye = {
@@ -81,7 +91,7 @@ function setupExp(){
 
         trials[0] = intro;
         
-        trials[tmp.num_trials +2] = goodbye;
+        trials[tmp.num_trials +3] = goodbye;
 
         var main_on_finish = function(data)  {
           socket.emit('currentData', data);
@@ -109,7 +119,7 @@ socket.emit('getStim', {gameID: id});
 };
 
 for(var i = 0; i< tmp.num_trials; i++){
-  var k = i+2;
+  var k = i+3;
   trials[k] = {
    type: tmp.type,
    trialNum: i,    	
