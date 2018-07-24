@@ -23,38 +23,35 @@
     position: absolute;
     display: inline-block;
     margin-bottom: auto;
-    left: 255px;
-    bottom: 205px; 
+    /* left: 255px; */
+    /* bottom: 205px;  */
 }
 
  
 #Title {
-   margin-left: auto;
-  margin-bottom: auto;
-  margin-right: auto;
-  position: relative;
-  display: block; 
-   font-size: 50px;
+    margin-left: auto;
+    /* margin-bottom: auto; */
+    margin-right: auto;
+    /* position: relative; */
+    display: block; 
+    font-size: 50px;
 }
+
 #nextButton{
    margin-left: auto;
     margin-bottom: auto;
     margin-right: auto;
   display: block;
   position:relative;
-  bottom:120px;
 }
 
 canvas[resize] {
-    position: absolute;
-    margin-left: auto;
-    margin-bottom: auto;
-    margin-right: auto;
+    /* position: absolute; */
+    margin:auto;
+    position:inline-block
     display: block;
     width: 300px;
     height: 300px;
-    top: 100px;
-
   }
 
  .jspsych-display-element:focus {
