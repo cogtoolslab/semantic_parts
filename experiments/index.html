@@ -18,10 +18,14 @@
  <script type="text/javascript" src="part_annotation.js"></script>
  
  <script type="text/javascript">
+  $(window).bind('beforeunload', function(){
+  return 'Are you sure you want to leave?';
+});
    paper.install(window);
    window.onload = function() {
      setupExp();
    }
+  
 
  </script>
 

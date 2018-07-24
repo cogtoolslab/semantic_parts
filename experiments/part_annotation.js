@@ -40,7 +40,8 @@ jsPsych.plugins['part_annotation'] = (function(){
     //Putting function calls and HTML elements of the jsPsych display element within a 1 second timeout
 
     setTimeout(function() {
-      display_element.innerHTML += '<div><canvas id="myCanvas" style="border: 2px solid #000000;"  \
+      display_element.innerHTML += "<div><p id='Title' style='color:black;'>"+ trial.category+"</p>";
+      display_element.innerHTML += '<canvas id="myCanvas" style="border: 2px solid #000000;"  \
       resize="true" ></canvas> \
       <ul id="List"></ul><div id="dialog-form" title="Enter Part Label">\
       <form><fieldset><label for="partName">Part Name</label>\
@@ -51,7 +52,7 @@ jsPsych.plugins['part_annotation'] = (function(){
       </form></div> <div class="progress"><div id= "progressbar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div></div>\
       <button id = "nextButton" type="button">Next Sketch</button> \
       </div>'; 
-      display_element.innerHTML += "<p id='Title' style='color:black;'>"+ trial.category+"</p>";
+     
       paper.setup('myCanvas');
       listgen();
       menugen();
@@ -304,9 +305,14 @@ tool.onMouseDrag= function(event){
         li.appendTo("#List");
 
       });
+      var unk = $("<li><div>" + "Unknown" +"</div></li>" )
+      setColor(unk);
+      unk.appendTo("#List")
       var other = $("<li><div>" + "Other" +"</div></li>" );
       setColor(other);
-      other.appendTo("#List");}
+      other.appendTo("#List");
+      
+     }
     //Function for creating menu and free response box widgets from the list created by listgen()
 
 
@@ -332,7 +338,7 @@ tool.onMouseDrag= function(event){
         $("#List").menu("refresh");
         //Retrieving text element of selected option
         var text = ui.item.text();
-        if(text!='Other'){
+        if(text!='Other'&& text!='Unknown'){
 
           _.forEach(selectedArray,function(p){ 
             p.highlit=false;
@@ -384,6 +390,42 @@ p.strokeWidth=5;
           //Calling dialog box
           otherColor = ui.item.css("background-color");
           $("#dialog-form").dialog("open");
+        } else if(text =='Unknown'){
+           _.forEach(selectedArray,function(p){ 
+            p.highlit=false;
+            p.sendToBack();
+            //Setting stroke color to the color of the menu item
+            p.strokeColor= ui.item.css("background-color");
+            p.alreadyClicked=true;
+            svgstring = p.exportSVG({asString: true});
+            var start = svgstring.indexOf('d="')+3;
+            numLitStrokes=0;
+            dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
+              "label": "Unknown", "strokeColor": p.strokeColor, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000), "strokeNum" : p.strokeNum});
+
+
+p.strokeWidth=5;
+
+
+
+
+          });        
+
+          c=c+selectedArray.length;
+          //Progress bar update
+          $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
+          $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
+          $('.progress-bar').html(c+" out of " +pathArray.length +' labeled');
+
+          for( var i = 0; i<pathArray.length; i++){
+              if(pathArray[i].alreadyClicked == false){
+                pathArray[i].strokeWidth = Math.max(5,(c/(pathArray.length))*13);
+              }
+            }
+               
+
+          selectedArray=[];
+
         }
           //Closing menu after selectioni
           $("#List").menu("disable");

@@ -20,7 +20,7 @@
  .ui-menu { width: 200px; }
  .ui-widget-header { padding: 0.2em; }
  .ui-menu {
-    position: relative;
+    position: absolute;
     display: inline-block;
     margin-bottom: auto;
     left: 255px;
@@ -30,11 +30,10 @@
  
 #Title {
    margin-left: auto;
-    margin-bottom: auto;
-    margin-right: auto;
+  margin-bottom: auto;
+  margin-right: auto;
   position: relative;
-  display: block;
-   bottom: 550px; 
+  display: block; 
    font-size: 50px;
 }
 #nextButton{
@@ -47,7 +46,7 @@
 }
 
 canvas[resize] {
-    position: relative;
+    position: absolute;
     margin-left: auto;
     margin-bottom: auto;
     margin-right: auto;
