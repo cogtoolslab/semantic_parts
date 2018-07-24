@@ -23,8 +23,8 @@
     position: absolute;
     display: inline-block;
     margin-bottom: auto;
-    /* left: 255px; */
-    /* bottom: 205px;  */
+    /* bottom:38%; */
+    /* left: 60.5%; */
 }
 
  
@@ -35,6 +35,12 @@
     /* position: relative; */
     display: block; 
     font-size: 50px;
+  /* position: absolute; */
+  /* display: inline-block; */
+  /*  /\*bottom: 550px; *\/ */
+  /*  font-size: 50px; */
+  /*  bottom:70%; */
+  /*  right:45%; */
 }
 
 #nextButton{
@@ -49,9 +55,33 @@ canvas[resize] {
     /* position: absolute; */
     margin:auto;
     position:inline-block
+/* ======= */
+/*   display: absolute; */
+/*   position:absolute; */
+/*   bottom:25%; */
+/*   left:47%; */
+/*   /\*bottom:120px;*\/ */
+/* } */
+/* .progress{ */
+/*   position:absolute; */
+/*   width: 20%; */
+/*   right:39%; */
+/*   top: 80%; */
+/* } */
+
+/* canvas[resize] { */
+/*    position: absolute; */
+/*     margin-left: auto; */
+/*     margin-bottom: auto; */
+/*     margin-right: auto; */
     display: block;
+    bottom:30%;
+    left:40%;
     width: 300px;
     height: 300px;
+
+    /*top: 100px;*/
+
   }
 
  .jspsych-display-element:focus {
