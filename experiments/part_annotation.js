@@ -41,7 +41,7 @@ jsPsych.plugins['part_annotation'] = (function(){
 
     setTimeout(function() {
       display_element.innerHTML += ('\
-        <div id="main_container" style="width:100vh;height:60vh"> \
+        <div id="main_container" style="width:100vh;height:60vh; margin-left:200px; margin-bottom:200px"> \
            <ul id="List" style="float:right;margin:auto;vertical-align:middle"></ul>\
            <div id="canvas_container" style="float:left;width:300px;height:100%";display:absolute;>\
              <p id="Title" style="color:black;float:top;height:10%">'+ trial.category+'</p> \
@@ -66,7 +66,7 @@ jsPsych.plugins['part_annotation'] = (function(){
             </fieldset>\
           </form>\
         </div> \
-        <div class="progress" style="float:bottom"> \
+        <div class="progress" style="float:bottom; margin-bottom:200px;"> \
           <div id= "progressbar" class="progress-bar" role="progressbar" \
                style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%\
           </div>\
