@@ -27,6 +27,7 @@ jsPsych.plugins['part_annotation'] = (function(){
    var numLitStrokes=0; 
    var splineArray;   
    var timeLabeled;
+  
     //Setting colors for the menu items ROYGBIV from left to right
     var colors = ["#ff6666","#ffaa80","#ffb3ba","#ffdfba", "#ffffba", "#baffc9", "#bae1ff", "#bf80ff", "#f9bcff"];
 
@@ -194,6 +195,8 @@ function setColor(li) {
             $('#List').menu("enable");
             for(var i=0; i<dict.length; i++){
               if(p.strokeNum==dict[i].strokeNum){
+
+                var changed =false;
             //Changing menu color properties of previous label to distinguish it from others and to match it to current stroke color
             for(var j=0; j<$('#List li').length-1;j++){
               if($('li div')[j].innerHTML==dict[i].label){
@@ -201,8 +204,15 @@ function setColor(li) {
                 $($('li div')[j]).css("color", "#f4d142");
                 $($('li div')[j]).css("border-width", 3);
                 $($('li div')[j]).css("border-color", "black");
-              }}
-            }
+                changed = true;
+              } }
+              if(changed==false){
+                $($('li div')[$('#List li').length-1]).css("background-color", "#660000");
+                $($('li div')[$('#List li').length-1]).css("color", "#f4d142");
+                $($('li div')[$('#List li').length-1]).css("border-width", 3);
+                $($('li div')[$('#List li').length-1]).css("border-color", "black");
+              }
+            dict.splice(i,1);}
           }
         } 
       }
@@ -330,7 +340,7 @@ tool.onMouseDrag= function(event){
             //Setting stroke color to the color of the menu item
             p.strokeColor= ui.item.css("background-color");
             p.alreadyClicked=true;
-            p.strokeWidth=5;
+       
             svgstring = p.exportSVG({asString: true});
             var start = svgstring.indexOf('d="')+3;
             numLitStrokes=0;
@@ -338,7 +348,7 @@ tool.onMouseDrag= function(event){
               "label": text, "strokeColor": p.strokeColor, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000), "strokeNum" : p.strokeNum});
 
 
-
+p.strokeWidth=5;
 
 
 
@@ -353,36 +363,22 @@ tool.onMouseDrag= function(event){
           $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
           $('.progress-bar').html(c+" out of " +pathArray.length +' labeled');
 
-          if(c>(0.6*pathArray.length)){
+          /*if(c>(0.6*pathArray.length)){
             for( var i = 0; i<pathArray.length; i++){
               if(pathArray[i].alreadyClicked == false){
                 pathArray[i].strokeWidth = 12;
               }
             }
-          }
+          }*/
+
+          for( var i = 0; i<pathArray.length; i++){
+              if(pathArray[i].alreadyClicked == false){
+                pathArray[i].strokeWidth = Math.max(5,(c/(pathArray.length))*13);
+              }
+            }
+               
 
           selectedArray=[];
-          if(c==pathArray.length){
-           //Getting png "snapshot" of the fully labeled sketch 
-           var dataURL = document.getElementById('myCanvas').toDataURL();
-           dataURL = dataURL.replace('data:image/png;base64,',''); 
-           var category = trial.category;
-           var tempObj={};
-           tempObj[category] = dict;
-           tempObj["png"] = dataURL
-           results.push(tempObj);
-
-            //console.log(dict[0].label);
-            results = JSON.stringify(results)
-            console.log(results);
-            //resettting canvas and other menu elements
-            project.activeLayer.removeChildren();
-            paper.view.draw();
-            $("#List").menu("destroy");
-            $("#confirmContinue").dialog("destroy");
-            $("#dialog-form").dialog("destroy");
-            end_trial();
-          }
         }
         else if(text == 'Other'){
           //Calling dialog box
@@ -434,7 +430,7 @@ tool.onMouseDrag= function(event){
       $("#List").menu("destroy");
       $("#dialog-form").dialog("destroy");
       $("#confirmContinue").dialog("destroy");
-      end_trial();
+      end_trial(results);
 
 
         }
@@ -446,6 +442,12 @@ tool.onMouseDrag= function(event){
     height: 400,
     width: 350,
     modal: true,
+    open : function(event, ui) { 
+      originalContent = $("#dialog-form").html();
+     },
+   close : function(event, ui) {
+      $("#dialog-form").html(originalContent);
+   },
     buttons: 
     {
 
@@ -478,29 +480,8 @@ tool.onMouseDrag= function(event){
         $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
         $('.progress-bar').html(c+" out of "+pathArray.length +' labeled');
         selectedArray=[];
-        $(this).dialog("close");
-        if(c==pathArray.length){
-          //getting png 'snapshot' of fully labeled sketch
-          var dataURL = document.getElementById('myCanvas').toDataURL();
-          dataURL = dataURL.replace('data:image/png;base64,',''); 
-          var category = trial.category;
-          var tempObj={};
-          tempObj[category] = dict;
-          tempObj["png"] = dataURL;
-          results.push(tempObj);
-          console.log(results);
-          results = JSON.stringify(results)
-          console.log(results);
-          //resetting canvas and menu elements
-          project.activeLayer.removeChildren();
-          paper.view.draw();
-          $("#List").menu("destroy");
-          $("#dialog-form").dialog("destroy");
-          $("#confirmContinue").dialog("destroy");
-          end_trial();
 
-        }
-        ;
+        $(this).dialog("close");
       }
     }
   });
