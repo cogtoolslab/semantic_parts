@@ -23,24 +23,31 @@
     position: absolute;
     display: inline-block;
     margin-bottom: auto;
-    bottom:40%;
-    left: 60%;
+    bottom:38%;
+    left: 60.5%;
 }
 
  
 #Title {
   position: absolute;
   display: inline-block;
-   /*bottom: 550px; 
-   font-size: 50px;*/
+   /*bottom: 550px; */
+   font-size: 50px;
    bottom:70%;
+   right:45%;
 }
 #nextButton{
   display: absolute;
   position:absolute;
-  bottom:20%;
+  bottom:25%;
   left:47%;
   /*bottom:120px;*/
+}
+.progress{
+  position:absolute;
+  width: 20%;
+  right:39%;
+  top: 80%;
 }
 
 canvas[resize] {
