@@ -41,17 +41,17 @@ jsPsych.plugins['part_annotation'] = (function(){
 
     setTimeout(function() {
       display_element.innerHTML += '<div><canvas id="myCanvas" style="border: 2px solid #000000;"  \
-      width= "300px" height= "300px" resize="true" ></canvas> \
+      resize="true" ></canvas> \
       <ul id="List"></ul><div id="dialog-form" title="Enter Part Label">\
       <form><fieldset><label for="partName">Part Name</label>\
       <input type="text" name="partName" id="partName" placeholder="Type your part label here" class="text ui-widget-content ui-corner-all"> \
-      <div id ="confirmContinue" title= "Move on to next sketch?">Clicking continue will load the next sketch for annotation. Please make sure you have labeled all the parts that you can. \
+      <div id ="confirmContinue" title= "Move on to next sketch?">Clicking continue will end the current trial. Please make sure you have labeled all the parts that you can. \
       Click back to continue labeling the sketch.</div>\
       <!-- Allow form submission with keyboard without duplicating the dialog button --><input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset>\
       </form></div> <div class="progress"><div id= "progressbar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div></div>\
       <button id = "nextButton" type="button">Next Sketch</button> \
       </div>'; 
-      display_element.innerHTML += "<p id='Title' style='color:red;'>"+ trial.category+"</p>";
+      display_element.innerHTML += "<p id='Title' style='color:black;'>"+ trial.category+"</p>";
       paper.setup('myCanvas');
       listgen();
       menugen();
