@@ -40,18 +40,38 @@ jsPsych.plugins['part_annotation'] = (function(){
     //Putting function calls and HTML elements of the jsPsych display element within a 1 second timeout
 
     setTimeout(function() {
-      display_element.innerHTML += "<div><p id='Title' style='color:black;'>"+ trial.category+"</p>";
-      display_element.innerHTML += '<canvas id="myCanvas" style="border: 2px solid #000000;"  \
-      resize="true" ></canvas> \
-      <ul id="List"></ul><div id="dialog-form" title="Enter Part Label">\
-      <form><fieldset><label for="partName">Part Name</label>\
-      <input type="text" name="partName" id="partName" placeholder="Type your part label here" class="text ui-widget-content ui-corner-all"> \
-      <div id ="confirmContinue" title= "Move on to next sketch?">Clicking continue will end the current trial. Please make sure you have labeled all the parts that you can. \
-      Click back to continue labeling the sketch.</div>\
-      <!-- Allow form submission with keyboard without duplicating the dialog button --><input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset>\
-      </form></div> <div class="progress"><div id= "progressbar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div></div>\
-      <button id = "nextButton" type="button">Next Sketch</button> \
-      </div>'; 
+      display_element.innerHTML += ('\
+        <div id="main_container" style="width:60vh;height:60vh"> \
+           <ul id="List" style="float:right;margin:auto;vertical-align:middle"></ul>\
+           <div id="canvas_container" style="float:left;width:50%;height:100%";display:absolute;>\
+             <p id="Title" style="color:black;float:top;height:10%">'+ trial.category+'</p> \
+             <canvas id="myCanvas" style="border: 2px solid #000000"  \
+                     resize="true" ></canvas> \
+             <button id = "nextButton" type="button" style="float:bottom;height:10%">Next Sketch</button> \
+           </div>\
+        </div> \
+        <div id="dialog-form" title="Enter Part Label">\
+          <form>\
+            <fieldset> \
+              <label for="partName">Part Name</label>\
+              <input type="text" name="partName" id="partName" \
+                     placeholder="Type your part label here" \
+                     class="text ui-widget-content ui-corner-all"> \
+              <div id ="confirmContinue" title= "Move on to next sketch?">\
+                  Clicking continue will end the current trial. \
+                  Please make sure you have labeled all the parts that you can. \
+                  Click back to continue labeling the sketch.\
+              </div>\
+              <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">\
+            </fieldset>\
+          </form>\
+        </div> \
+        <div class="progress" style="float:botom"> \
+          <div id= "progressbar" class="progress-bar" role="progressbar" \
+               style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%\
+          </div>\
+        </div>\
+      </div>');
      
       paper.setup('myCanvas');
       listgen();
