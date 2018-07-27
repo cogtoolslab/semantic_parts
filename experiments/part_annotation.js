@@ -41,19 +41,25 @@ jsPsych.plugins['part_annotation'] = (function(){
 
     setTimeout(function() {
       display_element.innerHTML += ('\
-        <div id="main_container" style="width:100vh;height:60vh; margin-left:200px; margin-bottom:200px"> \
+        <div id="main_container" style="width:200vh;height:60vh; margin-left:200px; margin-bottom:200px"> \
            <ul id="List" style="float:right;margin:auto;vertical-align:middle"></ul>\
-           <div id="canvas_container" style="float:left;width:300px;height:100%";display:absolute;>\
+           <div id="canvas_container" style="width:300px;height:100%;display:absolute;margin-left:200px">\
              <p id="Title" style="color:black;float:top;height:10%">'+ trial.category+'</p> \
              <canvas id="myCanvas" style="border: 2px solid #000000"  \
                      resize="true" ></canvas> \
              <button id = "nextButton" type="button" style="float:bottom;height:10%">Next Sketch</button> \
            </div>\
-           <div class="progress" style="float:bottom; margin-bottom:200px;"> \
+           <div class="progress" style="float:bottom; margin-bottom:0px;"> \
           <div id= "progressbar" class="progress-bar" role="progressbar" \
                style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%\
           </div>\
         </div>\
+        <div class="row">\
+    <img src='+trial.renders[0]+' style= "border:2px solid #000000;">\
+    <img src='+trial.renders[1]+' style= "border:2px solid #000000;">\
+    <img src='+trial.renders[2]+' style= "border:2px solid #000000;">\
+    <img src='+trial.renders[3]+' style= "border:2px solid #000000;">\
+  </div>\
         </div> \
         <div id="dialog-form" title="Enter Part Label">\
           <form>\
@@ -71,6 +77,7 @@ jsPsych.plugins['part_annotation'] = (function(){
             </fieldset>\
           </form>\
         </div> \
+         \
       </div>');
      
       // display_element.innerHTML += "<div><div ><p id='Title' style='color:black;'>"+ trial.category+'</p> <canvas id="myCanvas" style="border: 2px solid #000000;" resize="true" ></canvas> <button id = "nextButton" type="button">Next Sketch</button> </div><div id="dialog-form" title="Enter Part Label"> <form><fieldset><label for="partName">Part Name</label> <input type="text" name="partName" id="partName" placeholder="Type your part label here" class="text ui-widget-content ui-corner-all"> <input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset></form></div> <ul id = "List"></ul><div id ="confirmContinue" title= "Move on to next sketch?">Clicking continue will end the current trial. Please make sure you have labeled all the parts that you can. Click back to continue labeling the sketch.</div><div class="progress"><div id= "progressbar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div></div></div>';

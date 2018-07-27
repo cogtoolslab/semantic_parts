@@ -23,7 +23,7 @@
     position: relative;
     display: inline-block;
     margin-bottom: auto;
-    right:235px;
+    right:750px;
     top:60px;
     ;
 
@@ -31,7 +31,9 @@
     /* left: 60.5%; */
 }
 
- 
+.row{
+  margin-bottom: 320px;
+}
 #Title {
     margin-left: auto;
     /* margin-bottom: auto; */
@@ -55,8 +57,8 @@
   position:relative;
 }
 .progress{
-  margin-left:0px;
-  width:70%;
+  margin-left:80px;
+  width:50%;
 }
 canvas[resize] {
     /* position: absolute; */

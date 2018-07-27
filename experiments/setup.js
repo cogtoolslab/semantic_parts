@@ -73,6 +73,8 @@ function setupExp(){
         trials[1].svg = data.svg;
         trials[1].parts = data.parts;
         trials[1].category = data.category;
+        trials[1].renders = data.renders;
+        trials[1].distractors = data.distractors;
 
         trials[2] ={
           type: 'instructions',
@@ -113,6 +115,9 @@ function setupExp(){
 trial.svg = stim.svg;
 trial.parts = stim.parts;
 trial.category = stim.category;
+trial.renders = stim.renders;
+trial.distractors = stim.distractors;
+console.log(trial.distractors);
 
 jsPsych.resumeExperiment();
 };
