@@ -14,6 +14,9 @@ function setupExp(){
     var id = d.id;
     console.log(d);
 
+    //var renderList = renderList;
+    console.log("RENDERLIST", renderList[1].url);
+
     var tmp = {
       type: 'part_annotation',
       iterationName: 'pilot0',
@@ -38,7 +41,7 @@ function setupExp(){
         'str5': "<p> As you continue to label strokes, unselected strokes will get thicker to help guide your attention to potential smaller strokes, which you may have missed.<p><img src = 'thicknessInstructions.png' style= 'border:2px solid #000000;'></img></p> ",
         'str6': "<p>You can click on already highlighted strokes to un-highlight them before clicking on a menu label<p><img src = 'unhighlightInstructions.png' style= 'border:2px solid #000000;'></img></p>. Similarly, if you want to relabel an already labeled stroke, click on it and choose a new label from the menu.<p><img src = 'relabelInstructions.png' style= 'border:2px solid #000000;'></img></p></p>",
         'str7':"<p>Click next to start a practice trial. Label all the parts of the sketch that appears with appropriate labels. Make sure to try out the different selection and deselection tools to familiarize yourself before the actual trials begin. When you're done labeling, click on 'next sketch' then on 'continue' in the dialog-box that appears.</p>"};
-
+       
         var intro = {
           type: 'instructions',
           pages: [

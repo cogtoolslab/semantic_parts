@@ -43,7 +43,7 @@ jsPsych.plugins['part_annotation'] = (function(){
       display_element.innerHTML += ('\
         <div id="main_container" style="width:200vh;height:60vh; margin-left:200px; margin-bottom:200px"> \
            <ul id="List" style="float:right;margin:auto;vertical-align:middle"></ul>\
-           <div id="canvas_container" style="width:300px;height:100%;display:absolute;margin-left:200px">\
+           <div id="canvas_container" style="width:300px;height:100%;display:absolute;margin-left:350px">\
              <p id="Title" style="color:black;float:top;height:10%">'+ trial.category+'</p> \
              <canvas id="myCanvas" style="border: 2px solid #000000"  \
                      resize="true" ></canvas> \
