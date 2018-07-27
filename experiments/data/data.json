@@ -4,7 +4,7 @@
 [{"category": "knob",
 "parts": ["backrest,armrest,seat,pedestal,legs"],
 "svg":["M69,167c0,27.13435 5,54.84972 5,81c0,1.81504 -0.91033,9 1,9", "M160,166c1.05409,0 0.85093,1.9565 1,3c3.93963,27.57739 17,52.46796 17,81c0,1.62072 0.53044,9 2,9", "M59,168c36.94105,0 109.41653,13.58347 137,-14c2.81289,-2.81289 -6,-80.52 -6,-95", "M101,169c0,4.84383 -0.68482,10.20625 0,15c1.75585,12.29095 3,28.12981 3,40c0,1.33333 -0.56667,2 1,2", "M181,164c0,7.86143 13.09325,56.09325 19,62", "M69,163c0,-37.80801 42.62338,-19.06277 67,-15c9.91944,1.65324 31.61601,-4.38399 37,1c1.14884,1.14884 0.60768,6 3,6", "M190,56c-4.10673,0 -16.28207,-4.71793 -19,-2c-9.15137,9.15137 8,76.05702 8,92"],
- "renders":["http://s3.amazonaws.com/sketchloop-images-subord/chairs_08_knob_0035.png","http://s3.amazonaws.com/sketchloop-images-subord/birds_01_crow_0025.png","http://s3.amazonaws.com/sketchloop-images-subord/cars_05_redsport_0025.png","http://s3.amazonaws.com/sketchloop-images-subord/dogs_03_basset_0025.png"],
+ "renders":["http://s3.amazonaws.com/sketchloop-images-subord/chairs_08_knob_0035.png","https:s3.amazonaws.com/sketchloop-images-subord/birds_01_crow_0035.png","https:s3.amazonaws.com/sketchloop-images-subord/cars_05_redsport_0035.png","https:s3.amazonaws.com/sketchloop-images-subord/dogs_03_basset_0035.png"],
   "distractors":["crow","redsport","basset"]},
 {"category": "waiting",
 "parts": ["backrest,armrest,seat,pedestal,legs"],
