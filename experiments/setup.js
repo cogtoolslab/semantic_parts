@@ -79,7 +79,7 @@ function setupExp(){
         trials[1].parts = data.parts;
         trials[1].category = data.category;
         trials[1].renders = data.renders;
-        trials[1].distractors = data.distractors;
+        //trials[1].distractors = data.distractors;
         trials[1].targetPos = 2;
 
         trials[2] ={
@@ -122,7 +122,10 @@ trial.svg = stim.svg;
 trial.parts = stim.parts;
 trial.category = stim.category;
 //trial.renders = stim.renders;
-trial.distractors = stim.distractors;
+trial.Distractor1 = stim.Distractor1;
+trial.Distractor2 = stim.Distractor2;
+trial.Distractor3 = stim.Distractor3;
+
 trial.renders=[];
 /*r=0
 for(var i=0;i<renderList.length;i++){
@@ -143,15 +146,9 @@ _.forEach(renderList, function(f){
     trial.targetPos = r;
     trial.renders[r]=f.url
     r++
-  }else{
-    for(var i=0;i<trial.distractors.length;i++){
-      if(f.subordinate==trial.distractors[i]){
-        trial.renders[r]=f.url;
-        r++;
-        c++;
-
-      }
-    }
+  }else if(f.subordinate==trial.Distractor1||f.subordinate==trial.Distractor2||f.subordinate==trial.Distractor3){
+   trial.renders[r]=f.url
+    r++;
   }
 });
 
