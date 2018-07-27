@@ -12,7 +12,6 @@ jsPsych.plugins['part_annotation'] = (function(){
   }
   plugin.trial = function(display_element, trial) {
    var tool = new Tool();
-
    //More initializations
    var dict=[];
    var results=[];
@@ -147,6 +146,7 @@ function setColor(li) {
 
     //Main Display function for Canvas events
     function display(){  
+       console.log($($('.row img')[trial.targetPos]).css({"border-width": "10px", "border-color": "red"}));
 
       $("#nextButton").click(function(){
         $('#confirmContinue').dialog("open")}

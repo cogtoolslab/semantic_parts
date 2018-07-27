@@ -15,7 +15,7 @@
  var cars_07_hatchback_0035 = {filename: "cars_07_hatchback_0035.png" , basic: "cars", subordinate: "hatchback" , cluster: 1, object: 6, pose: 35, url: "https:s3.amazonaws.com/sketchloop-images-subord/cars_07_hatchback_0035.png",width: 256, height: 256};
  var cars_08_bluesedan_0035 = {filename: "cars_08_bluesedan_0035.png" , basic: "cars", subordinate: "bluesedan" , cluster: 1, object: 7, pose: 35, url: "https:s3.amazonaws.com/sketchloop-images-subord/cars_08_bluesedan_0035.png",width: 256, height: 256};
  var chairs_01_straight_0035 = {filename: "chairs_01_straight_0035.png" , basic: "chairs", subordinate: "straight" , cluster: 2, object: 0, pose: 35, url: "https:s3.amazonaws.com/sketchloop-images-subord/chairs_01_straight_0035.png",width: 256, height: 256};
- var chairs_02_squat_0035 = {filename: "chairs_02_squat_0035.png" , basic: "chairs", subordinate: "squat" , cluster: 2, object: 1, pose: 35, url: "https:s3.amazonaws.com/sketchloop-images-subord/chairs_02_squat_0035.png",width: 256, height: 256};
+ var chairs_02_squat_0035 = {filename: "chairs_02_squat_0035.png" , basic: "chairs", subordinate: "squat", cluster: 2, object: 1, pose: 35, url: "https:s3.amazonaws.com/sketchloop-images-subord/chairs_02_squat_0035.png",width: 256, height: 256};
  var chairs_03_leather_0035 = {filename: "chairs_03_leather_0035.png" , basic: "chairs", subordinate: "leather" , cluster: 2, object: 2, pose: 35, url: "https:s3.amazonaws.com/sketchloop-images-subord/chairs_03_leather_0035.png",width: 256, height: 256};
  var chairs_04_sling_0035 = {filename: "chairs_04_sling_0035.png" , basic: "chairs", subordinate: "sling" , cluster: 2, object: 3, pose: 35, url: "https:s3.amazonaws.com/sketchloop-images-subord/chairs_04_sling_0035.png",width: 256, height: 256};
  var chairs_05_woven_0035 = {filename: "chairs_05_woven_0035.png" , basic: "chairs", subordinate: "woven" , cluster: 2, object: 4, pose: 35, url: "https:s3.amazonaws.com/sketchloop-images-subord/chairs_05_woven_0035.png",width: 256, height: 256};
@@ -31,10 +31,10 @@
  var dogs_07_goldenretriever_0035 = {filename: "dogs_07_goldenretriever_0035.png" , basic: "dogs", subordinate: "goldenretriever" , cluster: 3, object: 6, pose: 35, url: "https:s3.amazonaws.com/sketchloop-images-subord/dogs_07_goldenretriever_0035.png",width: 256, height: 256};
  var dogs_08_pug_0035 = {filename: "dogs_08_pug_0035.png" , basic: "dogs", subordinate: "pug" , cluster: 3, object: 7, pose: 35, url: "https:s3.amazonaws.com/sketchloop-images-subord/dogs_08_pug_0035.png",width: 256, height: 256};
 
-var renderList = [birds_01_crow_0035,birds_02_pigeon_0035,birds_03_robin_0035,birds_04_sparrow_0035,birds_05_tomtit_0035,,birds_06_nightingale_0035,
+var renderList = [birds_01_crow_0035,birds_02_pigeon_0035,birds_03_robin_0035,birds_04_sparrow_0035,birds_05_tomtit_0035,birds_06_nightingale_0035,
 birds_07_bluejay_0035, birds_08_cuckoo_0035,cars_01_beetle_0035,cars_02_bluesport_0035,cars_03_brown_0035, cars_04_white_0035,cars_05_redsport_0035,
-cars_06_redantique_0035,cars_07_hatchback_0035, cars_07_hatchback_0035,cars_08_bluesedan_0035,chairs_01_straight_0035,chairs_02_squat_0035, chairs_03_leather_0035,
+cars_06_redantique_0035,cars_07_hatchback_0035,cars_08_bluesedan_0035,chairs_01_straight_0035,chairs_02_squat_0035, chairs_03_leather_0035,
  chairs_04_sling_0035, chairs_05_woven_0035, chairs_06_waiting_0035, chairs_07_inlay_0035,chairs_08_knob_0035,dogs_01_weimaraner_0035, dogs_02_chihuahua_0035,
   dogs_03_basset_0035, dogs_04_doberman_0035, dogs_05_bloodhound_0035, dogs_06_bullmastiff_0035,dogs_07_goldenretriever_0035, dogs_08_pug_0035  ];
 
- module.exports = renderList;
+ //module.exports = renderList;

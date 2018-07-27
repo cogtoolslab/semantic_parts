@@ -1,4 +1,6 @@
 var oldCallback;
+var c;
+var r;
 
 function sendData() {
   console.log('sending data to mturk');
@@ -10,12 +12,12 @@ function setupExp(){
 
   socket.on('onConnected', function(d) {
     //var numTrials = d.num_trials;
-    var numTrials = 4;
+    var numTrials = 7;
     var id = d.id;
     console.log(d);
 
     //var renderList = renderList;
-    console.log("RENDERLIST", renderList[1].url);
+    console.log("RENDERLIST", renderList);
 
     var tmp = {
       type: 'part_annotation',
@@ -41,7 +43,7 @@ function setupExp(){
         'str5': "<p> As you continue to label strokes, unselected strokes will get thicker to help guide your attention to potential smaller strokes, which you may have missed.<p><img src = 'thicknessInstructions.png' style= 'border:2px solid #000000;'></img></p> ",
         'str6': "<p>You can click on already highlighted strokes to un-highlight them before clicking on a menu label<p><img src = 'unhighlightInstructions.png' style= 'border:2px solid #000000;'></img></p>. Similarly, if you want to relabel an already labeled stroke, click on it and choose a new label from the menu.<p><img src = 'relabelInstructions.png' style= 'border:2px solid #000000;'></img></p></p>",
         'str7':"<p>Click next to start a practice trial. Label all the parts of the sketch that appears with appropriate labels. Make sure to try out the different selection and deselection tools to familiarize yourself before the actual trials begin. When you're done labeling, click on 'next sketch' then on 'continue' in the dialog-box that appears.</p>"};
-       
+
         var intro = {
           type: 'instructions',
           pages: [
@@ -78,13 +80,14 @@ function setupExp(){
         trials[1].category = data.category;
         trials[1].renders = data.renders;
         trials[1].distractors = data.distractors;
+        trials[1].targetPos = 2;
 
         trials[2] ={
           type: 'instructions',
           pages:[
           'Good job! You should now have a grasp on what the trials will look like.',
           ' You will now see several sketches of different classes. Please try and label their parts to the best of your ability. Once you are finished, the HIT will be automatically submitted for approval. Good luck!'],
-           show_clickable_nav: true
+          show_clickable_nav: true
         }
 
 
@@ -118,11 +121,44 @@ function setupExp(){
 trial.svg = stim.svg;
 trial.parts = stim.parts;
 trial.category = stim.category;
-trial.renders = stim.renders;
+//trial.renders = stim.renders;
 trial.distractors = stim.distractors;
-console.log(trial.distractors);
+trial.renders=[];
+/*r=0
+for(var i=0;i<renderList.length;i++){
+  if(renderList[i].subordinate==trial.distractors[c]){
+  trial.renders[r]= renderList[i].url;
+  c++;
+  r++;
+ }
+  else if(renderList[i].subordinate==trial.category){   
+   trial.renders[r]= renderList[i].url;
+   r++;
+ }
+ }*/
+ r=0
+ c=1
+_.forEach(renderList, function(f){
+  if(f.subordinate==trial.category){
+    trial.targetPos = r;
+    trial.renders[r]=f.url
+    r++
+  }else{
+    for(var i=0;i<trial.distractors.length;i++){
+      if(f.subordinate==trial.distractors[i]){
+        trial.renders[r]=f.url;
+        r++;
+        c++;
 
-jsPsych.resumeExperiment();
+      }
+    }
+  }
+});
+
+
+
+
+ jsPsych.resumeExperiment();
 };
 socket.removeListener('stimulus', oldCallback);
 socket.on('stimulus', newCallback);
