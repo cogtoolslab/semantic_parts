@@ -120,7 +120,7 @@ function setupExp(){
 //      	_.extend(trials[1], stim);
 trial.svg = stim.svg;
 trial.parts = stim.parts;
-trial.category = stim.category;
+trial.category = stim.target;
 //trial.renders = stim.renders;
 trial.Distractor1 = stim.Distractor1;
 trial.Distractor2 = stim.Distractor2;
