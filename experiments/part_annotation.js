@@ -43,7 +43,7 @@ jsPsych.plugins['part_annotation'] = (function(){
         <div id="main_container" style="width:200vh;height:60vh; margin-left:200px; margin-bottom:200px"> \
            <ul id="List" style="float:right;margin:auto;vertical-align:middle"></ul>\
            <div id="canvas_container" style="width:300px;height:100%;display:absolute;margin-left:350px">\
-             <p id="Title" style="color:black;float:top;height:10%">'+ trial.category+'</p> \
+             <p id="Title" style="color:black;float:top;height:10%">'+ "Chair"+'</p> \
              <canvas id="myCanvas" style="border: 2px solid #000000"  \
                      resize="true" ></canvas> \
              <button id = "nextButton" type="button" style="float:bottom;height:10%">Next Sketch</button> \
@@ -54,10 +54,10 @@ jsPsych.plugins['part_annotation'] = (function(){
           </div>\
         </div>\
         <div class="row">\
-    <img src='+trial.renders[0]+' style= "border:2px solid #000000;">\
-    <img src='+trial.renders[1]+' style= "border:2px solid #000000;">\
-    <img src='+trial.renders[2]+' style= "border:2px solid #000000;">\
-    <img src='+trial.renders[3]+' style= "border:2px solid #000000;">\
+    <img src='+trial.renders[0]+' style= "border:2px solid #000000;height:15%; width:15%">\
+    <img src='+trial.renders[1]+' style= "border:2px solid #000000;height:15%; width:15%">\
+    <img src='+trial.renders[2]+' style= "border:2px solid #000000;height:15%; width:15%">\
+    <img src='+trial.renders[3]+' style= "border:2px solid #000000;height:15%; width:15%">\
   </div>\
         </div> \
         <div id="dialog-form" title="Enter Part Label">\
