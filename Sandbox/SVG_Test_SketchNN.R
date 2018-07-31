@@ -1,5 +1,5 @@
 library("dplyr")
-raw<- as.data.frame(read.csv('../data/sketchpad_basic_group_data_lite.csv'))
+raw<- as.data.frame(read.csv('Documents/Github/semantic_parts/data/sketchpad_basic_chairs.csv'))
 parts_array<- character()
 raw$category = as.character(raw$category) 
 
@@ -22,8 +22,7 @@ raw <- as.data.frame(lapply(raw, gsub, pattern='u', replacement=''))
 raw$svg<-lapply(raw$svg, gsub, pattern= "'", replacement = '"')
 raw$parts<-lapply(raw$parts, gsub, pattern= "'", replacement = '"')
 raw<- as.list(select(raw, -X))
-raw<- as.data.frame(raw)
-write.csv(raw, file = "annotation_data.csv")
-parts_array
-
+raw$svg<- unlist(raw$svg, use.names = FALSE)
+write.csv(raw, file = "sketchpad_basic_chairs.csv", row.names=FALSE)
+typeof(raw$svg)
 
