@@ -4,6 +4,7 @@ jsPsych.plugins['part_annotation'] = (function(){
   var plugin = {};
   //intializing drag state checker and array of selected array
   var dragStat=false;
+  //initializing array of selected strokes as empty
   var selectedArray=[];
   plugin.info = {
     name: 'part_annotation',
@@ -26,12 +27,13 @@ jsPsych.plugins['part_annotation'] = (function(){
    var numLitStrokes=0; 
    var splineArray;   
    var timeLabeled;
-  
+   
     //Setting colors for the menu items ROYGBIV from left to right
-    var colors = ["#ff6666","#ffaa80","#ffb3ba","#ffdfba", "#ffffba", "#baffc9", "#bae1ff", "#bf80ff", "#f9bcff"];
-
-    var left = [255, 153, 51];
-    var right = [0, 204, 153];
+    //var colors = ["#ff6666","#ffaa80","#ffb3ba","#ffdfba", "#ffffba", "#baffc9", "#bae1ff", "#bf80ff", "#f9bcff"];
+    
+    //Setting RGB values to interpolate between 
+    var left = [237, 56, 8];
+    var right = [56, 209, 237];
     
     
 
@@ -39,46 +41,47 @@ jsPsych.plugins['part_annotation'] = (function(){
     //Putting function calls and HTML elements of the jsPsych display element within a 1 second timeout
 
     setTimeout(function() {
+      //Setting up HTML for each trial
       display_element.innerHTML += ('\
         <div id="main_container" style="width:200vh;height:60vh; margin-left:200px; margin-bottom:200px"> \
-           <ul id="List" style="float:right;margin:auto;vertical-align:middle"></ul>\
-           <div id="canvas_container" style="width:300px;height:100%;display:absolute;margin-left:350px">\
-             <p id="Title" style="color:black;float:top;height:10%">'+ "Chair"+'</p> \
-             <canvas id="myCanvas" style="border: 2px solid #000000"  \
-                     resize="true" ></canvas> \
-             <button id = "nextButton" type="button" style="float:bottom;height:10%">Next Sketch</button> \
-           </div>\
-           <div class="progress" style="float:bottom; margin-bottom:0px;"> \
-          <div id= "progressbar" class="progress-bar" role="progressbar" \
-               style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%\
-          </div>\
+        <ul id="List" style="float:right;margin:auto;vertical-align:middle"></ul>\
+        <div id="canvas_container" style="width:300px;height:100%;display:absolute;margin-left:350px">\
+        <p id="Title" style="color:black;float:top;height:10%">'+ "Chair"+'</p> \
+        <canvas id="myCanvas" style="border: 2px solid #000000"  \
+        resize="true" ></canvas> \
+        <button id = "nextButton" type="button" style="float:bottom;height:10%">Next Sketch</button> \
+        </div>\
+        <div class="progress" style="float:bottom; margin-bottom:0px;"> \
+        <div id= "progressbar" class="progress-bar" role="progressbar" \
+        style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%\
+        </div>\
         </div>\
         <div class="row">\
-    <img src='+trial.renders[0]+' style= "border:2px solid #000000;height:15%; width:15%">\
-    <img src='+trial.renders[1]+' style= "border:2px solid #000000;height:15%; width:15%">\
-    <img src='+trial.renders[2]+' style= "border:2px solid #000000;height:15%; width:15%">\
-    <img src='+trial.renders[3]+' style= "border:2px solid #000000;height:15%; width:15%">\
-  </div>\
+        <img src='+trial.renders[0]+' style= "border:2px solid #000000;height:15%; width:15%">\
+        <img src='+trial.renders[1]+' style= "border:2px solid #000000;height:15%; width:15%">\
+        <img src='+trial.renders[2]+' style= "border:2px solid #000000;height:15%; width:15%">\
+        <img src='+trial.renders[3]+' style= "border:2px solid #000000;height:15%; width:15%">\
+        </div>\
         </div> \
         <div id="dialog-form" title="Enter Part Label">\
-          <form>\
-            <fieldset> \
-              <label for="partName">Part Name</label>\
-              <input type="text" name="partName" id="partName" \
-                     placeholder="Type your part label here" \
-                     class="text ui-widget-content ui-corner-all"> \
-              <div id ="confirmContinue" title= "Move on to next sketch?">\
-                  Clicking continue will end the current trial. \
-                  Please make sure you have labeled all the parts that you can. \
-                  Click back to continue labeling the sketch.\
-              </div>\
-              <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">\
-            </fieldset>\
-          </form>\
+        <form>\
+        <fieldset> \
+        <label for="partName">Part Name</label>\
+        <input type="text" name="partName" id="partName" \
+        placeholder="Type your part label here" \
+        class="text ui-widget-content ui-corner-all"> \
+        <div id ="confirmContinue" title= "Move on to next sketch?">\
+        Clicking continue will end the current trial. \
+        Please make sure you have labeled all the parts that you can. \
+        Click back to continue labeling the sketch.\
+        </div>\
+        <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">\
+        </fieldset>\
+        </form>\
         </div> \
-         \
-      </div>');
-     
+        \
+        </div>');
+      
       // display_element.innerHTML += "<div><div ><p id='Title' style='color:black;'>"+ trial.category+'</p> <canvas id="myCanvas" style="border: 2px solid #000000;" resize="true" ></canvas> <button id = "nextButton" type="button">Next Sketch</button> </div><div id="dialog-form" title="Enter Part Label"> <form><fieldset><label for="partName">Part Name</label> <input type="text" name="partName" id="partName" placeholder="Type your part label here" class="text ui-widget-content ui-corner-all"> <input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset></form></div> <ul id = "List"></ul><div id ="confirmContinue" title= "Move on to next sketch?">Clicking continue will end the current trial. Please make sure you have labeled all the parts that you can. Click back to continue labeling the sketch.</div><div class="progress"><div id= "progressbar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div></div></div>';
       paper.setup('myCanvas');
       listgen();
@@ -86,17 +89,6 @@ jsPsych.plugins['part_annotation'] = (function(){
       display();
     }, 1000);
     
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -125,16 +117,16 @@ var end_trial = function(results) {
     };
 
 
-
-    function color_interpolate (left, right, colNo) {
-      var partList = trial.parts.toString().split(',');
-      var components = [];
-      for (var i = 0; i < 3; i++) {
-        console.log(partList.length);
-        components[i] = Math.round(left[i] + (right[i] - left[i]) * colNo/(partList.length+1));
-      }
-      return('"'+"rgb"+"("+components[0]+","+components[1]+","+components[2]+")"+'"');
+   //Interpolating between the two values provided to generate colors for label menu
+   function color_interpolate (left, right, colNo) {
+    var partList = trial.parts.toString().split(',');
+    var components = [];
+    for (var i = 0; i < 3; i++) {
+      console.log(partList.length);
+      components[i] = Math.round(left[i] + (right[i] - left[i]) * colNo/(partList.length+2));
     }
+    return('"'+"rgb"+"("+components[0]+","+components[1]+","+components[2]+")"+'"');
+  }
 
 
 
@@ -146,8 +138,10 @@ function setColor(li) {
 
     //Main Display function for Canvas events
     function display(){  
-       console.log($($('.row img')[trial.targetPos]).css({"border-width": "10px", "border-color": "red"}));
 
+      //Highlighting the target image in context
+      $($('.row img')[trial.targetPos]).css({"border-width": "10px", "border-color": "red"});
+      //Creating the 'next sketch' button
       $("#nextButton").click(function(){
         $('#confirmContinue').dialog("open")}
         );
@@ -156,8 +150,10 @@ function setColor(li) {
 
     //Displaying the sketch and setting stroke properties
     var svg = trial.svg;
+    //converting data to absolute coordinates
     splineArray = Snap.path.toAbsolute(svg);
     var copy = Snap.path.toAbsolute(svg);
+    //formatting spline data to be able to create paper js paths from them
     var numSplines = 0;
     for(i=0; i<splineArray.length; i++){
       if(splineArray[i][0]=='M'){
@@ -176,10 +172,10 @@ function setColor(li) {
     numSplines++
   })
 
-   console.log(sketch);
 
-   pathArray = new Array;
-   for (var i = 0; i< sketch.length; i++) {
+  //Actually displaying the sketch
+  pathArray = new Array;
+  for (var i = 0; i< sketch.length; i++) {
     pathArray[i] = new Path(sketch[i]);
     pathArray[i].strokeColor = "rgb(0,0,0)";
     pathArray[i].strokeWidth = 5;
@@ -206,14 +202,15 @@ function setColor(li) {
     p.onClick = function(event) {
       if(clickable == true){ 
         //Selecting a new stroke that hasn't been labeled
+        //Normal single click labeling
         if(p.alreadyClicked==false && p.highlit==false){
           p.highlit=true;
           selectedArray[numLitStrokes]=p;  
           timeClicked = Math.floor(Date.now() / 1000);
           $('#List').menu("enable");
-          selectedArray[numLitStrokes].strokeColor = "rgb(175,175,175)";
+          selectedArray[numLitStrokes].strokeColor = "rgb(200,200,200)";
           numLitStrokes++;}
-        //Reselecint an already labeled stroke  
+        //Reselecting an already labeled stroke
         else if(p.alreadyClicked==true && selectedArray.length==0){
           clickable = false;
           p.strokeColor= '#660000';
@@ -224,7 +221,6 @@ function setColor(li) {
             $('#List').menu("enable");
             for(var i=0; i<dict.length; i++){
               if(p.strokeNum==dict[i].strokeNum){
-
                 var changed =false;
             //Changing menu color properties of previous label to distinguish it from others and to match it to current stroke color
             for(var j=0; j<$('#List li').length-1;j++){
@@ -241,10 +237,10 @@ function setColor(li) {
                 $($('li div')[$('#List li').length-1]).css("border-width", 3);
                 $($('li div')[$('#List li').length-1]).css("border-color", "black");
               }
-            dict.splice(i,1);}
-          }
-        } 
-      }
+              dict.splice(i,1);}
+            }
+          } 
+        }
         //Deselecting a stroke that was accidentally highlighted
         else if(p.alreadyClicked== false && p.highlit==true){
           numLitStrokes--;
@@ -259,9 +255,6 @@ function setColor(li) {
                }
              } }}
              console.log(selectedArray);
-
-
-
 
            }
 
@@ -284,7 +277,7 @@ tool.onMouseDrag= function(event){
       $('#List').menu("enable");
       _.forEach(selectedArray, function(p){
         p.highlit = true;
-        p.strokeColor = "rgb(175,175,175)";});
+        p.strokeColor = "rgb(200,200,200)";});
     }
     dragStat=false;
 
@@ -297,13 +290,13 @@ tool.onMouseDrag= function(event){
         if(p.alreadyClicked == false && p.highlit==false && dragStat==true){
           p.highlit=true;
           selectedArray[numLitStrokes]=p;
-          selectedArray[numLitStrokes].strokeColor = "rgb(75,75,75)";
+          selectedArray[numLitStrokes].strokeColor = "rgb(100,100,100)";
           numLitStrokes++
         }
         //When entering a stroke while not dragging 
         else if (p.alreadyClicked == false && p.highlit==false && dragStat==false){
           console.log("general enter", dragStat)
-          p.strokeColor = "rgb(75,75,75)";
+          p.strokeColor = "rgb(100,100,100)";
         }
       }
     }});
@@ -317,10 +310,6 @@ tool.onMouseDrag= function(event){
       }}
     } }); 
 }
-
-
-
-
 
     //generating the menu 
     function listgen(){
@@ -340,11 +329,8 @@ tool.onMouseDrag= function(event){
       setColor(other);
       other.appendTo("#List");
       
-     }
+    }
     //Function for creating menu and free response box widgets from the list created by listgen()
-
-
-
 
     function menugen(){
 
@@ -374,18 +360,13 @@ tool.onMouseDrag= function(event){
             //Setting stroke color to the color of the menu item
             p.strokeColor= ui.item.css("background-color");
             p.alreadyClicked=true;
-       
+            
             svgstring = p.exportSVG({asString: true});
             var start = svgstring.indexOf('d="')+3;
             numLitStrokes=0;
             dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
               "label": text, "strokeColor": p.strokeColor, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000), "strokeNum" : p.strokeNum});
-
-
-p.strokeWidth=5;
-
-
-
+            p.strokeWidth=5;
 
 
 
@@ -406,11 +387,11 @@ p.strokeWidth=5;
           }*/
 
           for( var i = 0; i<pathArray.length; i++){
-              if(pathArray[i].alreadyClicked == false){
-                pathArray[i].strokeWidth = Math.max(5,(c/(pathArray.length))*13);
-              }
+            if(pathArray[i].alreadyClicked == false){
+              pathArray[i].strokeWidth = Math.max(5,(c/(pathArray.length))*13);
             }
-               
+          }
+          
 
           selectedArray=[];
         }
@@ -419,9 +400,9 @@ p.strokeWidth=5;
           otherColor = ui.item.css("background-color");
           $("#dialog-form").dialog("open");
         } else if(text =='Unknown'){
-           _.forEach(selectedArray,function(p){ 
-            p.highlit=false;
-            p.sendToBack();
+         _.forEach(selectedArray,function(p){ 
+          p.highlit=false;
+          p.sendToBack();
             //Setting stroke color to the color of the menu item
             p.strokeColor= ui.item.css("background-color");
             p.alreadyClicked=true;
@@ -432,25 +413,25 @@ p.strokeWidth=5;
               "label": "Unknown", "strokeColor": p.strokeColor, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000), "strokeNum" : p.strokeNum});
 
 
-p.strokeWidth=5;
+            p.strokeWidth=5;
 
 
 
 
           });        
 
-          c=c+selectedArray.length;
+         c=c+selectedArray.length;
           //Progress bar update
           $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
           $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
           $('.progress-bar').html(c+" out of " +pathArray.length +' labeled');
 
           for( var i = 0; i<pathArray.length; i++){
-              if(pathArray[i].alreadyClicked == false){
-                pathArray[i].strokeWidth = Math.max(5,(c/(pathArray.length))*13);
-              }
+            if(pathArray[i].alreadyClicked == false){
+              pathArray[i].strokeWidth = Math.max(5,(c/(pathArray.length))*13);
             }
-               
+          }
+          
 
           selectedArray=[];
 
@@ -503,9 +484,9 @@ p.strokeWidth=5;
       end_trial(results);
 
 
-        }
-      }
-    })
+    }
+  }
+})
 
   $( "#dialog-form" ).dialog({
     autoOpen: false,
@@ -514,10 +495,10 @@ p.strokeWidth=5;
     modal: true,
     open : function(event, ui) { 
       originalContent = $("#dialog-form").html();
-     },
-   close : function(event, ui) {
+    },
+    close : function(event, ui) {
       $("#dialog-form").html(originalContent);
-   },
+    },
     buttons: 
     {
 

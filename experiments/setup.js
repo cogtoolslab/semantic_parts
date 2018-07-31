@@ -80,7 +80,7 @@ function setupExp(){
         trials[1].category = data.category;
         trials[1].renders = data.renders;
         //trials[1].distractors = data.distractors;
-        trials[1].targetPos = 2;
+        trials[1].targetPos = 0;
 
         trials[2] ={
           type: 'instructions',
