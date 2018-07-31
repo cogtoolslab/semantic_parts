@@ -141,12 +141,11 @@ for(var i=0;i<renderList.length;i++){
  c=1
 _.forEach(renderList, function(f){
   if(f.subordinate==trial.category){
-    trial.targetPos = r;
-    trial.renders[r]=f.url
-    r++
-  }else if(f.subordinate==trial.Distractor1||f.subordinate==trial.Distractor2||f.subordinate==trial.Distractor3){
-   trial.renders[r]=f.url
-    r++;
+    trial.renders[0]=f.url;
+    
+      }else if(f.subordinate==trial.Distractor1||f.subordinate==trial.Distractor2||f.subordinate==trial.Distractor3){
+   trial.renders[c]=f.url
+    c++;
   }
 });
 
