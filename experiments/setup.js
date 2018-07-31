@@ -28,20 +28,18 @@ function setupExp(){
     var trials = new Array(tmp.num_trials + 3);
     
     var consentHTML = {
-      'str1' : '<p> In this HIT you will see some sketches. Your task will be to label the constituent strokes of these sketches using an interactive menu and/or a free response box.</p>',
+      'str1' : '<p> In this HIT you will see some sketches made by humans who played a pictionary-style game, where the sketcher had to distinguish a target image from three distractor images. Your task will be to label the constituent strokes of these sketches using an interactive menu and/or a free response box.</p>',
       'str2': '<p> We expect the average amount of time required to complete the HIT to be around n minutes, including the time it takes to read the instructions. </p>',
       'str3':"<p> If you encounter a problem or error, send us an email () and we will make sure you're compensated for your time! Please pay attention and do your best! Thank you!</p><p> Note: We recommend using Chrome. We have not tested this HIT in other browsers.</p>"};
       var instructionsHTML = {
         'str1' :"<p> Each trial will appear as follows: A sketch will appear within a bounded box along with a corresponding menu of labels to its right. A category label above the box will tell you what object the sketch is of.\
-        You will also see a 'next sketch' button below the box, which will allow you to move on to the next trial when you are done labeling the sketch.\
+        The four images below the box are the images the original sketcher was shown, with the target image being the one with a red border. You will also see a 'next sketch' button below the box, which will allow you to move on to the next trial when you are done labeling the sketch.\
         <p>Finally you will see a blue progress bar at the bottom of the screen indicating how many parts have been labeled for the current sketch.</p></p><p> Here is an example of what a typical trial looks like:</p><p> <img src='testImage.png' style= 'border:2px solid #000000;'></img></p>",
         'str2':"<p> Your task is to select strokes on the sketch and annotate them using either the labels provided, or by clicking on 'Other' and entering your own label in the text-box that appears.<p><img src= 'labelInstructions.png' style= 'border:2px solid #000000;'></img></p></p>",
-
-
         'str3':"<p> There are two main ways of selecting strokes :<p> 1. Clicking on a stroke to highlight it. </p>  <p><img src='clickInstructions.png' style= 'border:2px solid #000000;'></img</p></p>",
-        'str4': "<p> 2. Clicking and dragging the mouse across multiple strokes to highlight a family of strokes.<p><img src = 'dragInstructions.png' style= 'border:2px solid #000000;'></img></p> Once you've highlighted all the strokes you want to, click on one of the menu labels to assign that label to the highlighted strokes. Repeat this process until all strokes are labeled.</p>",
-        'str5': "<p> As you continue to label strokes, unselected strokes will get thicker to help guide your attention to potential smaller strokes, which you may have missed.<p><img src = 'thicknessInstructions.png' style= 'border:2px solid #000000;'></img></p> ",
-        'str6': "<p>You can click on already highlighted strokes to un-highlight them before clicking on a menu label<p><img src = 'unhighlightInstructions.png' style= 'border:2px solid #000000;'></img></p>. Similarly, if you want to relabel an already labeled stroke, click on it and choose a new label from the menu.<p><img src = 'relabelInstructions.png' style= 'border:2px solid #000000;'></img></p></p>",
+        'str4': "<p> 2. Clicking and dragging the mouse across the screen to highlight a family of strokes.<p><img src = 'dragInstructions.png' style= 'border:2px solid #000000;'></img></p> Once you've highlighted all the strokes you want to, click on one of the menu labels to assign that label to the highlighted strokes. Repeat this process until all strokes are labeled.</p>",
+        'str5': "<p> As you continue to label strokes, unselected strokes will get thicker to help guide your attention to smaller strokes, which you may have missed.<p><img src = 'thicknessInstructions.png' style= 'border:2px solid #000000;'></img></p> ",
+        'str6': "<p>You can click on already highlighted strokes to un-highlight them before clicking on a menu label.<p><img src = 'unhighlightInstructions.png' style= 'border:2px solid #000000;'></img></p> Similarly, if you want to relabel an already labeled stroke, click on it and choose a new label from the menu.<p><img src = 'relabelInstructions.png' style= 'border:2px solid #000000;'></img></p></p>",
         'str7':"<p>Click next to start a practice trial. Label all the parts of the sketch that appears with appropriate labels. Make sure to try out the different selection and deselection tools to familiarize yourself before the actual trials begin. When you're done labeling, click on 'next sketch' then on 'continue' in the dialog-box that appears.</p>"};
 
         var intro = {
