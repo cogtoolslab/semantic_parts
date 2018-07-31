@@ -1,5 +1,11 @@
-library("dplyr")
-raw<- as.data.frame(read.csv('Documents/Github/semantic_parts/data/sketchpad_basic_chairs.csv'))
+
+library(dplyr)
+sketchpad_basic<- read.csv('Documents/Github/semantic_parts/analysis/sketchpad_basic_group_data_for_annotation.csv')
+sketchpad_basic<-filter(sketchpad_basic, category=='chair')
+View(sketchpad_basic)
+write.csv(sketchpad_basic, file='sketchpad_basic_chairs.csv')
+
+raw<- as.data.frame(read.csv('Documents/Github/semantic_parts/analysis/sketchpad_basic_chairs.csv'))
 parts_array<- character()
 raw$category = as.character(raw$category) 
 
@@ -18,7 +24,7 @@ if(raw$category[i]=="dog"){
 }
 
 raw$parts<- parts_array
-raw <- as.data.frame(lapply(raw, gsub, pattern='u', replacement=''))
+raw$svg <- lapply(raw$svg, gsub, pattern='u', replacement='')
 raw$svg<-lapply(raw$svg, gsub, pattern= "'", replacement = '"')
 raw$parts<-lapply(raw$parts, gsub, pattern= "'", replacement = '"')
 raw<- as.list(select(raw, -X))
