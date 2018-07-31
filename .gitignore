@@ -8,6 +8,7 @@ __pycache__/
 *.so
 .DS_Store
 .R.app.history
+.Rhistory
 
 auth.txt
 auth.json
