@@ -140,7 +140,7 @@ function setColor(li) {
     function display(){  
 
       //Highlighting the target image in context
-      $($('.row img')[trial.targetPos]).css({"border-width": "10px", "border-color": "red"});
+      $($('.row img')[0]).css({"border-width": "10px", "border-color": "red"});
       //Creating the 'next sketch' button
       $("#nextButton").click(function(){
         $('#confirmContinue').dialog("open")}
@@ -179,6 +179,9 @@ function setColor(li) {
     pathArray[i] = new Path(sketch[i]);
     pathArray[i].strokeColor = "rgb(0,0,0)";
     pathArray[i].strokeWidth = 5;
+    pathArray[i].selected = true;
+    pathArray[i].bounds;
+
 
       //already clicked tracks if a stroke has been labeled
       pathArray[i].alreadyClicked = false;
@@ -367,6 +370,7 @@ tool.onMouseDrag= function(event){
             dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
               "label": text, "strokeColor": p.strokeColor, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000), "strokeNum" : p.strokeNum});
             p.strokeWidth=5;
+            p.selected=false;
 
 
 
@@ -515,6 +519,7 @@ tool.onMouseDrag= function(event){
         _.forEach(selectedArray,function(p){ 
           p.highlit=false;
           p.strokeColor= otherColor;
+          p.selected=false;
           p.alreadyClicked=true;
           p.strokeWidth=5;
           var UI = $("#partName").val();
