@@ -46,7 +46,7 @@ jsPsych.plugins['part_annotation'] = (function(){
       display_element.innerHTML += ('<p id= "bonusMeter" style="text-align:left; float:left;">Total bonus earned from previous trials: '+totalBonus+' cents <br>Bonus earned for this trial: 0 cents</p>\
         <p id="trialNum"style="text-align:right;"> You are on trial '+(trial.trialNum+1)+" of "+trial.num_trials+'</p><div id="main_container" style="width:1000px;height:600px; margin:auto;"> \
         \<div id= "upper_container" style="margin:auto; width:700px">\
-        <div id= "celebrationGif" style="z-index:10;position:absolute;height:100px;width:100px;float:left;padding-left:150px"><img class="gif" style="margin:auto; display: inline;" src="https://img1.picmix.com/output/stamp/normal/9/9/8/0/1110899_77ff4.gif"></div>\
+        <div id= "celebrationGif" style="position:absolute;height:100px;width:100px;float:left;padding-left:150px"><img class="gif" style="margin:auto; display: inline;" src="https://img1.picmix.com/output/stamp/normal/9/9/8/0/1110899_77ff4.gif"></div>\
         <div style="float:right; padding-top:43px"><ul id="List" style="margin:auto;"></ul></div>\
         <div id="canvas_container" style="width:300px;display:absolute;margin:auto;">\
         <p id="Title" style="color:black;height:10%">'+ trial.category+'</p> \
@@ -600,6 +600,9 @@ tool.onMouseDrag= function(event){
           p.alreadyClicked=true;
           p.strokeWidth=5;
           var UI = $("#partName").val();
+          if(UI==""){
+            UI="unknown"
+          }
           svgstring = p.exportSVG({asString: true});
           var start = svgstring.indexOf('d="')+3;
           numLitStrokes=0;
@@ -612,6 +615,10 @@ tool.onMouseDrag= function(event){
         $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
         $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
         $('.progress-bar').html(c+" out of "+pathArray.length +' labeled');
+         if(c==pathArray.length){
+          $('.gif').fadeIn(400);
+          setTimeout(function(){ $('.gif').fadeOut(500);; }, 4000);
+        }
         selectedArray=[];
 
         $(this).dialog("close");
