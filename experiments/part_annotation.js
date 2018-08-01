@@ -17,6 +17,7 @@ jsPsych.plugins['part_annotation'] = (function(){
    var dict=[];
    var results=[];
    var tempSketch=[];
+   var currentBonus=0;
    var sketch=[];
    var pathArray;
    var c=0;
@@ -42,12 +43,13 @@ jsPsych.plugins['part_annotation'] = (function(){
 
     setTimeout(function() {
       //Setting up HTML for each trial
-      display_element.innerHTML += ('<p id= "bonusMeter" style="text-align:left">Bonus earned for this round:0 cents</p>\
-        <p id="trialNum"style="text-align:right">'+(trial.trialNum+1)+"/"+trial.num_trials+'</p><div id="main_container" style="width:1000px;height:600px; margin:auto;"> \
+      display_element.innerHTML += ('<p id= "bonusMeter" style="text-align:left; float:left;">Total bonus earned from previous trials: '+totalBonus+' cents <br>Bonus earned for this trial: 0 cents</p>\
+        <p id="trialNum"style="text-align:right;"> You are on trial '+(trial.trialNum+1)+" of "+trial.num_trials+'</p><div id="main_container" style="width:1000px;height:600px; margin:auto;"> \
         \<div id= "upper_container" style="margin:auto; width:700px">\
+        <div id= "celebrationGif" style="z-index:10;position:absolute;height:100px;width:100px;float:left;padding-left:150px"><img class="gif" style="margin:auto; display: inline;" src="https://img1.picmix.com/output/stamp/normal/9/9/8/0/1110899_77ff4.gif"></div>\
         <div style="float:right; padding-top:43px"><ul id="List" style="margin:auto;"></ul></div>\
         <div id="canvas_container" style="width:300px;display:absolute;margin:auto;">\
-        <p id="Title" style="color:black;height:10%">'+ "Chair"+'</p> \
+        <p id="Title" style="color:black;height:10%">'+ trial.category+'</p> \
         <canvas id="myCanvas" style="border: 2px solid #000000"  \
         resize="true" ></canvas> \
         <button id = "nextButton" type="button" style="float:bottom;height:10%">Next Sketch</button> \
@@ -82,8 +84,7 @@ jsPsych.plugins['part_annotation'] = (function(){
         </div> \
         </div>');
       
-      // display_element.innerHTML += "<div><div ><p id='Title' style='color:black;'>"+ trial.category+'</p> <canvas id="myCanvas" style="border: 2px solid #000000;" resize="true" ></canvas> <button id = "nextButton" type="button">Next Sketch</button> </div><div id="dialog-form" title="Enter Part Label"> <form><fieldset><label for="partName">Part Name</label> <input type="text" name="partName" id="partName" placeholder="Type your part label here" class="text ui-widget-content ui-corner-all"> <input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset></form></div> <ul id = "List"></ul><div id ="confirmContinue" title= "Move on to next sketch?">Clicking continue will end the current trial. Please make sure you have labeled all the parts that you can. Click back to continue labeling the sketch.</div><div class="progress"><div id= "progressbar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div></div></div>';
-      paper.setup('myCanvas');
+            paper.setup('myCanvas');
       listgen();
       menugen();
       display();
@@ -141,8 +142,32 @@ function setColor(li) {
 
     //Main Display function for Canvas events
     function display(){  
+
+
+
+
+
+
+
+$('.gif').hide();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       if(trial.training==true){
         $("#bonusMeter").text('');
+        $("#trialNum").text('');
       }
 
 /*$( "#List" ).position({
@@ -420,6 +445,10 @@ tool.onMouseDrag= function(event){
 
           c=c+selectedArray.length;
           //Progress bar update
+          if(c==pathArray.length){
+          $('.gif').fadeIn(400);
+          setTimeout(function(){ $('.gif').fadeOut(500);; }, 4000);
+        }
           
           $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
           $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
@@ -428,7 +457,7 @@ tool.onMouseDrag= function(event){
           if(trial.training==false){
 
           currentBonus=Math.round(c*0.05*100)/100;
-          $('#bonusMeter').text("Bonus earned for this round:"+currentBonus+" cents"+"Also previous bonus"+totalBonus+"cents");
+          $('#bonusMeter').html("Total bonus earned from previous trials: "+totalBonus+" cents<br> Bonus earned for this trial: "+currentBonus+" cents");
 }
           /*if(c>(0.6*pathArray.length)){
             for( var i = 0; i<pathArray.length; i++){

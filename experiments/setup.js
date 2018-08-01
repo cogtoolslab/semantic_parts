@@ -31,7 +31,7 @@ function setupExp(){
       'str1' : '<p> In this HIT you will see some sketches made by humans who played a pictionary-style game, where the sketcher had to distinguish a target image from three distractor images. Your task will be to label the constituent strokes of these sketches using an interactive menu and/or a free response box.</p>',
       'str2': '<p> We expect the average amount of time required to complete the HIT to be around n minutes, including the time it takes to read the instructions. </p>',
       'str3':"<p> If you encounter a problem or error, send us an email () and we will make sure you're compensated for your time! Please pay attention and do your best! Thank you!</p><p> Note: We recommend using Chrome. We have not tested this HIT in other browsers.</p>"};
-      var instructionsHTML = {
+    var instructionsHTML = {
         'str1' :"<p> Each trial will appear as follows: A sketch will appear within a bounded box along with a corresponding menu of labels to its right. A category label above the box will tell you what object the sketch is of.\
         The four images below the box are the images the original sketcher was shown, with the target image being the one with a red border. You will also see a 'next sketch' button below the box, which will allow you to move on to the next trial when you are done labeling the sketch.\
         <p>Finally you will see a blue progress bar at the bottom of the screen indicating how many parts have been labeled for the current sketch.</p></p><p> Here is an example of what a typical trial looks like:</p><p> <img src='testImage.png' style= 'border:2px solid #000000;'></img></p>",
@@ -56,7 +56,11 @@ function setupExp(){
           instructionsHTML.str6,
           instructionsHTML.str7
           ],
-          show_clickable_nav: true
+         
+          allow_backward: true,
+          allow_keys:true,
+          show_clickable_nav: true,
+
         };
         console.log(data.parts);
 
@@ -85,7 +89,10 @@ function setupExp(){
           pages:[
           'Good job! You should now have a grasp on what the trials will look like.',
           ' You will now see several sketches of different classes. Please try and label their parts to the best of your ability. Once you are finished, the HIT will be automatically submitted for approval. Good luck!'],
-          show_clickable_nav: true
+        allow_backward: true,
+          allow_keys:true,
+          show_clickable_nav: true,
+
         }
 
 
@@ -119,7 +126,8 @@ function setupExp(){
         trial.training = false;
         trial.svg = stim.svg;
         trial.parts = stim.parts;
-        trial.category = stim.target;
+        trial.category = stim.category;
+        trial.target = stim.target;
         //trial.renders = stim.renders;
         trial.Distractor1 = stim.Distractor1;
         trial.Distractor2 = stim.Distractor2;
@@ -141,7 +149,7 @@ function setupExp(){
          r=0
          c=1
         _.forEach(renderList, function(f){
-          if(f.subordinate==trial.category){
+          if(f.subordinate==trial.target){
             trial.renders[0]=f.url;
             
               }else if(f.subordinate==trial.Distractor1||f.subordinate==trial.Distractor2||f.subordinate==trial.Distractor3){
