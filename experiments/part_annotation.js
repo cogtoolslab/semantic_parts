@@ -42,25 +42,25 @@ jsPsych.plugins['part_annotation'] = (function(){
 
     setTimeout(function() {
       //Setting up HTML for each trial
-      display_element.innerHTML += ('\
-        <div id="main_container" style="width:200vh;height:60vh; margin-left:200px; margin-bottom:200px"> \
-        <ul id="List" style="float:right;margin:auto;vertical-align:middle"></ul>\
-        <div id="canvas_container" style="width:300px;height:100%;display:absolute;margin-left:350px">\
-        <p id="Title" style="color:black;float:top;height:10%">'+ "Chair"+'</p> \
+      display_element.innerHTML += ('<div id="main_container" style="width:1000px;height:600px; margin:auto;"> \
+        \<div id= "upper_container" style="margin:auto; width:700px">\
+        <div style="float:right; padding-top:43px"><ul id="List" style="margin:auto;"></ul></div>\
+        <div id="canvas_container" style="width:300px;display:absolute;margin:auto;">\
+        <p id="Title" style="color:black;height:10%">'+ "Chair"+'</p> \
         <canvas id="myCanvas" style="border: 2px solid #000000"  \
         resize="true" ></canvas> \
         <button id = "nextButton" type="button" style="float:bottom;height:10%">Next Sketch</button> \
-        </div>\
-        <div class="progress" style="float:bottom; margin-bottom:0px;"> \
+        </div></div>\
+        <div class="progress" style="float:bottom; margin:auto;"> \
         <div id= "progressbar" class="progress-bar" role="progressbar" \
         style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%\
         </div>\
         </div>\
-        <div class="row">\
-        <img src='+trial.renders[0]+' style= "border:2px solid #000000;height:15%; width:15%">\
-        <img src='+trial.renders[1]+' style= "border:2px solid #000000;height:15%; width:15%">\
-        <img src='+trial.renders[2]+' style= "border:2px solid #000000;height:15%; width:15%">\
-        <img src='+trial.renders[3]+' style= "border:2px solid #000000;height:15%; width:15%">\
+        <div class="row" style = "float:bottom; display:table;x">\
+        <img src='+trial.renders[0]+' style= "border:2px solid #000000;height:20%; width:20%;">\
+        <img src='+trial.renders[1]+' style= "border:2px solid #000000;height:20%; width:20%;">\
+        <img src='+trial.renders[2]+' style= "border:2px solid #000000;height:20%; width:20%;">\
+        <img src='+trial.renders[3]+' style= "border:2px solid #000000;height:20%; width:20%;">\
         </div>\
         </div> \
         <div id="dialog-form" title="Enter Part Label">\
@@ -79,7 +79,6 @@ jsPsych.plugins['part_annotation'] = (function(){
         </fieldset>\
         </form>\
         </div> \
-        \
         </div>');
       
       // display_element.innerHTML += "<div><div ><p id='Title' style='color:black;'>"+ trial.category+'</p> <canvas id="myCanvas" style="border: 2px solid #000000;" resize="true" ></canvas> <button id = "nextButton" type="button">Next Sketch</button> </div><div id="dialog-form" title="Enter Part Label"> <form><fieldset><label for="partName">Part Name</label> <input type="text" name="partName" id="partName" placeholder="Type your part label here" class="text ui-widget-content ui-corner-all"> <input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></fieldset></form></div> <ul id = "List"></ul><div id ="confirmContinue" title= "Move on to next sketch?">Clicking continue will end the current trial. Please make sure you have labeled all the parts that you can. Click back to continue labeling the sketch.</div><div class="progress"><div id= "progressbar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div></div></div>';
@@ -139,6 +138,12 @@ function setColor(li) {
     //Main Display function for Canvas events
     function display(){  
 
+/*$( "#List" ).position({
+        my: "center top",
+        at: "right center",
+        of: "#main_container"
+      })*/
+
       //Highlighting the target image in context
       $($('.row img')[0]).css({"border-width": "10px", "border-color": "red"});
       //Creating the 'next sketch' button
@@ -179,7 +184,7 @@ function setColor(li) {
     pathArray[i] = new Path(sketch[i]);
     pathArray[i].strokeColor = "rgb(0,0,0)";
     pathArray[i].strokeWidth = 5;
-    pathArray[i].selected = true;
+    //pathArray[i].selected = true;
     pathArray[i].bounds;
 
 
@@ -370,11 +375,11 @@ tool.onMouseDrag= function(event){
             dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
               "label": text, "strokeColor": p.strokeColor, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000), "strokeNum" : p.strokeNum});
             p.strokeWidth=5;
-            p.selected=false;
+           // p.selected=false;
 
 
 
-          });        
+         });        
 
           c=c+selectedArray.length;
           //Progress bar update
@@ -519,7 +524,7 @@ tool.onMouseDrag= function(event){
         _.forEach(selectedArray,function(p){ 
           p.highlit=false;
           p.strokeColor= otherColor;
-          p.selected=false;
+          //p.selected=false;
           p.alreadyClicked=true;
           p.strokeWidth=5;
           var UI = $("#partName").val();

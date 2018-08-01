@@ -20,20 +20,18 @@
  .ui-menu { width: 200px; }
  .ui-widget-header { padding: 0.2em; }
  .ui-menu {
-    position: relative;
-    display: inline-block;
-    margin-bottom: auto;
-    right:510px;
-    top:55px;
-    ;
+    display: block;
+    margin:auto;
+    
 
     /* bottom:38%; */
     /* left: 60.5%; */
 }
 
 .row{
-  margin-bottom: 330px;
-  margin-left: 125px;
+  margin: auto;
+  /*margin-bottom: 330px;
+  margin-left: 125px;*/
 }
 #Title {
     margin-left: auto;
@@ -58,7 +56,7 @@
   position:relative;
 }
 .progress{
-  margin-left:160px;
+  margin: auto;
   width:50%;
 }
 canvas[resize] {
