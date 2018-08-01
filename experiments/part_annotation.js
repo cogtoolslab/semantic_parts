@@ -1,6 +1,6 @@
 
 jsPsych.plugins['part_annotation'] = (function(){
-
+  var totalBonus=0;
   var plugin = {};
   //intializing drag state checker and array of selected array
   var dragStat=false;
@@ -42,7 +42,8 @@ jsPsych.plugins['part_annotation'] = (function(){
 
     setTimeout(function() {
       //Setting up HTML for each trial
-      display_element.innerHTML += ('<div id="main_container" style="width:1000px;height:600px; margin:auto;"> \
+      display_element.innerHTML += ('<p id= "bonusMeter" style="text-align:left">Bonus earned for this round:0 cents</p>\
+        <p id="trialNum"style="text-align:right">'+(trial.trialNum+1)+"/"+trial.num_trials+'</p><div id="main_container" style="width:1000px;height:600px; margin:auto;"> \
         \<div id= "upper_container" style="margin:auto; width:700px">\
         <div style="float:right; padding-top:43px"><ul id="List" style="margin:auto;"></ul></div>\
         <div id="canvas_container" style="width:300px;display:absolute;margin:auto;">\
@@ -95,6 +96,9 @@ jsPsych.plugins['part_annotation'] = (function(){
 //Ending trial and creating trial data to be sent to db. Also resetting HTML elements
 var end_trial = function(results) {
  selectedArray=[];
+ if(trial.training==false){
+ totalBonus=totalBonus+currentBonus;
+}
  var turkInfo = jsPsych.turk.turkInfo();
 
       // gather the data to store for the trial
@@ -137,6 +141,9 @@ function setColor(li) {
 
     //Main Display function for Canvas events
     function display(){  
+      if(trial.training==true){
+        $("#bonusMeter").text('');
+      }
 
 /*$( "#List" ).position({
         my: "center top",
@@ -146,9 +153,39 @@ function setColor(li) {
 
       //Highlighting the target image in context
       $($('.row img')[0]).css({"border-width": "10px", "border-color": "red"});
+
       //Creating the 'next sketch' button
       $("#nextButton").click(function(){
-        $('#confirmContinue').dialog("open")}
+        if(c==pathArray.length){
+          var dataURL = document.getElementById('myCanvas').toDataURL();
+      dataURL = dataURL.replace('data:image/png;base64,',''); 
+      var category = trial.category;
+      _.forEach(pathArray, function(p){
+        if(p.alreadyClicked==false){
+          svgstring = p.exportSVG({asString: true});
+          var start = svgstring.indexOf('d="')+3;
+          dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
+            "label": "NA", "strokeColor": p.strokeColor, "Time clicked" : "NA", "Time labeled": Math.floor(Date.now() / 1000), "strokeNum" : p.strokeNum});
+
+        }
+      })
+      var tempObj={};
+      tempObj[category] = dict;
+      tempObj["png"] = dataURL;
+      results.push(tempObj);
+      console.log(results);
+      results = JSON.stringify(results)
+      console.log(results);
+      //resetting canvas and menu elements
+      project.activeLayer.removeChildren();
+      paper.view.draw();
+      $("#List").menu("destroy");
+      $("#dialog-form").dialog("destroy");
+      $("#confirmContinue").dialog("destroy");
+      end_trial(results);
+
+        }else if(trial.training==false&&c<pathArray.length){
+        $('#confirmContinue').dialog("open")}}
         );
 
 
@@ -330,7 +367,7 @@ tool.onMouseDrag= function(event){
         li.appendTo("#List");
 
       });
-      var unk = $("<li><div>" + "Unknown" +"</div></li>" )
+      var unk = $("<li><div>" + "I can't tell" +"</div></li>" )
       setColor(unk);
       unk.appendTo("#List")
       var other = $("<li><div>" + "Other" +"</div></li>" );
@@ -360,7 +397,7 @@ tool.onMouseDrag= function(event){
         $("#List").menu("refresh");
         //Retrieving text element of selected option
         var text = ui.item.text();
-        if(text!='Other'&& text!='Unknown'){
+        if(text!='Other'&& text!="I can't tell"){
 
           _.forEach(selectedArray,function(p){ 
             p.highlit=false;
@@ -383,10 +420,16 @@ tool.onMouseDrag= function(event){
 
           c=c+selectedArray.length;
           //Progress bar update
+          
           $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
           $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
           $('.progress-bar').html(c+" out of " +pathArray.length +' labeled');
 
+          if(trial.training==false){
+
+          currentBonus=Math.round(c*0.05*100)/100;
+          $('#bonusMeter').text("Bonus earned for this round:"+currentBonus+" cents"+"Also previous bonus"+totalBonus+"cents");
+}
           /*if(c>(0.6*pathArray.length)){
             for( var i = 0; i<pathArray.length; i++){
               if(pathArray[i].alreadyClicked == false){
@@ -408,7 +451,7 @@ tool.onMouseDrag= function(event){
           //Calling dialog box
           otherColor = ui.item.css("background-color");
           $("#dialog-form").dialog("open");
-        } else if(text =='Unknown'){
+        } else if(text =="I can't tell"){
          _.forEach(selectedArray,function(p){ 
           p.highlit=false;
           p.sendToBack();
@@ -419,7 +462,7 @@ tool.onMouseDrag= function(event){
             var start = svgstring.indexOf('d="')+3;
             numLitStrokes=0;
             dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-              "label": "Unknown", "strokeColor": p.strokeColor, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000), "strokeNum" : p.strokeNum});
+              "label": "unknown", "strokeColor": p.strokeColor, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000), "strokeNum" : p.strokeNum});
 
 
             p.strokeWidth=5;

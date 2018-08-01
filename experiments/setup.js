@@ -65,14 +65,14 @@ function setupExp(){
           type : 'part_annotation',
           num_trials: 1,
           on_finish: function(data){
-            var results = data.results;
-            console.log(JSON.parse(data.results)[0].smiley);
+            
             
           }
         }
 
 
         trials[1] = comprehensionTrial;
+        trials[1].training = true;
         trials[1].svg = data.svg;
         trials[1].parts = data.parts;
         trials[1].category = data.category;
@@ -116,6 +116,7 @@ function setupExp(){
             console.log('received stim')
             console.log(stim)
         //      	_.extend(trials[1], stim);
+        trial.training = false;
         trial.svg = stim.svg;
         trial.parts = stim.parts;
         trial.category = stim.target;
@@ -165,6 +166,7 @@ for(var i = 0; i< tmp.num_trials; i++){
   trials[k] = {
    type: tmp.type,
    trialNum: i,    	
+   num_trials: tmp.num_trials,
    on_finish: main_on_finish,
    on_start: main_on_start
  };

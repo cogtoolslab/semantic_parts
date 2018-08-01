@@ -6,7 +6,9 @@
  */
 
  /* Container holding jsPsych content */
-
+*{
+  font-family: 'Lato', sans-serif;
+}
  .jspsych-display-element {
    display: flex;
    flex-direction: column;
@@ -40,6 +42,7 @@
     /* position: relative; */
     display: block; 
     font-size: 50px;
+    font-family: 'Lato', sans-serif;
   /* position: absolute; */
   /* display: inline-block; */
   /*  /\*bottom: 550px; *\/ */
@@ -91,6 +94,7 @@ canvas[resize] {
     /*top: 100px;*/
 
   }
+
 
  .jspsych-display-element:focus {
    outline: none;
