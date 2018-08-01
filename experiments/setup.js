@@ -115,38 +115,38 @@ function setupExp(){
           var newCallback = function(stim) {
             console.log('received stim')
             console.log(stim)
-//      	_.extend(trials[1], stim);
-trial.svg = stim.svg;
-trial.parts = stim.parts;
-trial.category = stim.target;
-//trial.renders = stim.renders;
-trial.Distractor1 = stim.Distractor1;
-trial.Distractor2 = stim.Distractor2;
-trial.Distractor3 = stim.Distractor3;
+        //      	_.extend(trials[1], stim);
+        trial.svg = stim.svg;
+        trial.parts = stim.parts;
+        trial.category = stim.target;
+        //trial.renders = stim.renders;
+        trial.Distractor1 = stim.Distractor1;
+        trial.Distractor2 = stim.Distractor2;
+        trial.Distractor3 = stim.Distractor3;
 
-trial.renders=[];
-/*r=0
-for(var i=0;i<renderList.length;i++){
-  if(renderList[i].subordinate==trial.distractors[c]){
-  trial.renders[r]= renderList[i].url;
-  c++;
-  r++;
- }
-  else if(renderList[i].subordinate==trial.category){   
-   trial.renders[r]= renderList[i].url;
-   r++;
- }
- }*/
- r=0
- c=1
-_.forEach(renderList, function(f){
-  if(f.subordinate==trial.category){
-    trial.renders[0]=f.url;
-    
-      }else if(f.subordinate==trial.Distractor1||f.subordinate==trial.Distractor2||f.subordinate==trial.Distractor3){
-   trial.renders[c]=f.url
-    c++;
-  }
+        trial.renders=[];
+        /*r=0
+        for(var i=0;i<renderList.length;i++){
+          if(renderList[i].subordinate==trial.distractors[c]){
+          trial.renders[r]= renderList[i].url;
+          c++;
+          r++;
+         }
+          else if(renderList[i].subordinate==trial.category){   
+           trial.renders[r]= renderList[i].url;
+           r++;
+         }
+         }*/
+         r=0
+         c=1
+        _.forEach(renderList, function(f){
+          if(f.subordinate==trial.category){
+            trial.renders[0]=f.url;
+            
+              }else if(f.subordinate==trial.Distractor1||f.subordinate==trial.Distractor2||f.subordinate==trial.Distractor3){
+           trial.renders[c]=f.url
+            c++;
+          }
 });
 
 
