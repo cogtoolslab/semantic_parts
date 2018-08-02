@@ -27,60 +27,58 @@ function setupExp(){
 
     var trials = new Array(tmp.num_trials + 3);
     
-    var consentHTML = {
-      'str1' : '<p> In this HIT you will see some sketches made by humans who played a pictionary-style game, where the sketcher had to distinguish a target image from three distractor images. Your task will be to label the constituent strokes of these sketches using an interactive menu and/or a free response box.</p>',
-      'str2': '<p> We expect the average amount of time required to complete the HIT to be around n minutes, including the time it takes to read the instructions. </p>',
-      'str3':"<p> If you encounter a problem or error, send us an email () and we will make sure you're compensated for your time! Please pay attention and do your best! Thank you!</p><p> Note: We recommend using Chrome. We have not tested this HIT in other browsers.</p>"};
+    
     var instructionsHTML = {
-        'str1' :"<p> Each trial will appear as follows: A sketch will appear within a bounded box along with a corresponding menu of labels to its right. A category label above the box will tell you what object the sketch is of.\
-        The four images below the box are the images the original sketcher was shown, with the target image being the one with a red border. You will also see a 'next sketch' button below the box, which will allow you to move on to the next trial when you are done labeling the sketch.\
-        <p>Finally you will see a blue progress bar at the bottom of the screen indicating how many parts have been labeled for the current sketch.</p></p><p> Here is an example of what a typical trial looks like:</p><p> <img src='testImage.png' style= 'border:2px solid #000000;'></img></p>",
-        'str2':"<p> Your task is to select strokes on the sketch and annotate them using either the labels provided, or by clicking on 'Other' and entering your own label in the text-box that appears.<p><img src= 'labelInstructions.png' style= 'border:2px solid #000000;'></img></p></p>",
-        'str3':"<p> There are two main ways of selecting strokes :<p> 1. Clicking on a stroke to highlight it. </p>  <p><img src='clickInstructions.png' style= 'border:2px solid #000000;'></img</p></p>",
-        'str4': "<p> 2. Clicking and dragging the mouse across the screen to highlight a family of strokes.<p><img src = 'dragInstructions.png' style= 'border:2px solid #000000;'></img></p> Once you've highlighted all the strokes you want to, click on one of the menu labels to assign that label to the highlighted strokes. Repeat this process until all strokes are labeled.</p>",
-        'str5': "<p> As you continue to label strokes, unselected strokes will get thicker to help guide your attention to smaller strokes, which you may have missed.<p><img src = 'thicknessInstructions.png' style= 'border:2px solid #000000;'></img></p> ",
-        'str6': "<p>You can click on already highlighted strokes to un-highlight them before clicking on a menu label.<p><img src = 'unhighlightInstructions.png' style= 'border:2px solid #000000;'></img></p> Similarly, if you want to relabel an already labeled stroke, click on it and choose a new label from the menu.<p><img src = 'relabelInstructions.png' style= 'border:2px solid #000000;'></img></p></p>",
-        'str7':"<p>Click next to start a practice trial. Label all the parts of the sketch that appears with appropriate labels. Make sure to try out the different selection and deselection tools to familiarize yourself before the actual trials begin. When you're done labeling, click on 'next sketch' then on 'continue' in the dialog-box that appears.</p>"};
-
-        var intro = {
-          type: 'instructions',
-          pages: [
-          consentHTML.str1,
-          consentHTML.str2,
-          consentHTML.str3,
-          instructionsHTML.str1,
-          instructionsHTML.str2,
-          instructionsHTML.str3,
-          instructionsHTML.str4,
-          instructionsHTML.str5,
-          instructionsHTML.str6,
-          instructionsHTML.str7
-          ],
-         
-          allow_backward: true,
-          allow_keys:true,
-          show_clickable_nav: true,
-
-        };
-        console.log(data.parts);
+      'str1' :"<p> In this HIT you will play a fun game where you will see some sketches and tell us what you see!<p>Each sketch was made by somebody who was playing a Pictionary-style game, in which they had to make a sketch of a target object (outlined in red) so that someone else could tell which object in the lineup they were trying to draw.\
+      <br>Your goal is to label each of the strokes in these sketches by selecting parts from a menu.</p></p>",
+      'str2':"<p> Let's walk through an example! See the diagram below:<p></p></p>",
 
 
-        var comprehensionTrial = {
-          type : 'part_annotation',
-          num_trials: 1,
-          on_finish: function(data){
-            
-            
-          }
+      'str3':"<p> Here's how you label a sketch! You can click on a stroke or paint overit by dragging your cursor over several strokes.\
+       Once it is selected, it will turn gray. You then click on one of the labels in the righthand menu to label it. Once it is labeled,\
+        it will turn into the same color as the word in the menu. If the label you think is most appropriate for the stroke is not already \
+        in the menu, please click other to provide your own label. If you change your mind about a stroke you already labeled, just click\
+         that stroke again, and select a new label from the menu. Repeat steps 1–4 until you have labeled all the strokes in the sketch\
+         Note: To make your life easier, as you label more strokes in each sketch, the remaining ones will get thicker so it is easier to see them. </p>",
+      
+      'str4': "<p> Okay, let's practice!</p>",
+      'str5': "<p> As you continue to label strokes, unselected strokes will get thicker to help guide your attention to smaller strokes, which you may have missed.<p><img src = 'thicknessInstructions.png' style= 'border:2px solid #000000;'></img></p> ",
+      'str6': "<p>You can click on already highlighted strokes to un-highlight them before clicking on a menu label.<p><img src = 'unhighlightInstructions.png' style= 'border:2px solid #000000;'></img></p> Similarly, if you want to relabel an already labeled stroke, click on it and choose a new label from the menu.<p><img src = 'relabelInstructions.png' style= 'border:2px solid #000000;'></img></p></p>",
+      'str7':"<p>Click next to start a practice trial. Label all the parts of the sketch that appears with appropriate labels. Make sure to try out the different selection and deselection tools to familiarize yourself before the actual trials begin. When you're done labeling, click on 'next sketch' then on 'continue' in the dialog-box that appears.</p>"};
+
+      var intro = {
+        type: 'instructions',
+        pages: [
+
+        instructionsHTML.str1,
+        instructionsHTML.str2,
+        instructionsHTML.str3,
+        instructionsHTML.str4
+        ],
+        show_clickable_nav: true,
+        allow_backward: true,
+        allow_keys:true
+
+      };
+      console.log(data.parts);
+
+
+      var comprehensionTrial = {
+        type : 'part_annotation',
+        num_trials: 1,
+        on_finish: function(data){
+
+
         }
+      }
 
 
-        trials[1] = comprehensionTrial;
-        trials[1].training = true;
-        trials[1].svg = data.svg;
-        trials[1].parts = data.parts;
-        trials[1].category = data.category;
-        trials[1].renders = data.renders;
+      trials[1] = comprehensionTrial;
+      trials[1].training = true;
+      trials[1].svg = data.svg;
+      trials[1].parts = data.parts;
+      trials[1].category = data.category;
+      trials[1].renders = data.renders;
         //trials[1].distractors = data.distractors;
         trials[1].targetPos = 0;
 
@@ -88,11 +86,11 @@ function setupExp(){
           type: 'instructions',
           pages:[
           'Good job! You should now have a grasp on what the trials will look like.',
-          ' You will now see several sketches of different classes. Please try and label their parts to the best of your ability. Once you are finished, the HIT will be automatically submitted for approval. Good luck!'],
-        allow_backward: true,
-          allow_keys:true,
-          show_clickable_nav: true,
-
+          'You will receive a "stroke bonus" for every stroke you label AND a special "completion bonus" for every sketch that you finish labeling.\
+          For each sketch, you are allowed to continue to the next sketch if you have not finished labeling every stroke, but then you will miss out on the completion bonus. So please do your best to label every stroke you see!\
+          We expect the average amount of time required to complete the HIT to be around 10 minutes, including the time it takes to read the instructions.\
+          If you encounter a problem or error, send us an email (sketchloop@gmail.com) and we will make sure you are compensated for your time! Please pay attention and do your best! Thank you!'],
+          show_clickable_nav: true
         }
 
 
@@ -145,40 +143,40 @@ function setupExp(){
            trial.renders[r]= renderList[i].url;
            r++;
          }
-         }*/
-         r=0
-         c=1
-        _.forEach(renderList, function(f){
-          if(f.subordinate==trial.target){
-            trial.renders[0]=f.url;
-            
-              }else if(f.subordinate==trial.Distractor1||f.subordinate==trial.Distractor2||f.subordinate==trial.Distractor3){
-           trial.renders[c]=f.url
-            c++;
-          }
-});
+       }*/
+       r=0
+       c=1
+       _.forEach(renderList, function(f){
+        if(f.subordinate==trial.target){
+          trial.renders[0]=f.url;
+
+        }else if(f.subordinate==trial.Distractor1||f.subordinate==trial.Distractor2||f.subordinate==trial.Distractor3){
+         trial.renders[c]=f.url
+         c++;
+       }
+     });
 
 
 
 
- jsPsych.resumeExperiment();
-};
-socket.removeListener('stimulus', oldCallback);
-socket.on('stimulus', newCallback);
+       jsPsych.resumeExperiment();
+     };
+     socket.removeListener('stimulus', oldCallback);
+     socket.on('stimulus', newCallback);
 
-socket.emit('getStim', {gameID: id});
-};
+     socket.emit('getStim', {gameID: id});
+   };
 
-for(var i = 0; i< tmp.num_trials; i++){
-  var k = i+3;
-  trials[k] = {
-   type: tmp.type,
-   trialNum: i,    	
-   num_trials: tmp.num_trials,
-   on_finish: main_on_finish,
-   on_start: main_on_start
- };
-}
+   for(var i = 0; i< tmp.num_trials; i++){
+    var k = i+3;
+    trials[k] = {
+     type: tmp.type,
+     trialNum: i,    	
+     num_trials: tmp.num_trials,
+     on_finish: main_on_finish,
+     on_start: main_on_start
+   };
+ }
 
 
     // start game

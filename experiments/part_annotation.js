@@ -17,7 +17,7 @@ jsPsych.plugins['part_annotation'] = (function(){
    var dict=[];
    var results=[];
    var tempSketch=[];
-   var currentBonus=0;
+   var Bonus=totalBonus;
    var sketch=[];
    var pathArray;
    var c=0;
@@ -43,10 +43,9 @@ jsPsych.plugins['part_annotation'] = (function(){
 
     setTimeout(function() {
       //Setting up HTML for each trial
-      display_element.innerHTML += ('<p id= "bonusMeter" style="text-align:left; float:left;">Total bonus earned from previous trials: '+totalBonus+' cents <br>Bonus earned for this trial: 0 cents</p>\
-        <p id="trialNum"style="text-align:right;"> You are on trial '+(trial.trialNum+1)+" of "+trial.num_trials+'</p><div id="main_container" style="width:1000px;height:600px; margin:auto;"> \
-        \<div id= "upper_container" style="margin:auto; width:700px">\
-        <div id= "celebrationGif" style="position:absolute;height:100px;width:100px;float:left;padding-left:150px"><img class="gif" style="margin:auto; display: inline;" src="https://img1.picmix.com/output/stamp/normal/9/9/8/0/1110899_77ff4.gif"></div>\
+      display_element.innerHTML += ('<p id= "bonusMeter" style="font-size:25px;text-align:left; float:left;">Bonus: '+ Bonus + ' cents</p>\
+        <p id="trialNum"style="text-align:right; font-size:25px"> '+(trial.trialNum+1)+" of "+trial.num_trials+'</p><div id="main_container" style="width:1000px;height:600px; margin:auto;"> \
+        <div id= "upper_container" style="margin:auto; width:700px">\
         <div style="float:right; padding-top:43px"><ul id="List" style="margin:auto;"></ul></div>\
         <div id="canvas_container" style="width:300px;display:absolute;margin:auto;">\
         <p id="Title" style="color:black;height:10%">'+ trial.category+'</p> \
@@ -98,7 +97,7 @@ jsPsych.plugins['part_annotation'] = (function(){
 var end_trial = function(results) {
  selectedArray=[];
  if(trial.training==false){
- totalBonus=totalBonus+currentBonus;
+ totalBonus=totalBonus+Bonus;
 }
  var turkInfo = jsPsych.turk.turkInfo();
 
@@ -456,8 +455,8 @@ tool.onMouseDrag= function(event){
 
           if(trial.training==false){
 
-          currentBonus=Math.round(c*0.05*100)/100;
-          $('#bonusMeter').html("Total bonus earned from previous trials: "+totalBonus+" cents<br> Bonus earned for this trial: "+currentBonus+" cents");
+          Bonus=Math.round(Bonus+c*0.05*100)/100;
+          $('#bonusMeter').html("Bonus: "+Bonus+" cents");
 }
           /*if(c>(0.6*pathArray.length)){
             for( var i = 0; i<pathArray.length; i++){
