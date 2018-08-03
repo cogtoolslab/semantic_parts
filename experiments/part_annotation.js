@@ -17,7 +17,7 @@ jsPsych.plugins['part_annotation'] = (function(){
    var dict=[];
    var results=[];
    var tempSketch=[];
-   var Bonus=totalBonus;
+   //var Bonus=totalBonus;
    var sketch=[];
    var pathArray=new Array;
    var c=0;
@@ -43,7 +43,7 @@ jsPsych.plugins['part_annotation'] = (function(){
 
     setTimeout(function() {
       //Setting up HTML for each trial
-      display_element.innerHTML += ('<div class ="wrapper"></div><p id= "bonusMeter" style="font-size:25px;text-align:left; float:left;">Bonus: '+ Bonus + ' cents</p>\
+      display_element.innerHTML += ('<div class ="wrapper"></div><p id= "bonusMeter" style="font-size:25px;text-align:left; float:left;">Bonus: '+ totalBonus.toFixed(2) + ' cents</p>\
         <p id="trialNum"style="text-align:right; font-size:25px"> '+(trial.trialNum+1)+" of "+trial.num_trials+'</p><div id="main_container" style="width:1000px;height:600px; margin:auto;"> \
         <div id= "upper_container" style="margin:auto; width:710px">\
         <div style="float:right; padding-top:43px;left:5px"><ul id="List" style="margin:auto;"></ul></div>\
@@ -73,7 +73,7 @@ jsPsych.plugins['part_annotation'] = (function(){
         placeholder="Type your part label here" \
         class="text ui-widget-content ui-corner-all"> \
         <div id ="confirmContinue" title= "Move on to next sketch?">\
-        Clicking continue will end the current trial. \
+        Clicking continue will end the current round. \
         Please make sure you have labeled all the parts that you can. \
         Click back to continue labeling the sketch.\
         </div>\
@@ -83,7 +83,7 @@ jsPsych.plugins['part_annotation'] = (function(){
         </div> \
         </div>');
       
-            paper.setup('myCanvas');
+      paper.setup('myCanvas');
       listgen();
       menugen();
       display();
@@ -97,8 +97,8 @@ jsPsych.plugins['part_annotation'] = (function(){
 var end_trial = function(results) {
  selectedArray=[];
  if(trial.training==false){
- totalBonus=totalBonus+Bonus;
-}
+   totalBonus=totalBonus+Bonus;
+ }
  var turkInfo = jsPsych.turk.turkInfo();
 
       // gather the data to store for the trial
@@ -148,13 +148,13 @@ function create(i) {
   var colour = "red";
   switch(colourIdx) {
     case 1:
-      colour = "yellow";
-      break;
+    colour = "yellow";
+    break;
     case 2:
-      colour = "blue";
-      break;
+    colour = "blue";
+    break;
     default:
-      colour = "red";
+    colour = "red";
   }
   $('<div class="confetti-'+i+' '+colour+'"></div>').css({
     "width" : width+"px",
@@ -188,13 +188,13 @@ function reset(x) {
 
     //Main Display function for Canvas events
     function display(){  
+     Bonus=totalBonus;
 
 
-
-      if(trial.training==true){
-        $("#bonusMeter").text('');
-        $("#trialNum").text('');
-      }
+     if(trial.training==true){
+      $("#bonusMeter").text('');
+      $("#trialNum").text('');
+    }
 
 /*$( "#List" ).position({
         my: "center top",
@@ -209,24 +209,24 @@ function reset(x) {
       $("#nextButton").click(function(){
         if(c==pathArray.length){
           var dataURL = document.getElementById('myCanvas').toDataURL();
-      dataURL = dataURL.replace('data:image/png;base64,',''); 
-      var category = trial.category;
-      _.forEach(pathArray, function(p){
-        if(p.alreadyClicked==false){
-          svgstring = p.exportSVG({asString: true});
-          var start = svgstring.indexOf('d="')+3;
-          dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-            "label": "NA", "strokeColor": p.strokeColor, "Time clicked" : "NA", "Time labeled": Math.floor(Date.now() / 1000), "strokeNum" : p.strokeNum});
+          dataURL = dataURL.replace('data:image/png;base64,',''); 
+          var category = trial.category;
+          _.forEach(pathArray, function(p){
+            if(p.alreadyClicked==false){
+              svgstring = p.exportSVG({asString: true});
+              var start = svgstring.indexOf('d="')+3;
+              dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
+                "label": "NA", "strokeColor": p.strokeColor, "Time clicked" : "NA", "Time labeled": Math.floor(Date.now() / 1000), "strokeNum" : p.strokeNum});
 
-        }
-      })
-      var tempObj={};
-      tempObj[category] = dict;
-      tempObj["png"] = dataURL;
-      results.push(tempObj);
-      console.log(results);
-      results = JSON.stringify(results)
-      console.log(results);
+            }
+          })
+          var tempObj={};
+          tempObj[category] = dict;
+          tempObj["png"] = dataURL;
+          results.push(tempObj);
+          console.log(results);
+          results = JSON.stringify(results)
+          console.log(results);
       //resetting canvas and menu elements
       project.activeLayer.removeChildren();
       paper.view.draw();
@@ -235,9 +235,9 @@ function reset(x) {
       $("#confirmContinue").dialog("destroy");
       end_trial(results);
 
-        }else if(trial.training==false&&c<pathArray.length){
-        $('#confirmContinue').dialog("open")}}
-        );
+    }else if(trial.training==false&&c<pathArray.length){
+      $('#confirmContinue').dialog("open")}}
+      );
 
 
 
@@ -245,7 +245,7 @@ function reset(x) {
     var svg = trial.svg;
     var numPaths=0;
     
-for(var k=0;k<svg.length;k++){
+    for(var k=0;k<svg.length;k++){
     //converting data to absolute coordinates
 
     splineArray = Snap.path.toAbsolute(svg[k]);
@@ -272,22 +272,22 @@ for(var k=0;k<svg.length;k++){
 
   //Actually displaying the sketch
 
-tempPath = new Array;
-for(var i =0; i<sketch.length;i++){
-tempPath[i] = new Path(sketch[i]);
-}
+  tempPath = new Array;
+  for(var i =0; i<sketch.length;i++){
+    tempPath[i] = new Path(sketch[i]);
+  }
 
 
-console.log("pretemppath length", tempPath.length);
-var j = tempPath.length-1;
-while(j>0){
-  if(tempPath[j].length<13||tempPath[j-1].length<13){
-    tempPath[j]= tempPath[j-1].join(tempPath[j]);
-    tempPath.splice(j,1);
-      }
-      j--
-}
-console.log("posttemppath length", tempPath.length);
+  console.log("pretemppath length", tempPath.length);
+  var j = tempPath.length-1;
+  while(j>0){
+    if(tempPath[j].length<15||tempPath[j-1].length<15){
+      tempPath[j]= tempPath[j-1].join(tempPath[j]);
+      tempPath.splice(j,1);
+    }
+    j--
+  }
+  console.log("posttemppath length", tempPath.length);
 
 
 
@@ -295,12 +295,12 @@ console.log("posttemppath length", tempPath.length);
 
   for (var i = numPaths; i< (tempPath.length+numPaths); i++) {
     pathArray[i] = tempPath[i-numPaths];
- console.log("This is the length of spline "+i+" "+pathArray[i].length)
+    console.log("This is the length of spline "+i+" "+pathArray[i].length)
 
 
     pathArray[i].strokeColor = "rgb(0,0,0)";
     pathArray[i].strokeWidth = 5;
-   
+
 
       //already clicked tracks if a stroke has been labeled
       pathArray[i].alreadyClicked = false;
@@ -311,37 +311,12 @@ console.log("posttemppath length", tempPath.length);
       
     };
 
-/*var j = sketch.length+numPaths-2;
-while(j>0){
-  if(pathArray[j].length<12){
-    pathArray[j]= pathArray[j].join(pathArray[j+1]);
-    pathArray.splice(j+1,1);
-    j--
-  }
-   pathArray[j].strokeColor = "rgb(0,0,0)";
-   pathArray[j].strokeWidth = 5;
-   
-
-      //already clicked tracks if a stroke has been labeled
-      pathArray[j].alreadyClicked = false;
-      //highlit tracks whether a stroke is ready to be labeled
-      pathArray[j].highlit=false;
-      //Appending a stroke number to each stroke
-      pathArray[j].strokeNum=j;
-      j--
-}*/
-
-
-
-
-
-
     numPaths= numPaths+tempPath.length;
     tempSketch=[];
     sketch=[];
-   console.log("this is pathArray", pathArray);
-}
-   
+    console.log("this is pathArray", pathArray);
+  }
+
 
 /*
 
@@ -529,19 +504,20 @@ tool.onMouseDrag= function(event){
           c=c+selectedArray.length;
           //Progress bar update
           if(c==pathArray.length){
-         for (var i = 0; i < 300; i++) {
-  create(i);
-}}
+           for (var i = 0; i < 300; i++) {
+            create(i);
+          }}
           
           $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
           $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
           $('.progress-bar').html(c+" out of " +pathArray.length +' labeled');
 
           if(trial.training==false){
-
-          Bonus=Math.round(Bonus+c*0.05*100)/100;
-          $('#bonusMeter').html("Bonus: "+Bonus+" cents");
-}
+            console.log("This is bonus", Bonus);
+            Bonus=Math.round(c*0.05*100)/100;
+            console.log("This is bonus2", Bonus);
+            $('#bonusMeter').html("Bonus: "+(Bonus+totalBonus).toFixed(2)+" cents");
+          }
           /*if(c>(0.6*pathArray.length)){
             for( var i = 0; i<pathArray.length; i++){
               if(pathArray[i].alreadyClicked == false){
@@ -586,13 +562,20 @@ tool.onMouseDrag= function(event){
 
          c=c+selectedArray.length;
          if(c==pathArray.length){
-         for (var i = 0; i < 300; i++) {
-  create(i);
-}}
+           for (var i = 0; i < 300; i++) {
+            create(i);
+          }}
           //Progress bar update
           $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
           $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
           $('.progress-bar').html(c+" out of " +pathArray.length +' labeled');
+
+          if(trial.training==false){
+            console.log("This is bonus", Bonus);
+            Bonus=Math.round(c*0.05*100)/100;
+            console.log("This is bonus2", Bonus);
+            $('#bonusMeter').html("Bonus: "+(Bonus+totalBonus).toFixed(2)+" cents");
+          }
 
           for( var i = 0; i<pathArray.length; i++){
             if(pathArray[i].alreadyClicked == false){
@@ -698,16 +681,20 @@ tool.onMouseDrag= function(event){
 
         });        
         c=c+selectedArray.length;
-         if(c==pathArray.length){
+        if(c==pathArray.length){
          for (var i = 0; i < 300; i++) {
-  create(i);}}
+          create(i);}}
         //progress bar update
         $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
         $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
         $('.progress-bar').html(c+" out of "+pathArray.length +' labeled');
-         if(c==pathArray.length){
-          $('.gif').fadeIn(400);
-          setTimeout(function(){ $('.gif').fadeOut(500);; }, 4000);
+
+
+        if(trial.training==false){
+          console.log("This is bonus", Bonus);
+          Bonus=Math.round(c*0.05*100)/100;
+          console.log("This is bonus2", Bonus);
+          $('#bonusMeter').html("Bonus: "+(Bonus+totalBonus).toFixed(2)+" cents");
         }
         selectedArray=[];
 
