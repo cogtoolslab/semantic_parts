@@ -12,7 +12,7 @@ function setupExp(){
 
   socket.on('onConnected', function(d) {
     //var numTrials = d.num_trials;
-    var numTrials = 7;
+    var numTrials = 10;
     var id = d.id;
     console.log(d);
 
@@ -29,22 +29,19 @@ function setupExp(){
     
     
     var instructionsHTML = {
-      'str1' :"<p> In this HIT you will play a fun game where you will see some sketches and tell us what you see!<p>Each sketch was made by somebody who was playing a Pictionary-style game, in which they had to make a sketch of a target object (outlined in red) so that someone else could tell which object in the lineup they were trying to draw.\
+      'str1' :"<p> In this HIT you will play a fun game where you will see some sketches and tell us what you see!<p>Each sketch was made by somebody who was playing a Pictionary-style game, in which they had to make a sketch of a target object (outlined in red) so that someone else could tell which object in the lineup they were trying to draw.<p><img src = 'instructions1.png' style='border: 2px solid #000000;'></img></p>\
       <br>Your goal is to label each of the strokes in these sketches by selecting parts from a menu.</p></p>",
-      'str2':"<p> Let's walk through an example! See the diagram below:<p></p></p>",
+      'str2':"<p> Let's walk through an example! See the diagram below:<p><img src= 'instructions2.png' style= 'height:650px;border: 2px solid #000000;'></img></p></p>",
 
 
-      'str3':"<p> Here's how you label a sketch! You can click on a stroke or paint overit by dragging your cursor over several strokes.\
-       Once it is selected, it will turn gray. You then click on one of the labels in the righthand menu to label it. Once it is labeled,\
-        it will turn into the same color as the word in the menu. If the label you think is most appropriate for the stroke is not already \
-        in the menu, please click other to provide your own label. If you change your mind about a stroke you already labeled, just click\
-         that stroke again, and select a new label from the menu. Repeat steps 1–4 until you have labeled all the strokes in the sketch\
-         Note: To make your life easier, as you label more strokes in each sketch, the remaining ones will get thicker so it is easier to see them. </p>",
+      'str3':"<p> Here's how you label a sketch! <p> 1. You can click on a stroke OR paint over it by dragging your cursor over several strokes.\
+      Once it is selected, it will turn light-gray.<p><img src = 'instructions3.png' style='height:350px; width:1050px; border: 2px solid #000000; '></img></p><p><img src = 'instructions4.png' style='height:350px; width:1050px;border: 2px solid #000000;'></img></p><p> 2. You then click on one of the labels in the righthand menu to label it. Once it is labeled,\
+      it will turn into the same color as the word in the menu.<p><img src ='instructions5.png' style='height:350px; width:1050px;border: 2px solid #000000;'></img></p><p> 3. If the label you think is most appropriate for the stroke is not already \
+      in the menu, please click 'Other' to provide your own label. If you cannot identify a stroke, select it and click on 'I can't tell' in the menu.<p><img src ='instructions6.png' style='height:350px; width:1050px;border: 2px solid #000000;'></img></p><p> 4. If you change your mind about a stroke you already labeled, just click\
+      that stroke again, and select a new label from the menu.<p><img src ='instructions7.png' style='height:350px; width:1050px;border: 2px solid #000000;'></img></p> </p> <p> 5. Repeat steps 1–4 until you have labeled all the strokes in the sketch.</p>\
+      <p>Note: To make your life easier, as you label more strokes in each sketch, the remaining ones will get thicker so it is easier to see them.</p> <p><img src ='instructions8.png' style='height:350px;border: 2px solid #000000;'></img></p></p>",
       
-      'str4': "<p> Okay, let's practice!</p>",
-      'str5': "<p> As you continue to label strokes, unselected strokes will get thicker to help guide your attention to smaller strokes, which you may have missed.<p><img src = 'thicknessInstructions.png' style= 'border:2px solid #000000;'></img></p> ",
-      'str6': "<p>You can click on already highlighted strokes to un-highlight them before clicking on a menu label.<p><img src = 'unhighlightInstructions.png' style= 'border:2px solid #000000;'></img></p> Similarly, if you want to relabel an already labeled stroke, click on it and choose a new label from the menu.<p><img src = 'relabelInstructions.png' style= 'border:2px solid #000000;'></img></p></p>",
-      'str7':"<p>Click next to start a practice trial. Label all the parts of the sketch that appears with appropriate labels. Make sure to try out the different selection and deselection tools to familiarize yourself before the actual trials begin. When you're done labeling, click on 'next sketch' then on 'continue' in the dialog-box that appears.</p>"};
+      'str4': "<p> Okay, let's practice! Make sure to familiarize yourself with the task.</p><p>Click on 'next sketch' when you're done labeling.</p>"}
 
       var intro = {
         type: 'instructions',
@@ -79,47 +76,46 @@ function setupExp(){
       trials[1].parts = data.parts;
       trials[1].category = data.category;
       trials[1].renders = data.renders;
-        //trials[1].distractors = data.distractors;
-        trials[1].targetPos = 0;
+      trials[1].targetPos = 0;
 
-        trials[2] ={
-          type: 'instructions',
-          pages:[
-          'Good job! You should now have a grasp on what the trials will look like.',
-          'You will receive a "stroke bonus" for every stroke you label AND a special "completion bonus" for every sketch that you finish labeling.\
-          For each sketch, you are allowed to continue to the next sketch if you have not finished labeling every stroke, but then you will miss out on the completion bonus. So please do your best to label every stroke you see!\
-          We expect the average amount of time required to complete the HIT to be around 10 minutes, including the time it takes to read the instructions.\
-          If you encounter a problem or error, send us an email (sketchloop@gmail.com) and we will make sure you are compensated for your time! Please pay attention and do your best! Thank you!'],
-          show_clickable_nav: true
-        }
-
+      trials[2] ={
+        type: 'instructions',
+        pages:[
+        'Good job! You should now have a grasp on what the trials will look like.',
+        '<p>You will receive a "stroke bonus" for every stroke you label AND a special "completion bonus" for every sketch that you finish labeling.</p>\
+        <p>For each sketch, you are allowed to continue to the next sketch if you have not finished labeling every stroke, but then you will miss out on the completion bonus. So please do your best to label every stroke you see!</p>\
+        <p>We expect the average amount of time required to complete the HIT to be around 10 minutes, including the time it takes to read the instructions.\
+        If you encounter a problem or error, send us an email (sketchloop@gmail.com) and we will make sure you are compensated for your time!</p><p> Please pay attention and do your best! Thank you!</p>'],
+        show_clickable_nav: true
+      }
 
 
-        var goodbye = {
-          type: 'instructions',
-          pages: [
-          'Congrats! You are all done. Thanks for participating in our experiment! Please click the "next" button to submit this HIT.'
-          ],
-          show_clickable_nav: true,
-          on_finish: function() { sendData();}
-        };
 
-        trials[0] = intro;
-        
-        trials[tmp.num_trials +3] = goodbye;
+      var goodbye = {
+        type: 'instructions',
+        pages: [
+        'Congrats! You are all done. Thanks for participating in our experiment! Please click the "next" button to submit this HIT.'
+        ],
+        show_clickable_nav: true,
+        on_finish: function() { sendData();}
+      };
 
-        var main_on_finish = function(data)  {
-          socket.emit('currentData', data);
-        };
+      trials[0] = intro;
 
-        var main_on_start = function(trial) {
+      trials[tmp.num_trials +3] = goodbye;
 
-          console.log("main on start being called");
+      var main_on_finish = function(data)  {
+        socket.emit('currentData', data);
+      };
 
-          oldCallback = newCallback;
-          var newCallback = function(stim) {
-            console.log('received stim')
-            console.log(stim)
+      var main_on_start = function(trial) {
+
+        console.log("main on start being called");
+
+        oldCallback = newCallback;
+        var newCallback = function(stim) {
+          console.log('received stim')
+          console.log(stim)
         //      	_.extend(trials[1], stim);
         trial.training = false;
         trial.svg = stim.svg;
@@ -177,6 +173,21 @@ function setupExp(){
      on_start: main_on_start
    };
  }
+
+
+ trials[(tmp.num_trials/2)+3] ={
+  type: tmp.type,
+  trialNum:tmp.num_trials/2,
+  num_trials:1,
+  on_finish: main_on_finish
+
+};
+trials[(tmp.num_trials/2)+3].training = false;
+trials[(tmp.num_trials/2)+3].svg = data.svg;
+trials[(tmp.num_trials/2)+3].parts = data.parts;
+trials[(tmp.num_trials/2)+3].category = data.category;
+trials[(tmp.num_trials/2)+3].renders = data.renders;
+trials[(tmp.num_trials/2)+3].targetPos = 0;
 
 
     // start game

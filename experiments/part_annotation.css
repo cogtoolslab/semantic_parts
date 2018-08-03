@@ -35,6 +35,7 @@
   /*margin-bottom: 330px;
   margin-left: 125px;*/
 }
+
 #Title {
     margin-left: auto;
     /* margin-bottom: auto; */
@@ -60,7 +61,7 @@
 }
 .progress{
   margin: auto;
-  width:50%;
+  width:80%;
 }
 canvas[resize] {
     /* position: absolute; */
@@ -94,6 +95,35 @@ canvas[resize] {
     /*top: 100px;*/
 
   }
+
+
+
+
+.wrapper {
+  
+  max-height: 100%;
+  max-width: 100%;
+  display: inline;;
+}
+
+[class|="confetti"] {
+  width: 100px;
+
+  position: absolute;
+}
+
+.red {
+  background-color: #e94a3f;
+}
+
+.yellow {
+  background-color: #faa040;
+}
+
+.blue {
+  background-color: #5fc9f5;
+}
+
 
 
  .jspsych-display-element:focus {

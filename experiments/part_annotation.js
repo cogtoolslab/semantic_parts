@@ -19,7 +19,7 @@ jsPsych.plugins['part_annotation'] = (function(){
    var tempSketch=[];
    var Bonus=totalBonus;
    var sketch=[];
-   var pathArray;
+   var pathArray=new Array;
    var c=0;
    var timeClicked;
    var clickable=true;
@@ -43,17 +43,17 @@ jsPsych.plugins['part_annotation'] = (function(){
 
     setTimeout(function() {
       //Setting up HTML for each trial
-      display_element.innerHTML += ('<p id= "bonusMeter" style="font-size:25px;text-align:left; float:left;">Bonus: '+ Bonus + ' cents</p>\
+      display_element.innerHTML += ('<div class ="wrapper"></div><p id= "bonusMeter" style="font-size:25px;text-align:left; float:left;">Bonus: '+ Bonus + ' cents</p>\
         <p id="trialNum"style="text-align:right; font-size:25px"> '+(trial.trialNum+1)+" of "+trial.num_trials+'</p><div id="main_container" style="width:1000px;height:600px; margin:auto;"> \
-        <div id= "upper_container" style="margin:auto; width:700px">\
-        <div style="float:right; padding-top:43px"><ul id="List" style="margin:auto;"></ul></div>\
+        <div id= "upper_container" style="margin:auto; width:710px">\
+        <div style="float:right; padding-top:43px;left:5px"><ul id="List" style="margin:auto;"></ul></div>\
         <div id="canvas_container" style="width:300px;display:absolute;margin:auto;">\
         <p id="Title" style="color:black;height:10%">'+ trial.category+'</p> \
-        <canvas id="myCanvas" style="border: 2px solid #000000"  \
+        <canvas id="myCanvas" style="border: 2px solid #000000; border-radius:10px"  \
         resize="true" ></canvas> \
         <button id = "nextButton" type="button" style="float:bottom;height:10%">Next Sketch</button> \
         </div></div>\
-        <div class="progress" style="float:bottom; margin:auto;"> \
+        <div class="progress" style="float:bottom; margin-top:2px;margin-bottom:2px;"> \
         <div id= "progressbar" class="progress-bar" role="progressbar" \
         style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%\
         </div>\
@@ -137,30 +137,57 @@ var end_trial = function(results) {
 function setColor(li) {
   li.css("background-color", color_interpolate(left, right, colNo));
   colNo++;
+};
+
+
+
+function create(i) {
+  var width = Math.random() * 8;
+  var height = width * 0.4;
+  var colourIdx = Math.ceil(Math.random() * 3);
+  var colour = "red";
+  switch(colourIdx) {
+    case 1:
+      colour = "yellow";
+      break;
+    case 2:
+      colour = "blue";
+      break;
+    default:
+      colour = "red";
+  }
+  $('<div class="confetti-'+i+' '+colour+'"></div>').css({
+    "width" : width+"px",
+    "height" : height+"px",
+    "top" : -Math.random()*20+"%",
+    "left" : Math.random()*100+"%",
+    "opacity" : Math.random()+0.5,
+    "transform" : "rotate("+Math.random()*360+"deg)"
+  }).appendTo('.wrapper');  
+  
+  drop(i);
+}
+
+function drop(x) {
+  $('.confetti-'+x).animate({
+    top: "100%",
+    left: "+="+Math.random()*15+"%"
+  }, Math.random()*3000 + 3000, function() {
+    reset(x);
+  });
+}
+
+function reset(x) {
+  $('.confetti-'+x).animate({
+    "top" : -Math.random()*20+"%",
+    "left" : "-="+Math.random()*15+"%"
+  }, 0, function() {
+    drop(x);             
+  });
 }
 
     //Main Display function for Canvas events
     function display(){  
-
-
-
-
-
-
-
-$('.gif').hide();
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -216,9 +243,13 @@ $('.gif').hide();
 
     //Displaying the sketch and setting stroke properties
     var svg = trial.svg;
+    var numPaths=0;
+    
+for(var k=0;k<svg.length;k++){
     //converting data to absolute coordinates
-    splineArray = Snap.path.toAbsolute(svg);
-    var copy = Snap.path.toAbsolute(svg);
+
+    splineArray = Snap.path.toAbsolute(svg[k]);
+    var copy = Snap.path.toAbsolute(svg[k]);
     //formatting spline data to be able to create paper js paths from them
     var numSplines = 0;
     for(i=0; i<splineArray.length; i++){
@@ -232,7 +263,7 @@ $('.gif').hide();
        numSplines++;
      }
    }
-   var numSplines = 0
+   var numSplines = 0;
    _.forEach(tempSketch, function(f){
     sketch[numSplines]=f.toString();
     numSplines++
@@ -240,28 +271,81 @@ $('.gif').hide();
 
 
   //Actually displaying the sketch
-  pathArray = new Array;
-  for (var i = 0; i< sketch.length; i++) {
-    pathArray[i] = new Path(sketch[i]);
+
+tempPath = new Array;
+for(var i =0; i<sketch.length;i++){
+tempPath[i] = new Path(sketch[i]);
+}
+
+
+console.log("pretemppath length", tempPath.length);
+var j = tempPath.length-1;
+while(j>0){
+  if(tempPath[j].length<13||tempPath[j-1].length<13){
+    tempPath[j]= tempPath[j-1].join(tempPath[j]);
+    tempPath.splice(j,1);
+      }
+      j--
+}
+console.log("posttemppath length", tempPath.length);
+
+
+
+
+
+  for (var i = numPaths; i< (tempPath.length+numPaths); i++) {
+    pathArray[i] = tempPath[i-numPaths];
+ console.log("This is the length of spline "+i+" "+pathArray[i].length)
+
+
     pathArray[i].strokeColor = "rgb(0,0,0)";
     pathArray[i].strokeWidth = 5;
-    //pathArray[i].selected = true;
-    pathArray[i].bounds;
-
+   
 
       //already clicked tracks if a stroke has been labeled
       pathArray[i].alreadyClicked = false;
       //highlit tracks whether a stroke is ready to be labeled
       pathArray[i].highlit=false;
       //Appending a stroke number to each stroke
-      pathArray[i].strokeNum=i;
+      pathArray[i].strokeNum=i; 
       
     };
 
+/*var j = sketch.length+numPaths-2;
+while(j>0){
+  if(pathArray[j].length<12){
+    pathArray[j]= pathArray[j].join(pathArray[j+1]);
+    pathArray.splice(j+1,1);
+    j--
+  }
+   pathArray[j].strokeColor = "rgb(0,0,0)";
+   pathArray[j].strokeWidth = 5;
+   
+
+      //already clicked tracks if a stroke has been labeled
+      pathArray[j].alreadyClicked = false;
+      //highlit tracks whether a stroke is ready to be labeled
+      pathArray[j].highlit=false;
+      //Appending a stroke number to each stroke
+      pathArray[j].strokeNum=j;
+      j--
+}*/
 
 
 
 
+
+
+    numPaths= numPaths+tempPath.length;
+    tempSketch=[];
+    sketch=[];
+   console.log("this is pathArray", pathArray);
+}
+   
+
+/*
+
+*/
 
    //Click and Hover event handlers
 
@@ -445,9 +529,9 @@ tool.onMouseDrag= function(event){
           c=c+selectedArray.length;
           //Progress bar update
           if(c==pathArray.length){
-          $('.gif').fadeIn(400);
-          setTimeout(function(){ $('.gif').fadeOut(500);; }, 4000);
-        }
+         for (var i = 0; i < 300; i++) {
+  create(i);
+}}
           
           $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
           $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
@@ -501,6 +585,10 @@ tool.onMouseDrag= function(event){
           });        
 
          c=c+selectedArray.length;
+         if(c==pathArray.length){
+         for (var i = 0; i < 300; i++) {
+  create(i);
+}}
           //Progress bar update
           $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
           $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
@@ -610,6 +698,9 @@ tool.onMouseDrag= function(event){
 
         });        
         c=c+selectedArray.length;
+         if(c==pathArray.length){
+         for (var i = 0; i < 300; i++) {
+  create(i);}}
         //progress bar update
         $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
         $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
