@@ -29,19 +29,19 @@ function setupExp(){
     
     
     var instructionsHTML = {
-      'str1' :"<p> In this HIT you will play a fun game where you will see some sketches and tell us what you see!<p>Each sketch was made by somebody who was playing a Pictionary-style game, in which they had to make a sketch of a target object (outlined in red) so that someone else could tell which object in the lineup they were trying to draw.<p><img src = 'instructions1.png' style='border: 2px solid #000000;'></img></p>\
-      <br>Your goal is to label each of the strokes in these sketches by selecting parts from a menu.</p></p>",
-      'str2':"<p> Let's walk through an example! See the diagram below:<p><img src= 'instructions2.png' style= 'height:650px;border: 2px solid #000000;'></img></p></p>",
+      'str1' :"<p style = 'font-size:30px;line-height:1.5;'> In this HIT you will play a fun game where you will see some sketches and tell us what you see!<p style = 'font-size:30px;line-height:1.5;'>Each sketch was made by somebody who was playing a Pictionary-style game, in which they had to make a sketch of a target object (outlined in red) so that someone else could tell which object in the lineup they were trying to draw.<p style = 'font-size:30px;line-height:1.5;'><img src = 'instructions1.png' style='border: 2px solid #000000;'></img><p> <br> <br> </p></p>\
+      <p style = 'font-size:30px;line-height:1.5;'>Your goal is to label each of the strokes in these sketches by selecting parts from a menu.</p></p></p>",
+      'str2':"<p style = 'font-size:30px;line-height:1.5;'> Let's walk through an example! See the diagram below:<p><img src= 'instructions2.png' style= 'height:650px;border: 2px solid #000000;'></img><p> <br> <br> </p></p></p>",
 
 
-      'str3':"<p> Here's how you label a sketch! <p> 1. You can click on a stroke OR paint over it by dragging your cursor over several strokes.\
-      Once it is selected, it will turn light-gray.<p><img src = 'instructions3.png' style='height:350px; width:1050px; border: 2px solid #000000; '></img></p><p><img src = 'instructions4.png' style='height:350px; width:1050px;border: 2px solid #000000;'></img></p><p> 2. You then click on one of the labels in the righthand menu to label it. Once it is labeled,\
-      it will turn into the same color as the word in the menu.<p><img src ='instructions5.png' style='height:350px; width:1050px;border: 2px solid #000000;'></img></p><p> 3. If the label you think is most appropriate for the stroke is not already \
-      in the menu, please click 'Other' to provide your own label. If you cannot identify a stroke, select it and click on 'I can't tell' in the menu.<p><img src ='instructions6.png' style='height:350px; width:1050px;border: 2px solid #000000;'></img></p><p> 4. If you change your mind about a stroke you already labeled, just click\
-      that stroke again, and select a new label from the menu.<p><img src ='instructions7.png' style='height:350px; width:1050px;border: 2px solid #000000;'></img></p> </p> <p> 5. Repeat steps 1–4 until you have labeled all the strokes in the sketch.</p>\
-      <p>Note: To make your life easier, as you label more strokes in each sketch, the remaining ones will get thicker so it is easier to see them.</p> <p><img src ='instructions8.png' style='height:350px;border: 2px solid #000000;'></img></p></p>",
+      'str3':"<p style = 'font-size:30px;line-height:1.5;'> Here's how you label a sketch! <p style = 'font-size:30px;line-height:1.5;'> 1. You can click on a stroke OR paint over it by dragging your cursor over several strokes.\
+      Once it is selected, it will turn light-gray.<p style = 'font-size:30px;line-height:2;'><img src = 'instructions3.png' style='height:350px; width:1050px; border: 2px solid #000000; '></img></p><p style= 'line-height:2;'><img src = 'instructions4.png' style='height:350px; width:1050px;border: 2px solid #000000;'></img><p> <br> <br> </p></p><p style = 'font-size:30px;line-height:1.5;'> 2. You then click on one of the labels in the righthand menu to label it. Once it is labeled,\
+      it will turn into the same color as the word in the menu.<p style='line-height:2;'><img src ='instructions5.png' style='height:350px; width:1050px;border: 2px solid #000000;'></img><p> <br> <br> </p></p><p style = 'font-size:30px;line-height:1.5;'> 3. If the label you think is most appropriate for the stroke is not already \
+      in the menu, please click 'Other' to provide your own label. If you cannot identify a stroke, select it and click on 'I can't tell' in the menu.<p style='line-height:2;'><img src ='instructions6.png' style='height:350px; width:1050px;border: 2px solid #000000;'></img><p> <br> <br> </p></p><p style = 'font-size:30px;line-height:1.5;'> 4. If you change your mind about a stroke you already labeled, just click\
+      that stroke again, and select a new label from the menu.<p style='line-height:2;'><img src ='instructions7.png' style='height:350px; width:1050px;border: 2px solid #000000;'></img><p> <br> <br> </p></p> </p> <p style = 'font-size:30px;line-height:1.5;'> 5. Repeat steps 1–4 until you have labeled all the strokes in the sketch.</p>\
+      <p style = 'font-size:30px;line-height:1.5;'>Note: To make your life easier, as you label more strokes in each sketch, the remaining ones will get thicker so it is easier to see them.</p> <p style='line-height:2;'><img src ='instructions8.png' style='height:350px;border: 2px solid #000000;'></img></p></p>",
       
-      'str4': "<p> Okay, let's practice! Make sure to familiarize yourself with the task.</p><p>Click on 'next sketch' when you're done labeling.</p>"}
+      'str4': "<p style = 'font-size:30px;line-height:1.5;'> Okay, let's practice! Make sure to familiarize yourself with the task.</p><p style = 'font-size:30px;line-height:1.5;'>Click on 'next sketch' when you're done labeling.</p>"}
 
       var intro = {
         type: 'instructions',
@@ -81,11 +81,11 @@ function setupExp(){
       trials[2] ={
         type: 'instructions',
         pages:[
-        'Good job! You should now have a grasp on what the trials will look like.',
-        '<p>You will receive a "stroke bonus" for every stroke you label AND a special "completion bonus" for every sketch that you finish labeling.</p>\
-        <p>For each sketch, you are allowed to continue to the next sketch if you have not finished labeling every stroke, but then you will miss out on the completion bonus. So please do your best to label every stroke you see!</p>\
-        <p>We expect the average amount of time required to complete the HIT to be around 10 minutes, including the time it takes to read the instructions.\
-        If you encounter a problem or error, send us an email (sketchloop@gmail.com) and we will make sure you are compensated for your time!</p><p> Please pay attention and do your best! Thank you!</p>'],
+        '<p style = "font-size:30px;line-height:1.5;"">Good job! You should now have a grasp on what the trials will look like.</p>',
+        '<p style = "font-size:30px;line-height:1.5;">You will receive a bonus for every stroke you label AND a special "completion bonus" for labeling all the strokes in a sketch.</p>\
+        <p style = "font-size:30px;line-height:1.5;">For each sketch, you are allowed to continue to the next sketch if you have not finished labeling every stroke, but then you will miss out on the completion bonus. So please do your best to label every stroke you see!</p>\
+        <p style = "font-size:30px;line-height:1.5;">We expect the average amount of time required to complete the HIT to be around 10 minutes, including the time it takes to read the instructions.\
+        If you encounter a problem or error, send us an email (sketchloop@gmail.com) and we will make sure you are compensated for your time!</p><p style = "font-size:30px;line-height:1.5;"> Please pay attention and do your best! Thank you!</p>'],
         show_clickable_nav: true
       }
 
