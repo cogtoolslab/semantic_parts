@@ -80,7 +80,7 @@ function setupExp(){
        trials[1].gameID = "7004-6ff0964c-ff95-40f9-8696-d6a8931c94d5";
         trials[1].condition= "further";
         trials[1].numStrokes = 5;
-        trials[1].outcome = "TRUE";
+        trials[1].outcome = true;
         trials[1].orginalTrialNum = 17;
         trials[1].response= "straight";
 
@@ -204,7 +204,7 @@ trials[(tmp.num_trials/2)+3].renders = data.renders;
 trials[(tmp.num_trials/2)+3].gameID= "7004-6ff0964c-ff95-40f9-8696-d6a8931c94d5";
 trials[(tmp.num_trials/2)+3].condition= "further";
 trials[(tmp.num_trials/2)+3].numStrokes=5;
-trials[(tmp.num_trials/2)+3].outcome="TRUE";
+trials[(tmp.num_trials/2)+3].outcome=true;
 trials[(tmp.num_trials/2)+3].originalTrialNum=17;
 trials[(tmp.num_trials/2)+3].response="straight";
 //trials[(tmp.num_trials/2)+3].targetPos = 0;
