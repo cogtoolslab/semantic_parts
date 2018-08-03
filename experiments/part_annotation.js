@@ -15,6 +15,7 @@ jsPsych.plugins['part_annotation'] = (function(){
    var tool = new Tool();
    //More initializations
    var dict=[];
+   var Bonus=0;
    var results=[];
    var tempSketch=[];
    //var Bonus=totalBonus;
@@ -97,7 +98,8 @@ jsPsych.plugins['part_annotation'] = (function(){
 var end_trial = function(results) {
  selectedArray=[];
  if(trial.training==false){
-   totalBonus=Bonus;
+   totalBonus=totalBonus+Bonus;
+   //Bonus = 0;
  }
 
  var turkInfo = jsPsych.turk.turkInfo();
@@ -197,7 +199,7 @@ function reset(x) {
 
     //Main Display function for Canvas events
     function display(){  
-     Bonus=totalBonus;
+    
 
 
      if(trial.training==true){
