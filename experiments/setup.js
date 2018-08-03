@@ -12,7 +12,7 @@ function setupExp(){
 
   socket.on('onConnected', function(d) {
     //var numTrials = d.num_trials;
-    var numTrials = 10;
+    var numTrials = 11;
     var id = d.id;
     console.log(d);
 
@@ -76,7 +76,13 @@ function setupExp(){
       trials[1].parts = data.parts;
       trials[1].category = data.category;
       trials[1].renders = data.renders;
-      trials[1].targetPos = 0;
+      //trials[1].targetPos = 0;
+       trials[1].gameID = "7004-6ff0964c-ff95-40f9-8696-d6a8931c94d5";
+        trials[1].condition= "further";
+        trials[1].numStrokes = 5;
+        trials[1].outcome = "TRUE";
+        trials[1].orginalTrialNum = 17;
+        trials[1].response= "straight";
 
       trials[2] ={
         type: 'instructions',
@@ -115,8 +121,9 @@ function setupExp(){
         oldCallback = newCallback;
         var newCallback = function(stim) {
           console.log('received stim')
-          console.log(stim)
+          console.log(stim);
         //      	_.extend(trials[1], stim);
+
         trial.training = false;
         trial.svg = stim.svg;
         trial.parts = stim.parts;
@@ -126,8 +133,15 @@ function setupExp(){
         trial.Distractor1 = stim.Distractor1;
         trial.Distractor2 = stim.Distractor2;
         trial.Distractor3 = stim.Distractor3;
-
         trial.renders=[];
+
+        trial.gameID = stim.gameID;
+        trial.condition = stim.condition;
+        trial.numStrokes = stim.numStrokes;
+        trial.outcome = stim.outcome;
+        trial.originalTrialNum = stim.trialNum;
+        trial.response = stim.response;
+
         /*r=0
         for(var i=0;i<renderList.length;i++){
           if(renderList[i].subordinate==trial.distractors[c]){
@@ -187,7 +201,13 @@ trials[(tmp.num_trials/2)+3].svg = data.svg;
 trials[(tmp.num_trials/2)+3].parts = data.parts;
 trials[(tmp.num_trials/2)+3].category = data.category;
 trials[(tmp.num_trials/2)+3].renders = data.renders;
-trials[(tmp.num_trials/2)+3].targetPos = 0;
+trials[(tmp.num_trials/2)+3].gameID= "7004-6ff0964c-ff95-40f9-8696-d6a8931c94d5";
+trials[(tmp.num_trials/2)+3].condition= "further";
+trials[(tmp.num_trials/2)+3].numStrokes=5;
+trials[(tmp.num_trials/2)+3].outcome="TRUE";
+trials[(tmp.num_trials/2)+3].originalTrialNum=17;
+trials[(tmp.num_trials/2)+3].response="straight";
+//trials[(tmp.num_trials/2)+3].targetPos = 0;
 
 
     // start game

@@ -44,7 +44,7 @@ jsPsych.plugins['part_annotation'] = (function(){
     setTimeout(function() {
       //Setting up HTML for each trial
       display_element.innerHTML += ('<div class ="wrapper"></div><p id= "bonusMeter" style="font-size:25px;text-align:left; float:left;">Bonus: '+ totalBonus.toFixed(2) + ' cents</p>\
-        <p id="trialNum"style="text-align:right; font-size:25px"> '+(trial.trialNum+1)+" of "+trial.num_trials+'</p><div id="main_container" style="width:1000px;height:600px; margin:auto;"> \
+        <p id="trialNum"style="text-align:right; font-size:25px"> '+(trial.trialNum+1)+" of "+11+'</p><div id="main_container" style="width:1000px;height:600px; margin:auto;"> \
         <div id= "upper_container" style="margin:auto; width:710px">\
         <div style="float:right; padding-top:43px;left:5px"><ul id="List" style="margin:auto;"></ul></div>\
         <div id="canvas_container" style="width:300px;display:absolute;margin:auto;">\
@@ -97,8 +97,9 @@ jsPsych.plugins['part_annotation'] = (function(){
 var end_trial = function(results) {
  selectedArray=[];
  if(trial.training==false){
-   totalBonus=totalBonus+Bonus;
+   totalBonus=Bonus;
  }
+
  var turkInfo = jsPsych.turk.turkInfo();
 
       // gather the data to store for the trial
@@ -109,8 +110,16 @@ var end_trial = function(results) {
       	dbname: 'svgAnnotation',
       	colname: 'examples',
         iterationName: 'testing',
+        gameID : trial.gameID,
+        condition: trial.condition,
+        numStrokes: trial.numStrokes,
+        outcome: trial.outcome,
+        trialNum: trial.trialNum,
+        originalTrialNum:trial.originalTrialNum,
+        response:trial.response,
         results: results
       });
+       console.log(trial_data);
 
       // clear the display
       display_element.innerHTML = '';
@@ -196,12 +205,6 @@ function reset(x) {
       $("#trialNum").text('');
     }
 
-/*$( "#List" ).position({
-        my: "center top",
-        at: "right center",
-        of: "#main_container"
-      })*/
-
       //Highlighting the target image in context
       $($('.row img')[0]).css({"border-width": "10px", "border-color": "red"});
 
@@ -216,7 +219,7 @@ function reset(x) {
               svgstring = p.exportSVG({asString: true});
               var start = svgstring.indexOf('d="')+3;
               dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-                "label": "NA", "strokeColor": p.strokeColor, "Time clicked" : "NA", "Time labeled": Math.floor(Date.now() / 1000), "strokeNum" : p.strokeNum});
+                "label": "NA", "strokeColor": p.strokeColor, "timeClicked" : "NA", "timeLabeled": Math.floor(Date.now() / 1000), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum });
 
             }
           })
@@ -301,13 +304,15 @@ function reset(x) {
     pathArray[i].strokeColor = "rgb(0,0,0)";
     pathArray[i].strokeWidth = 5;
 
-
+      pathArray[i].masterStrokeNum = k;
       //already clicked tracks if a stroke has been labeled
       pathArray[i].alreadyClicked = false;
       //highlit tracks whether a stroke is ready to be labeled
       pathArray[i].highlit=false;
       //Appending a stroke number to each stroke
       pathArray[i].strokeNum=i; 
+      pathArray[i].masterStrokeNum = k;
+      pathArray[i].withinStrokeSplineNum = i-numPaths;
       
     };
 
@@ -493,7 +498,7 @@ tool.onMouseDrag= function(event){
             var start = svgstring.indexOf('d="')+3;
             numLitStrokes=0;
             dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-              "label": text, "strokeColor": p.strokeColor, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000), "strokeNum" : p.strokeNum});
+              "label": text, "strokeColor": p.strokeColor, "timeClicked" : timeClicked, "timeLabeled": Math.floor(Date.now() / 1000), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum});
             p.strokeWidth=5;
            // p.selected=false;
 
@@ -550,9 +555,13 @@ tool.onMouseDrag= function(event){
             var start = svgstring.indexOf('d="')+3;
             numLitStrokes=0;
             dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-              "label": "unknown", "strokeColor": p.strokeColor, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000), "strokeNum" : p.strokeNum});
-
-
+                      "label": "unknown", 
+                      "strokeColor": p.strokeColor,
+                       "timeClicked" : timeClicked, 
+                       "timeLabeled": Math.floor(Date.now() / 1000), 
+                       "cumulativeSplineNum" : p.strokeNum, 
+                       "strokeNum":p.masterStrokeNum, 
+                       "withinStrokeSplineNum": p.withinStrokeSplineNum});
             p.strokeWidth=5;
 
 
@@ -615,7 +624,7 @@ tool.onMouseDrag= function(event){
           svgstring = p.exportSVG({asString: true});
           var start = svgstring.indexOf('d="')+3;
           dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-            "label": "NA", "strokeColor": p.strokeColor, "Time clicked" : "NA", "Time labeled": Math.floor(Date.now() / 1000), "strokeNum" : p.strokeNum});
+            "label": "NA", "strokeColor": p.strokeColor, "timeClicked" : "NA", "timeLabeled": Math.floor(Date.now() / 1000), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum});
 
         }
       })
@@ -677,7 +686,7 @@ tool.onMouseDrag= function(event){
           var start = svgstring.indexOf('d="')+3;
           numLitStrokes=0;
           dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-            "label": UI, "strokeColor": p.strokeColor, "Time clicked" : timeClicked, "Time labeled": Math.floor(Date.now() / 1000), "strokeNum" : p.strokeNum});
+            "label": UI, "strokeColor": p.strokeColor, "timeClicked" : timeClicked, "timeLabeled": Math.floor(Date.now() / 1000), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum});
 
         });        
         c=c+selectedArray.length;
