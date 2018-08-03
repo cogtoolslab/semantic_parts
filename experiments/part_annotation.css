@@ -6,7 +6,9 @@
  */
 
  /* Container holding jsPsych content */
-
+*{
+  font-family: 'Lato', sans-serif;
+}
  .jspsych-display-element {
    display: flex;
    flex-direction: column;
@@ -20,21 +22,20 @@
  .ui-menu { width: 200px; }
  .ui-widget-header { padding: 0.2em; }
  .ui-menu {
-    position: relative;
-    display: inline-block;
-    margin-bottom: auto;
-    right:510px;
-    top:55px;
-    ;
+    display: block;
+    margin:auto;
+    
 
     /* bottom:38%; */
     /* left: 60.5%; */
 }
 
 .row{
-  margin-bottom: 330px;
-  margin-left: 125px;
+  margin: auto;
+  /*margin-bottom: 330px;
+  margin-left: 125px;*/
 }
+
 #Title {
     margin-left: auto;
     /* margin-bottom: auto; */
@@ -42,6 +43,7 @@
     /* position: relative; */
     display: block; 
     font-size: 50px;
+    font-family: 'Lato', sans-serif;
   /* position: absolute; */
   /* display: inline-block; */
   /*  /\*bottom: 550px; *\/ */
@@ -58,8 +60,8 @@
   position:relative;
 }
 .progress{
-  margin-left:160px;
-  width:50%;
+  margin: auto;
+  width:80%;
 }
 canvas[resize] {
     /* position: absolute; */
@@ -93,6 +95,35 @@ canvas[resize] {
     /*top: 100px;*/
 
   }
+
+
+
+
+.wrapper {
+  
+  max-height: 100%;
+  max-width: 100%;
+  display: inline;;
+}
+
+[class|="confetti"] {
+
+  position: absolute;
+}
+
+.red {
+  background-color: #e94a3f;
+}
+
+.yellow {
+  background-color: #faa040;
+}
+
+.blue {
+  background-color: #5fc9f5;
+}
+
+
 
  .jspsych-display-element:focus {
    outline: none;

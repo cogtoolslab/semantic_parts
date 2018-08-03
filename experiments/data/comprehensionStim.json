@@ -1,5 +1,6 @@
-data = {"category": "straight",
-"parts": ["backrest,armrest,seat,pedestal,legs"],
+data = {"target": "straight",
+	"category":"chair",
+"parts": ["backrest,armrest,seat,legs"],
 "svg":["M49,166c0,7.67391 -0.75258,15.33008 -1,23c-0.26289,8.14948 -0.67416,11.37081 -2,18c-0.79682,3.9841 -4.38185,23.81851 -3,10c1.47585,-14.75851 -1.03737,-46.98132 15,-55c6.23108,-3.11554 30.08534,3 38,3c3.16971,0 52.70671,-2.29329 54,-1c0.2357,0.2357 0,0.66667 0,1c0,19.38031 7,36.72005 7,55", "M152,165c0,-11.59107 3.56817,-23.5454 5,-35c2.08256,-16.66052 -4,-33.01486 -4,-49", "M78,172c0,12.61734 -0.24055,24.58249 -3,37c-0.60411,2.71851 -6.1707,13.1707 -4,11", "M130,168c0,14.75975 2.68358,31.94926 -2,46", "M61,156c0,-3.39782 2.14222,-3.14222 4,-5c3.08475,-3.08475 72.54385,0 86,0"],
 "renders":["http://s3.amazonaws.com/sketchloop-images-subord/chairs_01_straight_0035.png","http://s3.amazonaws.com/sketchloop-images-subord/birds_06_nightingale_0035.png","http://s3.amazonaws.com/sketchloop-images-subord/cars_04_white_0035.png","http://s3.amazonaws.com/sketchloop-images-subord/dogs_07_goldenretriever_0035.png"],
   "distractors":["nightingale","white","goldenretriever"]
