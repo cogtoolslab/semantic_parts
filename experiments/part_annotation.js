@@ -20,6 +20,7 @@ jsPsych.plugins['part_annotation'] = (function(){
   plugin.trial = function(display_element, trial) {
   //More initializations
   var tool = new Tool();
+  var numSplines;
   var dict=[];
   var Bonus=0;
   var results=[];
@@ -96,6 +97,7 @@ jsPsych.plugins['part_annotation'] = (function(){
 
 //Ending trial and creating trial data to be sent to db. Also resetting HTML elements
 var end_trial = function(results) {
+  console.log(results);
  var timeStamp = Math.floor(Date.now() / 1000);
  selectedArray=[];
  if(trial.training==false){
@@ -112,6 +114,7 @@ var end_trial = function(results) {
      iterationName: 'testing2',
      gameID : trial.gameID,
      time: timeStamp,
+     numSplines: numSplines,
      condition: trial.condition,
      numStrokes: trial.numStrokes,
      outcome: trial.outcome,
@@ -406,9 +409,11 @@ if(trial.training==true){
 
  //Setting states for when mouse is lifted after dragging and activating menus
  tool.onMouseUp = function(event){
+
    if(clickable == true){
     if(dragStat==true && selectedArray.length!=0){
-      timeClicked = Math.floor(Date.now() / 1000);
+     timeClicked = Math.floor(Date.now() / 1000);
+     console.log(timeClicked);
       $('#List').menu("enable");
       _.forEach(selectedArray, function(p){
         p.highlit = true;
