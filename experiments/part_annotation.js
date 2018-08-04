@@ -34,6 +34,7 @@ jsPsych.plugins['part_annotation'] = (function(){
   var numLitStrokes=0; 
   var splineArray;   
   var timeLabeled;
+  var confettiCount= 200;
 
   //Setting colors for the menu items ROYGBIV from left to right
   //Setting RGB values to interpolate between 
@@ -117,7 +118,6 @@ var end_trial = function(results) {
      response:trial.response,
      results: results
    });
-   console.log(trial_data);
 
       // clear the display
       display_element.innerHTML = '';
@@ -132,7 +132,6 @@ var end_trial = function(results) {
     var partList = trial.parts.toString().split(',');
     var components = [];
     for (var i = 0; i < 3; i++) {
-      console.log(partList.length);
       components[i] = Math.round(left[i] + (right[i] - left[i]) * colNo/(partList.length+2));
     }
     return('"'+"rgb"+"("+components[0]+","+components[1]+","+components[2]+")"+'"');
@@ -182,7 +181,7 @@ var end_trial = function(results) {
     top: "100%",
     left: "+="+Math.random()*15+"%"
   }, Math.random()*3000 + 3000, function() {
-    reset(x);
+    //reset(x);
   });
  }
  //Resetting confetti to cycle
@@ -235,7 +234,6 @@ if(trial.training==true){
       tempObj["png"] = dataURL;
       results.push(tempObj);
       results = JSON.stringify(results)
-      console.log(results);
       //resetting canvas and menu elements
       project.activeLayer.removeChildren();
       paper.view.draw();
@@ -303,7 +301,6 @@ if(trial.training==true){
 
   for (var i = numPaths; i< (tempPath.length+numPaths); i++) {
     pathArray[i] = tempPath[i-numPaths];
-    console.log("This is the length of spline "+i+" "+pathArray[i].length)
     pathArray[i].strokeColor = "rgb(0,0,0)";
     pathArray[i].strokeWidth = 5;
     pathArray[i].masterStrokeNum = k; //Stroke Num
@@ -318,7 +315,6 @@ if(trial.training==true){
   numPaths= numPaths+tempPath.length;
   tempSketch=[];
   sketch=[];
-  console.log("this is pathArray", pathArray);
 }
 
 
@@ -351,7 +347,6 @@ if(trial.training==true){
           clickable = false;
           p.strokeColor= '#660000';
           selectedArray[numLitStrokes]=p;
-          console.log(dict);
           c--;
           if(dict.length>0){
             $('#List').menu("enable");
@@ -392,7 +387,6 @@ if(trial.training==true){
                $('#List').menu("disable");
              }
            } }}
-           console.log(selectedArray);
 
          }
 
@@ -406,7 +400,6 @@ if(trial.training==true){
   tool.onMouseDrag= function(event){
    if(clickable == true){
      dragStat=true;
-     console.log("MD", dragStat);
    }}
 
  //Setting states for when mouse is lifted after dragging and activating menus
@@ -438,7 +431,6 @@ if(trial.training==true){
         }
         //When entering a stroke while not dragging 
         else if (p.alreadyClicked == false && p.highlit==false && dragStat==false){
-          console.log("general enter", dragStat)
           p.strokeColor = "rgb(100,100,100)";
         }
       }
@@ -490,7 +482,6 @@ if(trial.training==true){
       disabled: true,
       modal: true,
       select : function(event, ui){
-        console.log(dict);
         clickable = true;
         //Refreshing the menu on each click;
         listgen();
@@ -522,7 +513,7 @@ if(trial.training==true){
             if(trial.training==false){
              totalBonus = totalBonus+0.02;
             }
-           for (var i = 0; i < 300; i++) {
+           for (var i = 0; i < confettiCount; i++) {
             create(i);
           }}
           $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
@@ -530,9 +521,7 @@ if(trial.training==true){
           $('.progress-bar').html(c+" out of " +pathArray.length +' labeled');
 
           if(trial.training==false){
-            console.log("This is bonus", Bonus);
             Bonus=Math.round(c*0.002*1000)/1000;
-            console.log("This is bonus2", Bonus);
             $('#bonusMeter').html("Bonus: $ "+(Bonus+totalBonus).toFixed(3));
           }
 
@@ -578,7 +567,7 @@ if(trial.training==true){
            if(trial.training==false){
              totalBonus = totalBonus+0.02;
             }
-           for (var i = 0; i < 300; i++) {
+           for (var i = 0; i < confettiCount; i++) {
             create(i);
           }}
           //Progress marker updates and checking for whether confetti should fall
@@ -587,9 +576,7 @@ if(trial.training==true){
           $('.progress-bar').html(c+" out of " +pathArray.length +' labeled');
 
           if(trial.training==false){
-            console.log("This is bonus", Bonus);
             Bonus=Math.round(c*0.002*1000)/1000;
-            console.log("This is bonus2", Bonus);
             $('#bonusMeter').html("Bonus: $ "+(Bonus+totalBonus).toFixed(3));
           }
 
@@ -639,9 +626,7 @@ if(trial.training==true){
       tempObj[category] = dict;
       tempObj["png"] = dataURL;
       results.push(tempObj);
-      console.log(results);
       results = JSON.stringify(results)
-      console.log(results);
       //resetting canvas and menu elements
       project.activeLayer.removeChildren();
       paper.view.draw();
@@ -701,7 +686,7 @@ if(trial.training==true){
            if(trial.training==false){
              totalBonus = totalBonus+0.02;
             }
-         for (var i = 0; i < 300; i++) {
+         for (var i = 0; i < confettiCount; i++) {
           create(i);}}
         //progress bar update
         $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
@@ -710,9 +695,7 @@ if(trial.training==true){
 
 
         if(trial.training==false){
-          console.log("This is bonus", Bonus);
           Bonus=Math.round(c*0.002*1000)/1000;
-          console.log("This is bonus2", Bonus);
           $('#bonusMeter').html("Bonus: $ "+(Bonus+totalBonus).toFixed(3));
         }
         selectedArray=[];

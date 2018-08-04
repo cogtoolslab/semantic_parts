@@ -3,7 +3,7 @@ var c;
 var r;
 
 function sendData() {
-  console.log('sending data to mturk');
+  //console.log('sending data to mturk');
   jsPsych.turk.submitToTurk({});
 }
 
@@ -14,10 +14,8 @@ function setupExp(){
     //var numTrials = d.num_trials;
     var numTrials = 11;
     var id = d.id;
-    console.log(d);
 
     //var renderList = renderList;
-    console.log("RENDERLIST", renderList);
 
     var tmp = {
       type: 'part_annotation',
@@ -55,7 +53,6 @@ function setupExp(){
         allow_keys:true
 
       };
-      console.log(data.parts);
 
 
       var comprehensionTrial = {
@@ -112,12 +109,11 @@ function setupExp(){
 
       var main_on_start = function(trial) {
 
-        console.log("main on start being called");
+       // console.log("main on start being called");
 
         oldCallback = newCallback;
         var newCallback = function(stim) {
-          console.log('received stim')
-          console.log(stim);
+          //.log('received stim')
         //      	_.extend(trials[1], stim);
 
         trial.training = false;
