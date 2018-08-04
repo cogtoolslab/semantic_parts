@@ -34,6 +34,7 @@ jsPsych.plugins['part_annotation'] = (function(){
   var numLitStrokes=0; 
   var splineArray;   
   var timeLabeled;
+  var confettiCount= 200;
 
   //Setting colors for the menu items ROYGBIV from left to right
   //Setting RGB values to interpolate between 
@@ -182,7 +183,7 @@ var end_trial = function(results) {
     top: "100%",
     left: "+="+Math.random()*15+"%"
   }, Math.random()*3000 + 3000, function() {
-    reset(x);
+    //reset(x);
   });
  }
  //Resetting confetti to cycle
@@ -522,7 +523,7 @@ if(trial.training==true){
             if(trial.training==false){
              totalBonus = totalBonus+0.02;
             }
-           for (var i = 0; i < 300; i++) {
+           for (var i = 0; i < confettiCount; i++) {
             create(i);
           }}
           $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
@@ -578,7 +579,7 @@ if(trial.training==true){
            if(trial.training==false){
              totalBonus = totalBonus+0.02;
             }
-           for (var i = 0; i < 300; i++) {
+           for (var i = 0; i < confettiCount; i++) {
             create(i);
           }}
           //Progress marker updates and checking for whether confetti should fall
@@ -701,7 +702,7 @@ if(trial.training==true){
            if(trial.training==false){
              totalBonus = totalBonus+0.02;
             }
-         for (var i = 0; i < 300; i++) {
+         for (var i = 0; i < confettiCount; i++) {
           create(i);}}
         //progress bar update
         $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
