@@ -34,7 +34,7 @@ jsPsych.plugins['part_annotation'] = (function(){
   var numLitStrokes=0; 
   var splineArray;   
   var timeLabeled;
-  var confettiCount= 200;
+  var confettiCount= 200;  
 
   //Setting colors for the menu items ROYGBIV from left to right
   //Setting RGB values to interpolate between 
@@ -110,15 +110,14 @@ var end_trial = function(results) {
      dbname: 'svgAnnotation',
      colname: 'examples',
      iterationName: 'testing4',
-     gameID : trial.gameID,
      time: timeStamp,
-     condition: trial.condition,
      numStrokes: trial.numStrokes,
-     numSplines: numSplines,
-     outcome: trial.outcome,
      trialNum: trial.trialNum,
+     originalGameID : trial.gameID,     
+     originalCondition: trial.condition,     
+     originalOutcome: trial.outcome,     
      originalTrialNum:trial.originalTrialNum,
-     response:trial.response,
+     originalResponse:trial.response,
      annotations: results
    });
 
