@@ -20,6 +20,7 @@ jsPsych.plugins['part_annotation'] = (function(){
   plugin.trial = function(display_element, trial) {
   //More initializations
   var tool = new Tool();
+  var numSplines;
   var dict=[];
   var Bonus=0;
   var results=[];
@@ -96,6 +97,7 @@ jsPsych.plugins['part_annotation'] = (function(){
 
 //Ending trial and creating trial data to be sent to db. Also resetting HTML elements
 var end_trial = function(results) {
+  console.log(results);
  var timeStamp = Math.floor(Date.now() / 1000);
  selectedArray=[];
  if(trial.training==false){
@@ -112,6 +114,7 @@ var end_trial = function(results) {
      iterationName: 'testing6',
      gameID : trial.gameID,
      time: timeStamp,
+     numSplines: numSplines,
      condition: trial.condition,
      numStrokes: trial.numStrokes,
      numSplines: numSplines,
@@ -409,9 +412,12 @@ if(trial.training==true){
 
  //Setting states for when mouse is lifted after dragging and activating menus
  tool.onMouseUp = function(event){
+   //timeClicked = Math.floor(Date.now() / 1000);
    if(clickable == true){
+     
     if(dragStat==true && selectedArray.length!=0){
-      timeClicked = Math.floor(Date.now() / 1000);
+    
+     console.log(timeClicked);
       $('#List').menu("enable");
       _.forEach(selectedArray, function(p){
         p.highlit = true;
@@ -429,6 +435,7 @@ if(trial.training==true){
      if(clickable == true){
         //When entering a stroke during dragging
         if(p.alreadyClicked == false && p.highlit==false && dragStat==true){
+          timeClicked = Math.floor(Date.now() / 1000);
           p.highlit=true;
           selectedArray[numLitStrokes]=p;
           selectedArray[numLitStrokes].strokeColor = "rgb(100,100,100)";
