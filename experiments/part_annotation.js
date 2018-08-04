@@ -20,7 +20,7 @@ jsPsych.plugins['part_annotation'] = (function(){
   plugin.trial = function(display_element, trial) {
   //More initializations
   var tool = new Tool();
-  var numSplines;
+  var totalSplines;
   var dict=[];
   var Bonus=0;
   var results=[];
@@ -97,7 +97,6 @@ jsPsych.plugins['part_annotation'] = (function(){
 
 //Ending trial and creating trial data to be sent to db. Also resetting HTML elements
 var end_trial = function(results) {
-  console.log(results);
  var timeStamp = Math.floor(Date.now() / 1000);
  selectedArray=[];
  if(trial.training==false){
@@ -114,10 +113,9 @@ var end_trial = function(results) {
      iterationName: 'testing4',
      gameID : trial.gameID,
      time: timeStamp,
-     numSplines: numSplines,
+     numSplines: totalSplines,
      condition: trial.condition,
      numStrokes: trial.numStrokes,
-     numSplines: numSplines,
      outcome: trial.outcome,
      trialNum: trial.trialNum,
      originalTrialNum:trial.originalTrialNum,
@@ -295,6 +293,7 @@ if(trial.training==true){
   for(var i =0; i<sketch.length;i++){
     tempPath[i] = new Path(sketch[i]);
   }
+
   //Checking splines pairwise within strokes to concatenate small splines
   var j = tempPath.length-1;
   while(j>0){
@@ -325,7 +324,7 @@ if(trial.training==true){
   sketch=[];
 }
 
-
+totalSplines= numPaths;
 
 
 
