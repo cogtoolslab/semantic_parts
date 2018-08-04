@@ -96,6 +96,7 @@ jsPsych.plugins['part_annotation'] = (function(){
 
 //Ending trial and creating trial data to be sent to db. Also resetting HTML elements
 var end_trial = function(results) {
+ var timeStamp = Math.floor(Date.now() / 1000);
  selectedArray=[];
  if(trial.training==false){
    totalBonus=totalBonus+Bonus;
@@ -110,13 +111,14 @@ var end_trial = function(results) {
      colname: 'examples',
      iterationName: 'testing4',
      gameID : trial.gameID,
+     time: timeStamp,
      condition: trial.condition,
      numStrokes: trial.numStrokes,
      outcome: trial.outcome,
      trialNum: trial.trialNum,
      originalTrialNum:trial.originalTrialNum,
      response:trial.response,
-     results: results
+     annotations: results
    });
 
       // clear the display
