@@ -86,7 +86,7 @@ function sendStim(socket, data) {
   sendPostRequest('http://localhost:6001/db/getstims', {
     json: {
       dbname: 'stimuli',
-      colname: 'svg_annotation_sketchpad_basic_chairs_dev',
+      colname: 'svg_annotation_sketchpad_basic_chairs4_dev',
       numTrials: 1,
       gameid: data.gameID
     }
@@ -100,7 +100,6 @@ function sendStim(socket, data) {
     }
   });
 }
-
 var writeDataToMongo = function(data) {
   sendPostRequest(
     'http://localhost:6001/db/insert',
