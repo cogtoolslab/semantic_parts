@@ -111,17 +111,18 @@ var end_trial = function(results) {
      aID : turkInfo.assignmentId,
      dbname: 'svgAnnotation',
      colname: 'examples',
-     iterationName: 'testing2',
+     iterationName: 'testing4',
      gameID : trial.gameID,
      time: timeStamp,
      numSplines: numSplines,
      condition: trial.condition,
      numStrokes: trial.numStrokes,
+     numSplines: numSplines,
      outcome: trial.outcome,
      trialNum: trial.trialNum,
      originalTrialNum:trial.originalTrialNum,
      response:trial.response,
-     results: results
+     annotations: results
    });
 
       // clear the display
@@ -284,6 +285,8 @@ if(trial.training==true){
     sketch[numSplines]=f.toString();
     numSplines++
   })
+
+
 
 
   //Actually displaying the sketch
