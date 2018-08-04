@@ -94,6 +94,7 @@ jsPsych.plugins['part_annotation'] = (function(){
   }, 1000);
 
 
+
 //Ending trial and creating trial data to be sent to db. Also resetting HTML elements
 var end_trial = function(results) {
  selectedArray=[];

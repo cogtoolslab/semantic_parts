@@ -100,7 +100,6 @@ function sendStim(socket, data) {
     }
   });
 }
-
 var writeDataToMongo = function(data) {
   sendPostRequest(
     'http://localhost:6001/db/insert',
