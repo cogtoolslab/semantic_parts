@@ -97,7 +97,7 @@ jsPsych.plugins['part_annotation'] = (function(){
 
 //Ending trial and creating trial data to be sent to db. Also resetting HTML elements
 var end_trial = function(results) {
- var timeStamp = Math.floor(Date.now() / 1000);
+ var timeStamp = Date.now();
  selectedArray=[];
  if(trial.training==false){
    totalBonus=totalBonus+Bonus;
@@ -226,7 +226,7 @@ if(trial.training==true){
             "label": "NA", 
             "strokeColor": p.strokeColor, 
             "timeClicked" : "NA", 
-            "timeLabeled": Math.floor(Date.now() / 1000), 
+            "timeLabeled": Date.now(), 
             "cumulativeSplineNum" : p.strokeNum, 
             "strokeNum":p.masterStrokeNum, 
             "withinStrokeSplineNum": p.withinStrokeSplineNum });
@@ -343,7 +343,7 @@ totalSplines= numPaths;
         if(p.alreadyClicked==false && p.highlit==false){
           p.highlit=true;
           selectedArray[numLitStrokes]=p;  
-          timeClicked = Math.floor(Date.now() / 1000);
+          timeClicked = Date.now();
           $('#List').menu("enable");
           selectedArray[numLitStrokes].strokeColor = "rgb(200,200,200)";
           numLitStrokes++;}
@@ -411,7 +411,7 @@ totalSplines= numPaths;
 
  //Setting states for when mouse is lifted after dragging and activating menus
  tool.onMouseUp = function(event){
-   //timeClicked = Math.floor(Date.now() / 1000);
+   //timeClicked = Date.now();
    if(clickable == true){
      
     if(dragStat==true && selectedArray.length!=0){
@@ -434,7 +434,7 @@ totalSplines= numPaths;
      if(clickable == true){
         //When entering a stroke during dragging
         if(p.alreadyClicked == false && p.highlit==false && dragStat==true){
-          timeClicked = Math.floor(Date.now() / 1000);
+          timeClicked = Date.now();
           p.highlit=true;
           selectedArray[numLitStrokes]=p;
           selectedArray[numLitStrokes].strokeColor = "rgb(100,100,100)";
@@ -513,7 +513,7 @@ totalSplines= numPaths;
             var start = svgstring.indexOf('d="')+3;
             numLitStrokes=0;
             dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-              "label": text, "strokeColor": p.strokeColor, "timeClicked" : timeClicked, "timeLabeled": Math.floor(Date.now() / 1000), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum});
+              "label": text, "strokeColor": p.strokeColor, "timeClicked" : timeClicked, "timeLabeled": Date.now(), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum});
             p.strokeWidth=5;
           
          });        
@@ -562,7 +562,7 @@ totalSplines= numPaths;
               "label": "unknown", 
               "strokeColor": p.strokeColor,
               "timeClicked" : timeClicked, 
-              "timeLabeled": Math.floor(Date.now() / 1000), 
+              "timeLabeled": Date.now(), 
               "cumulativeSplineNum" : p.strokeNum, 
               "strokeNum":p.masterStrokeNum, 
               "withinStrokeSplineNum": p.withinStrokeSplineNum});
@@ -629,7 +629,7 @@ totalSplines= numPaths;
           svgstring = p.exportSVG({asString: true});
           var start = svgstring.indexOf('d="')+3;
           dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-            "label": "NA", "strokeColor": p.strokeColor, "timeClicked" : "NA", "timeLabeled": Math.floor(Date.now() / 1000), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum});
+            "label": "NA", "strokeColor": p.strokeColor, "timeClicked" : "NA", "timeLabeled": Date.now(), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum});
 
         }
       })
@@ -689,7 +689,7 @@ totalSplines= numPaths;
           var start = svgstring.indexOf('d="')+3;
           numLitStrokes=0;
           dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-            "label": UI, "strokeColor": p.strokeColor, "timeClicked" : timeClicked, "timeLabeled": Math.floor(Date.now() / 1000), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum});
+            "label": UI, "strokeColor": p.strokeColor, "timeClicked" : timeClicked, "timeLabeled": Date.now(), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum});
 
         });        
         c=c+selectedArray.length;
