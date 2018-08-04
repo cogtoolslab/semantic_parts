@@ -39,7 +39,7 @@ function setupExp(){
       that stroke again, and select a new label from the menu.<p style='line-height:2;'><img src ='instructions7.png' style='height:350px; width:1050px;border: 2px solid #000000;'></img><p> <br> <br> </p></p> </p> <p style = 'font-size:24px;line-height:1.5;'> 5. Repeat steps 1–4 until you have labeled all the strokes in the sketch.</p>\
       <p style = 'font-size:24px;line-height:1.5;'>Note: To make your life easier, as you label more strokes in each sketch, the remaining ones will get thicker so it is easier to see them.</p> <p style='line-height:2;'><img src ='instructions8.png' style='height:350px;border: 2px solid #000000;'></img></p></p>",
       
-      'str4': "<p style = 'font-size:30px;line-height:1.5;'> Okay, let's practice! Make sure to familiarize yourself with the task.</p><p style = 'font-size:24px;line-height:1.5;'>Click on 'next sketch' when you're done labeling.</p>"}
+      'str4': "<p style = 'font-size:30px;line-height:1.5;'> Okay, let's try it out! </p><p style = 'font-size:24px;line-height:1.5;'> On the next screen you will get to practice labeling the parts of a sketch. Click on 'next sketch' when you're done labeling everything.</p>"}
 
       var intro = {
         type: 'instructions',
