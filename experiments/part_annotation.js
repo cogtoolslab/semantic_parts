@@ -47,7 +47,7 @@ jsPsych.plugins['part_annotation'] = (function(){
 
   setTimeout(function() {
     //Setting up HTML for each trial
-    display_element.innerHTML += ('<div class ="wrapper"></div><p id= "bonusMeter" style="font-size:25px;text-align:left; float:left;">Bonus: '+ totalBonus.toFixed(2) + ' cents</p>\
+    display_element.innerHTML += ('<div class ="wrapper"></div><p id= "bonusMeter" style="font-size:25px;text-align:left; float:left;">Bonus: $ '+ totalBonus.toFixed(3)+'</p>\
       <p id="trialNum"style="text-align:right; font-size:25px"> '+(trial.trialNum+1)+" of "+11+'</p><div id="main_container" style="width:1000px;height:600px; margin:auto;"> \
       <div id= "upper_container" style="margin:auto; width:710px">\
       <div style="float:right; padding-top:43px;left:5px"><ul id="List" style="margin:auto;"></ul></div>\
@@ -108,7 +108,7 @@ var end_trial = function(results) {
      aID : turkInfo.assignmentId,
      dbname: 'svgAnnotation',
      colname: 'examples',
-     iterationName: 'testing',
+     iterationName: 'testing2',
      gameID : trial.gameID,
      condition: trial.condition,
      numStrokes: trial.numStrokes,
@@ -520,6 +520,9 @@ if(trial.training==true){
           c=c+selectedArray.length;
           //Progress marker updates and checking for whether confetti should fall
           if(c==pathArray.length){
+            if(trial.training==false){
+             totalBonus = totalBonus+0.02;
+            }
            for (var i = 0; i < 300; i++) {
             create(i);
           }}
@@ -529,9 +532,9 @@ if(trial.training==true){
 
           if(trial.training==false){
             console.log("This is bonus", Bonus);
-            Bonus=Math.round(c*0.05*100)/100;
+            Bonus=Math.round(c*0.002*1000)/1000;
             console.log("This is bonus2", Bonus);
-            $('#bonusMeter').html("Bonus: "+(Bonus+totalBonus).toFixed(2)+" cents");
+            $('#bonusMeter').html("Bonus: $ "+(Bonus+totalBonus).toFixed(3));
           }
 
           for( var i = 0; i<pathArray.length; i++){
@@ -573,6 +576,9 @@ if(trial.training==true){
 
          c=c+selectedArray.length;
          if(c==pathArray.length){
+           if(trial.training==false){
+             totalBonus = totalBonus+0.02;
+            }
            for (var i = 0; i < 300; i++) {
             create(i);
           }}
@@ -583,9 +589,9 @@ if(trial.training==true){
 
           if(trial.training==false){
             console.log("This is bonus", Bonus);
-            Bonus=Math.round(c*0.05*100)/100;
+            Bonus=Math.round(c*0.002*1000)/1000;
             console.log("This is bonus2", Bonus);
-            $('#bonusMeter').html("Bonus: "+(Bonus+totalBonus).toFixed(2)+" cents");
+            $('#bonusMeter').html("Bonus: $ "+(Bonus+totalBonus).toFixed(3));
           }
 
           for( var i = 0; i<pathArray.length; i++){
@@ -693,6 +699,9 @@ if(trial.training==true){
         });        
         c=c+selectedArray.length;
         if(c==pathArray.length){
+           if(trial.training==false){
+             totalBonus = totalBonus+0.02;
+            }
          for (var i = 0; i < 300; i++) {
           create(i);}}
         //progress bar update
@@ -703,9 +712,9 @@ if(trial.training==true){
 
         if(trial.training==false){
           console.log("This is bonus", Bonus);
-          Bonus=Math.round(c*0.05*100)/100;
+          Bonus=Math.round(c*0.002*1000)/1000;
           console.log("This is bonus2", Bonus);
-          $('#bonusMeter').html("Bonus: "+(Bonus+totalBonus).toFixed(2)+" cents");
+          $('#bonusMeter').html("Bonus: $ "+(Bonus+totalBonus).toFixed(3));
         }
         selectedArray=[];
 
