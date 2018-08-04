@@ -46,7 +46,8 @@ io.on('connection', function (socket) {
 
   // write data to db upon getting current data
   socket.on('currentData', function(data) {
-    console.log('currentData received: ' + JSON.stringify(data));
+    console.log(JSON.stringify(_.pick(data, ['dbname','colname','gameID','trialNum','category','target']), null, 3));
+
     // Increment games list in mongo here
     writeDataToMongo(data);
   });
