@@ -116,7 +116,7 @@ var end_trial = function(results) {
      trialNum: trial.trialNum,
      originalTrialNum:trial.originalTrialNum,
      response:trial.response,
-     results: results
+     annotations: results
    });
 
       // clear the display
