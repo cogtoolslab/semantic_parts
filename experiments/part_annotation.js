@@ -412,10 +412,11 @@ if(trial.training==true){
 
  //Setting states for when mouse is lifted after dragging and activating menus
  tool.onMouseUp = function(event){
-
+   //timeClicked = Math.floor(Date.now() / 1000);
    if(clickable == true){
+     
     if(dragStat==true && selectedArray.length!=0){
-     timeClicked = Math.floor(Date.now() / 1000);
+    
      console.log(timeClicked);
       $('#List').menu("enable");
       _.forEach(selectedArray, function(p){
@@ -434,6 +435,7 @@ if(trial.training==true){
      if(clickable == true){
         //When entering a stroke during dragging
         if(p.alreadyClicked == false && p.highlit==false && dragStat==true){
+          timeClicked = Math.floor(Date.now() / 1000);
           p.highlit=true;
           selectedArray[numLitStrokes]=p;
           selectedArray[numLitStrokes].strokeColor = "rgb(100,100,100)";
