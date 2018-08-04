@@ -39,9 +39,7 @@ jsPsych.plugins['part_annotation'] = (function(){
   //Setting RGB values to interpolate between 
   var left = [237, 56, 8];
   var right = [56, 209, 237];
-
-
-
+  var splineArcLengthThreshold = 18;
 
   //Putting function calls and HTML elements of the jsPsych display element within a 1 second timeout
 
@@ -294,7 +292,7 @@ if(trial.training==true){
   //Checking splines pairwise within strokes to concatenate small splines
   var j = tempPath.length-1;
   while(j>0){
-    if(tempPath[j].length<15||tempPath[j-1].length<15){
+    if(tempPath[j].length<splineArcLengthThreshold||tempPath[j-1].length<splineArcLengthThreshold){
       tempPath[j]= tempPath[j-1].join(tempPath[j]);
       tempPath.splice(j,1);
     }
