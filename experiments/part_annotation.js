@@ -114,6 +114,7 @@ var end_trial = function(results) {
      time: timeStamp,
      condition: trial.condition,
      numStrokes: trial.numStrokes,
+     numSplines: numSplines,
      outcome: trial.outcome,
      trialNum: trial.trialNum,
      originalTrialNum:trial.originalTrialNum,
@@ -281,6 +282,8 @@ if(trial.training==true){
     sketch[numSplines]=f.toString();
     numSplines++
   })
+
+
 
 
   //Actually displaying the sketch
