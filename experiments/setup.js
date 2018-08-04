@@ -85,10 +85,10 @@ function setupExp(){
       trials[2] ={
         type: 'instructions',
         pages:[
-        '<p style = "font-size:24px;line-height:1.5;"">Good job! You should now have a grasp on what this game feels like to play.</p>',
+        '<p style = "font-size:24px;line-height:1.5;">Good job! You should now have a grasp on what this game feels like to play.</p>',
         '<p style = "font-size:24px;line-height:1.5;">You will receive a bonus for every stroke you label AND a special "completion bonus" for labeling all the strokes in a sketch.</p>',
-        '<p style = "font-size:30px;line-height:1.5;">For each sketch, you are allowed to continue to the next sketch if you have not finished labeling every stroke, but then you will miss out on the completion bonus. So please do your best to label every stroke you see!</p>',
-        '<p style = "font-size:30px;line-height:1.5;">We expect the average amount of time required to complete the HIT to be around 10 minutes, including the time it takes to read the instructions.\        
+        '<p style = "font-size:24px;line-height:1.5;">For each sketch, you are allowed to continue to the next sketch if you have not finished labeling every stroke, but then you will miss out on the completion bonus. So please do your best to label every stroke you see!</p>',
+        '<p style = "font-size:24px;line-height:1.5;">We expect the average amount of time required to complete the HIT to be around 10 minutes, including the time it takes to read the instructions.\        
         By completing this HIT, you are participating in a study being conducted by cognitive scientists in the Stanford Department of Psychology.\
         If you have questions about this research, or if you encounter a problem or error, please contact the \
         <b>Sketchloop Admin</b> at <b><a href="mailto://sketchloop@gmail.com">sketchloop@gmail.com</a> </b> or \
