@@ -20,7 +20,7 @@ jsPsych.plugins['part_annotation'] = (function(){
   plugin.trial = function(display_element, trial) {
   //More initializations
   var tool = new Tool();
-  var numSplines;
+  var totalSplines;
   var dict=[];
   var Bonus=0;
   var results=[];
@@ -97,8 +97,7 @@ jsPsych.plugins['part_annotation'] = (function(){
 
 //Ending trial and creating trial data to be sent to db. Also resetting HTML elements
 var end_trial = function(results) {
-  console.log(results);
- var timeStamp = Math.floor(Date.now() / 1000);
+ var timeStamp = Date.now();
  selectedArray=[];
  if(trial.training==false){
    totalBonus=totalBonus+Bonus;
@@ -111,8 +110,11 @@ var end_trial = function(results) {
      aID : turkInfo.assignmentId,
      dbname: 'svgAnnotation',
      colname: 'examples',
-     iterationName: 'testing4',
+     iterationName: 'testing6',
+     gameID : trial.gameID,
      time: timeStamp,
+     numSplines: totalSplines,
+     condition: trial.condition,
      numStrokes: trial.numStrokes,
      trialNum: trial.trialNum,
      originalGameID : trial.gameID,     
@@ -226,7 +228,7 @@ if(trial.training==true){
             "label": "NA", 
             "strokeColor": p.strokeColor, 
             "timeClicked" : "NA", 
-            "timeLabeled": Math.floor(Date.now() / 1000), 
+            "timeLabeled": Date.now(), 
             "cumulativeSplineNum" : p.strokeNum, 
             "strokeNum":p.masterStrokeNum, 
             "withinStrokeSplineNum": p.withinStrokeSplineNum });
@@ -293,6 +295,7 @@ if(trial.training==true){
   for(var i =0; i<sketch.length;i++){
     tempPath[i] = new Path(sketch[i]);
   }
+
   //Checking splines pairwise within strokes to concatenate small splines
   var j = tempPath.length-1;
   while(j>0){
@@ -323,7 +326,7 @@ if(trial.training==true){
   sketch=[];
 }
 
-
+totalSplines= numPaths;
 
 
 
@@ -342,7 +345,7 @@ if(trial.training==true){
         if(p.alreadyClicked==false && p.highlit==false){
           p.highlit=true;
           selectedArray[numLitStrokes]=p;  
-          timeClicked = Math.floor(Date.now() / 1000);
+          timeClicked = Date.now();
           $('#List').menu("enable");
           selectedArray[numLitStrokes].strokeColor = "rgb(200,200,200)";
           numLitStrokes++;}
@@ -410,10 +413,11 @@ if(trial.training==true){
 
  //Setting states for when mouse is lifted after dragging and activating menus
  tool.onMouseUp = function(event){
-
+   //timeClicked = Date.now();
    if(clickable == true){
+     
     if(dragStat==true && selectedArray.length!=0){
-     timeClicked = Math.floor(Date.now() / 1000);
+    
      console.log(timeClicked);
       $('#List').menu("enable");
       _.forEach(selectedArray, function(p){
@@ -432,6 +436,7 @@ if(trial.training==true){
      if(clickable == true){
         //When entering a stroke during dragging
         if(p.alreadyClicked == false && p.highlit==false && dragStat==true){
+          timeClicked = Date.now();
           p.highlit=true;
           selectedArray[numLitStrokes]=p;
           selectedArray[numLitStrokes].strokeColor = "rgb(100,100,100)";
@@ -510,7 +515,7 @@ if(trial.training==true){
             var start = svgstring.indexOf('d="')+3;
             numLitStrokes=0;
             dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-              "label": text, "strokeColor": p.strokeColor, "timeClicked" : timeClicked, "timeLabeled": Math.floor(Date.now() / 1000), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum});
+              "label": text, "strokeColor": p.strokeColor, "timeClicked" : timeClicked, "timeLabeled": Date.now(), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum});
             p.strokeWidth=5;
           
          });        
@@ -559,7 +564,7 @@ if(trial.training==true){
               "label": "unknown", 
               "strokeColor": p.strokeColor,
               "timeClicked" : timeClicked, 
-              "timeLabeled": Math.floor(Date.now() / 1000), 
+              "timeLabeled": Date.now(), 
               "cumulativeSplineNum" : p.strokeNum, 
               "strokeNum":p.masterStrokeNum, 
               "withinStrokeSplineNum": p.withinStrokeSplineNum});
@@ -626,7 +631,7 @@ if(trial.training==true){
           svgstring = p.exportSVG({asString: true});
           var start = svgstring.indexOf('d="')+3;
           dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-            "label": "NA", "strokeColor": p.strokeColor, "timeClicked" : "NA", "timeLabeled": Math.floor(Date.now() / 1000), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum});
+            "label": "NA", "strokeColor": p.strokeColor, "timeClicked" : "NA", "timeLabeled": Date.now(), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum});
 
         }
       })
@@ -686,7 +691,7 @@ if(trial.training==true){
           var start = svgstring.indexOf('d="')+3;
           numLitStrokes=0;
           dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-            "label": UI, "strokeColor": p.strokeColor, "timeClicked" : timeClicked, "timeLabeled": Math.floor(Date.now() / 1000), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum});
+            "label": UI, "strokeColor": p.strokeColor, "timeClicked" : timeClicked, "timeLabeled": Date.now(), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum});
 
         });        
         c=c+selectedArray.length;
