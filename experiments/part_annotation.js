@@ -35,7 +35,10 @@ jsPsych.plugins['part_annotation'] = (function(){
   var numLitStrokes=0; 
   var splineArray;   
   var timeLabeled;
-  var confettiCount= 200;  
+  var confettiCount= 200; 
+  var colorChecked = false;
+  var similarityThreshold=0.8; 
+  var colorFlag = false;
 
   //Setting colors for the menu items ROYGBIV from left to right
   //Setting RGB values to interpolate between 
@@ -85,7 +88,9 @@ jsPsych.plugins['part_annotation'] = (function(){
       </fieldset>\
       </form>\
       </div> \
-      </div>');
+      </div>\
+      <div id= "colorCheck" title="Are you sure?">It looks like you used the same label for a lot of strokes! Why not take a second to check\
+      your labeling just to be sure? Once you are done, click on the "next sketch" button again to continue</div>');
 
     paper.setup('myCanvas');
     listgen();
@@ -97,7 +102,8 @@ jsPsych.plugins['part_annotation'] = (function(){
 
 //Ending trial and creating trial data to be sent to db. Also resetting HTML elements
 var end_trial = function(results) {
- var timeStamp = Date.now();
+ 
+ var time = Date.now();
  selectedArray=[];
  if(trial.training==false){
    totalBonus=totalBonus+Bonus;
@@ -111,9 +117,10 @@ var end_trial = function(results) {
      dbname: 'svgAnnotation',
      colname: 'examples',
      iterationName: 'testing8',
-     time: timeStamp,
+     time: time,
      numSplines: totalSplines,
      condition: trial.condition,
+     colorFlag:colorFlag,
      numStrokes: trial.numStrokes,
      trialNum: trial.trialNum,
      originalGameID : trial.gameID,     
@@ -123,6 +130,7 @@ var end_trial = function(results) {
      originalResponse:trial.response,
      annotations: results
    });
+    console.log(trial_data);
 
       // clear the display
       display_element.innerHTML = '';
@@ -198,6 +206,23 @@ var end_trial = function(results) {
     drop(x);             
   });
 }
+  function sameColorCheck(pathArray){
+    if(colorChecked==true){
+      return(false);
+    }
+    var sameColStrokes=1;
+    for(var i=1;i<dict.length;i++){
+       console.log(dict.length,dict[i].label,dict[0].label);
+      if(dict[i].label==dict[0].label){
+      sameColStrokes++;
+      }}
+     
+    if(sameColStrokes/dict.length>=similarityThreshold){
+      return(true);
+    }else{return(false)}
+    
+
+  }
 
 
 //Main Display function for Canvas events
@@ -215,7 +240,8 @@ if(trial.training==true){
 
   //Creating the 'next sketch' button
   $("#nextButton").click(function(){
-    if(c==pathArray.length){
+    
+    if(c==pathArray.length&& sameColorCheck(pathArray)==false){
       var dataURL = document.getElementById('myCanvas').toDataURL();
       dataURL = dataURL.replace('data:image/png;base64,',''); 
       var category = trial.category;
@@ -249,6 +275,10 @@ if(trial.training==true){
 
       //Opening a confirmation box if all strokes haven't been labeled
 
+    }else if(c==pathArray.length&& sameColorCheck(pathArray)==true){
+      colorFlag=true;
+        $("#colorCheck").dialog("open");
+       
     }else if(trial.training==false&&c<pathArray.length){
       $('#confirmContinue').dialog("open")}}
       );
@@ -359,10 +389,10 @@ totalSplines= numPaths;
           if(dict.length>0){
             $('#List').menu("enable");
             for(var i=0; i<dict.length; i++){
-              if(p.strokeNum==dict[i].strokeNum){
-                var changed =false;
+              if(p.strokeNum==dict[i].cumulativeSplineNum){
+              var changed =false;
             //Changing menu color properties of previous label to distinguish it from others and to match it to current stroke color
-            for(var j=0; j<$('#List li').length-1;j++){
+            for(var j=0; j<$('#List li').length-2;j++){
               if($('li div')[j].innerHTML==dict[i].label){
                 $($('li div')[j]).css("background-color", "#660000");
                 $($('li div')[j]).css("color", "#f4d142");
@@ -370,13 +400,22 @@ totalSplines= numPaths;
                 $($('li div')[j]).css("border-color", "black");
                 changed = true;
               } }
-              if(changed==false){
+                if(dict[i].label=="unknown"){
+                $($('li div')[$('#List li').length-2]).css("background-color", "#660000");
+                $($('li div')[$('#List li').length-2]).css("color", "#f4d142");
+                $($('li div')[$('#List li').length-2]).css("border-width", 3);
+                $($('li div')[$('#List li').length-2]).css("border-color", "black");
+                changed = true;
+              }
+
+              else if(changed==false){
                 $($('li div')[$('#List li').length-1]).css("background-color", "#660000");
                 $($('li div')[$('#List li').length-1]).css("color", "#f4d142");
                 $($('li div')[$('#List li').length-1]).css("border-width", 3);
                 $($('li div')[$('#List li').length-1]).css("border-color", "black");
               }
-              dict.splice(i,1);}
+              dict.splice(i,1);
+              console.log(dict);}
             }
           } 
         }
@@ -515,6 +554,7 @@ totalSplines= numPaths;
             numLitStrokes=0;
             dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
               "label": text, "strokeColor": p.strokeColor, "timeClicked" : timeClicked, "timeLabeled": Date.now(), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum});
+            console.log(dict);
             p.strokeWidth=5;
           
          });        
@@ -567,6 +607,7 @@ totalSplines= numPaths;
               "cumulativeSplineNum" : p.strokeNum, 
               "strokeNum":p.masterStrokeNum, 
               "withinStrokeSplineNum": p.withinStrokeSplineNum});
+            console.log(dict);
             p.strokeWidth=5;
 
 
@@ -631,7 +672,7 @@ totalSplines= numPaths;
           var start = svgstring.indexOf('d="')+3;
           dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
             "label": "NA", "strokeColor": p.strokeColor, "timeClicked" : "NA", "timeLabeled": Date.now(), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum});
-
+          console.log(dict);
         }
       })
       var tempObj={};
@@ -691,7 +732,7 @@ totalSplines= numPaths;
           numLitStrokes=0;
           dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
             "label": UI, "strokeColor": p.strokeColor, "timeClicked" : timeClicked, "timeLabeled": Date.now(), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum});
-
+          console.log(dict); 
         });        
         c=c+selectedArray.length;
         if(c==pathArray.length){
@@ -716,8 +757,23 @@ totalSplines= numPaths;
       }
     }
   });
-}    
+  $("#colorCheck").dialog({
+    autoOpen: false,
+    height: 400,
+    width: 350,
+    modal: true,
+    open : function(event, ui){
+    originalContent = $("#colorCheck").html();
+    },
+    buttons:{
+      "Ok": function(){
+        $(this).dialog("close");
+        colorChecked=true;
+      },
+    }
+  })
 
+}    
 }
 return plugin;
 })();
