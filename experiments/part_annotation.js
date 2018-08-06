@@ -319,10 +319,7 @@ if(trial.training==true){
   })
 
 
-
-
   //Actually displaying the sketch
-
   tempPath = new Array;
   for(var i =0; i<sketch.length;i++){
     tempPath[i] = new Path(sketch[i]);
