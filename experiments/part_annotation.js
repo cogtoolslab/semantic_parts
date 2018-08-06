@@ -211,6 +211,7 @@ var end_trial = function(results) {
     if(colorChecked==true){
       return(false);
     }
+    colorChecked=true;
     var sameColStrokes=1;
     for(var i=1;i<dict.length;i++){
        console.log(dict.length,dict[i].label,dict[0].label);
@@ -228,7 +229,7 @@ var end_trial = function(results) {
 
 //Main Display function for Canvas events
 function display(){  
-
+console.log("Trial ID", trial.originalTrialNum)
 //Hiding bonusmeter and progress marker if its the training trial
 if(trial.training==true){
   $("#bonusMeter").text('');
@@ -241,7 +242,7 @@ if(trial.training==true){
 
   //Creating the 'next sketch' button
   $("#nextButton").click(function(){
-    
+    console.log("colorCheck",sameColorCheck(pathArray),colorChecked)
     if(c==pathArray.length&& sameColorCheck(pathArray)==false){
       var dataURL = document.getElementById('myCanvas').toDataURL();
       dataURL = dataURL.replace('data:image/png;base64,',''); 
@@ -276,7 +277,7 @@ if(trial.training==true){
 
       //Opening a confirmation box if all strokes haven't been labeled
 
-    }else if(c==pathArray.length&& sameColorCheck(pathArray)==true){
+    }else if(c==pathArray.length){
       colorFlag=true;
         $("#colorCheck").dialog("open");
        
@@ -288,6 +289,7 @@ if(trial.training==true){
 
   //Displaying the sketch and setting stroke properties
   var svg = trial.svg;
+  console.log("trial.svg looks like this", trial.svg[0][0])
   var numPaths=0;
   for(var k=0;k<svg.length;k++){
 
@@ -768,8 +770,9 @@ totalSplines= numPaths;
     },
     buttons:{
       "Ok": function(){
+        //colorChecked=true;
         $(this).dialog("close");
-        colorChecked=true;
+        ;
       },
     }
   })
