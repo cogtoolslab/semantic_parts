@@ -120,7 +120,7 @@ var end_trial = function(results) {
      time: time,
      numSplines: totalSplines,
      condition: trial.condition,
-     colorFlag:colorFlag,
+     sameAnnotFlag:colorFlag,
      numStrokes: trial.numStrokes,
      trialNum: trial.trialNum,
      originalGameID : trial.gameID,     
