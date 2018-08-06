@@ -229,7 +229,7 @@ var end_trial = function(results) {
 
 //Main Display function for Canvas events
 function display(){  
-console.log("Trial ID", trial.originalTrialNum)
+console.log("Trial ID", trial.gameID)
 //Hiding bonusmeter and progress marker if its the training trial
 if(trial.training==true){
   $("#bonusMeter").text('');
