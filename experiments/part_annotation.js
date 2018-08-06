@@ -19,32 +19,33 @@ jsPsych.plugins['part_annotation'] = (function(){
   }
   plugin.trial = function(display_element, trial) {
   //More initializations
+  var dict=[];
+  var results=[];
+  var timeClicked;
+  var timeLabeled;
   var tool = new Tool();
   var totalSplines;
-  var dict=[];
   var Bonus=0;
-  var results=[];
   var tempSketch=[];
   var sketch=[];
   var pathArray=new Array;
-  var c=0;
-  var timeClicked;
+  var splineArray;   
   var clickable=true;
+  var c=0;
   var otherColor;
   var colNo = 0;
-  var numLitStrokes=0; 
-  var splineArray;   
-  var timeLabeled;
+  var numLitStrokes=0;
   var confettiCount= 200; 
   var colorChecked = false;
   var similarityThreshold=0.8; 
   var colorFlag = false;
+  var splineArcLengthThreshold = 18;
 
   //Setting colors for the menu items ROYGBIV from left to right
   //Setting RGB values to interpolate between 
   var left = [237, 56, 8];
   var right = [56, 209, 237];
-  var splineArcLengthThreshold = 18;
+
 
   //Putting function calls and HTML elements of the jsPsych display element within a 1 second timeout
 
@@ -120,7 +121,7 @@ var end_trial = function(results) {
      time: time,
      numSplines: totalSplines,
      condition: trial.condition,
-     sameAnnotFlag:colorFlag,
+     sameAnnotflag:colorFlag,
      numStrokes: trial.numStrokes,
      trialNum: trial.trialNum,
      originalGameID : trial.gameID,     
@@ -145,7 +146,7 @@ var end_trial = function(results) {
     var partList = trial.parts.toString().split(',');
     var components = [];
     for (var i = 0; i < 3; i++) {
-      components[i] = Math.round(left[i] + (right[i] - left[i]) * colNo/(partList.length+2));
+      components[i] = Math.round(left[i] + (right[i] - left[i]) * colNo/(partList.length));
     }
     return('"'+"rgb"+"("+components[0]+","+components[1]+","+components[2]+")"+'"');
   }
