@@ -37,7 +37,7 @@ jsPsych.plugins['part_annotation'] = (function(){
   var numLitStrokes=0;
   var confettiCount= 200; 
   var colorChecked = false;
-  var similarityThreshold=0.8; 
+  var similarityThreshold=1; 
   var colorFlag = false;
   var splineArcLengthThreshold = 18;
 
