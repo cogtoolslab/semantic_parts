@@ -254,9 +254,9 @@ if(trial.training==true){
           svgstring = p.exportSVG({asString: true});
           var start = svgstring.indexOf('d="')+3;
           dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-            "label": "NA", 
+            "label": NaN, 
             "strokeColor": p.strokeColor, 
-            "timeClicked" : "NA", 
+            "timeClicked" : NaN, 
             "timeLabeled": Date.now(), 
             "cumulativeSplineNum" : p.strokeNum, 
             "strokeNum":p.masterStrokeNum, 
@@ -679,7 +679,7 @@ totalSplines= numPaths;
           svgstring = p.exportSVG({asString: true});
           var start = svgstring.indexOf('d="')+3;
           dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-            "label": "NA", "strokeColor": p.strokeColor, "timeClicked" : "NA", "timeLabeled": Date.now(), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum});
+            "label": NaN, "strokeColor": p.strokeColor, "timeClicked" : NaN, "timeLabeled": Date.now(), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum});
           console.log(dict);
         }
       })
