@@ -12,7 +12,7 @@ function setupExp(){
 
   socket.on('onConnected', function(d) {
     //var numTrials = d.num_trials;
-    var numTrials = 11;
+    var numTrials = 3;
     var id = d.id;
 
     //var renderList = renderList;
@@ -159,8 +159,6 @@ function setupExp(){
      });
 
 
-
-
        jsPsych.resumeExperiment();
      };
      socket.removeListener('stimulus', oldCallback);
@@ -179,27 +177,6 @@ function setupExp(){
      on_start: main_on_start
    };
  }
-
-
- trials[(tmp.num_trials/2)+3] ={
-  type: tmp.type,
-  trialNum:tmp.num_trials/2,
-  num_trials:1,
-  on_finish: main_on_finish
-
-};
-trials[(tmp.num_trials/2)+3].training = false;
-trials[(tmp.num_trials/2)+3].svg = data.svg;
-trials[(tmp.num_trials/2)+3].parts = data.parts;
-trials[(tmp.num_trials/2)+3].category = data.category;
-trials[(tmp.num_trials/2)+3].renders = data.renders;
-trials[(tmp.num_trials/2)+3].gameID= "7004-6ff0964c-ff95-40f9-8696-d6a8931c94d5";
-trials[(tmp.num_trials/2)+3].condition= "further";
-trials[(tmp.num_trials/2)+3].numStrokes=5;
-trials[(tmp.num_trials/2)+3].outcome=true;
-trials[(tmp.num_trials/2)+3].originalTrialNum=17;
-trials[(tmp.num_trials/2)+3].response="straight";
-//trials[(tmp.num_trials/2)+3].targetPos = 0;
 
 
     // start game
