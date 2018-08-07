@@ -12,6 +12,7 @@ jsPsych.plugins['part_annotation'] = (function(){
   var dragStat=false;
   //initializing array of selected strokes as empty
   var selectedArray=[];
+   var colorChecked = false;
   plugin.info = {
     name: 'part_annotation',
     parameters: {
@@ -36,10 +37,10 @@ jsPsych.plugins['part_annotation'] = (function(){
   var colNo = 0;
   var numLitStrokes=0;
   var confettiCount= 200; 
-  var colorChecked = false;
   var similarityThreshold=1; 
   var colorFlag = false;
   var splineArcLengthThreshold = 18;
+  colorChecked=false;
 
   //Setting colors for the menu items ROYGBIV from left to right
   //Setting RGB values to interpolate between 
@@ -209,9 +210,9 @@ var end_trial = function(results) {
 }
   function sameColorCheck(pathArray){
     if(colorChecked==true){
+      console.log("second pass");
       return(false);
     }
-    colorChecked=true;
     var sameColStrokes=1;
     for(var i=1;i<dict.length;i++){
        console.log(dict.length,dict[i].label,dict[0].label);
@@ -242,7 +243,7 @@ if(trial.training==true){
 
   //Creating the 'next sketch' button
   $("#nextButton").click(function(){
-    console.log("colorCheck",sameColorCheck(pathArray),colorChecked)
+    console.log("colorChecked",colorChecked)
     if(c==pathArray.length&& sameColorCheck(pathArray)==false){
       var dataURL = document.getElementById('myCanvas').toDataURL();
       dataURL = dataURL.replace('data:image/png;base64,',''); 
@@ -294,17 +295,22 @@ if(trial.training==true){
   for(var k=0;k<svg.length;k++){
 
     //converting data to absolute coordinates
-    splineArray = Snap.path.toAbsolute(svg[k]);
-    var copy = Snap.path.toAbsolute(svg[k]);
+    splineArray = Snap.path.toCubic(Snap.path.toAbsolute(svg[k]));
+    var copy = Snap.path.toCubic(Snap.path.toAbsolute(svg[k]));
+    console.log(copy);
 
     //formatting spline data to be able to create paper js paths from them
     var numSplines = 0;
     for(i=0; i<splineArray.length; i++){
-      if(splineArray[i][0]=='M'){
+      if(splineArray[i][0]=='M'&&splineArray[i+1][0]!='M'){
         tempSketch[numSplines] = (splineArray[i].concat(splineArray[i+1]));
         numSplines++;
         i++
-      } else if (splineArray[i][0]=='C'){
+      } else if(splineArray[i][0]=='M'&&splineArray[i+1][0]=='M'){
+        tempSketch[numSplines] = splineArray[i];
+        numSplines++
+      } 
+      else if (splineArray[i][0]=='C'){
        splineArray[i].unshift("M",copy[i-1][5],copy[i-1][6]); 
        tempSketch[numSplines] = splineArray[i];
        numSplines++;
@@ -319,10 +325,7 @@ if(trial.training==true){
   })
 
 
-
-
   //Actually displaying the sketch
-
   tempPath = new Array;
   for(var i =0; i<sketch.length;i++){
     tempPath[i] = new Path(sketch[i]);
@@ -454,6 +457,7 @@ totalSplines= numPaths;
 
  //Setting states for when mouse is lifted after dragging and activating menus
  tool.onMouseUp = function(event){
+   console.log("colorchecked",colorChecked)
    //timeClicked = Date.now();
    if(clickable == true){
      
@@ -770,8 +774,9 @@ totalSplines= numPaths;
     },
     buttons:{
       "Ok": function(){
-        //colorChecked=true;
+        colorChecked=true;
         $(this).dialog("close");
+        console.log("colorchecked",colorChecked);
         ;
       },
     }
