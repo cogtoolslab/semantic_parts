@@ -107,7 +107,7 @@ function setupExp(){
 
       var main_on_finish = function(data)  {
         if (data.bonus) {
-          bonus = data.bonus;
+          score = data.bonus;
         }
         socket.emit('currentData', data);
       };
