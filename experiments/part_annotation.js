@@ -118,7 +118,7 @@ var end_trial = function(results) {
      aID : turkInfo.assignmentId,
      dbname: 'svgAnnotation',
      colname: 'examples',
-     iterationName: 'testing9',
+     iterationName: 'sandbox0',
      time: time,
      numSplines: totalSplines,
      condition: trial.condition,
