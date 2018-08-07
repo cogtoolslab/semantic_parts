@@ -1,10 +1,11 @@
 var oldCallback;
 var c;
 var r;
+var score = 0;
 
 function sendData() {
-  //console.log('sending data to mturk');
-  jsPsych.turk.submitToTurk({});
+  console.log('sending data to mturk');
+  jsPsych.turk.submitToTurk({'score':score});
 }
 
 function setupExp(){
@@ -104,6 +105,9 @@ function setupExp(){
       trials[tmp.num_trials +3] = goodbye;
 
       var main_on_finish = function(data)  {
+        if (data.bonus) {
+          bonus = data.bonus;
+        }
         socket.emit('currentData', data);
       };
 

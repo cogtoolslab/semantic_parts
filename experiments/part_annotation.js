@@ -53,7 +53,7 @@ jsPsych.plugins['part_annotation'] = (function(){
   setTimeout(function() {
     //Setting up HTML for each trial
     display_element.innerHTML += ('<div class ="wrapper"></div><p id= "bonusMeter" style="font-size:25px;text-align:left; float:left;">Bonus: $ '+ totalBonus.toFixed(3)+'</p>\
-      <p id="trialNum"style="text-align:right; font-size:25px"> '+(trial.trialNum+1)+" of "+11+'</p><div id="main_container" style="width:1000px;height:600px; margin:auto;"> \
+      <p id="trialNum"style="text-align:right; font-size:25px"> '+(trial.trialNum+1)+" of "+trial.num_trials+'</p><div id="main_container" style="width:1000px;height:600px; margin:auto;"> \
       <div id= "upper_container" style="margin:auto; width:710px">\
       <div style="float:right; padding-top:43px;left:5px"><ul id="List" style="margin:auto;"></ul></div>\
       <div id="canvas_container" style="width:300px;display:absolute;margin:auto;">\
@@ -118,7 +118,8 @@ var end_trial = function(results) {
      aID : turkInfo.assignmentId,
      dbname: 'svgAnnotation',
      colname: 'examples',
-     iterationName: 'sandbox0',
+     iterationName: 'sandbox1',
+     bonus: totalBonus,
      time: time,
      numSplines: totalSplines,
      condition: trial.condition,
@@ -132,7 +133,7 @@ var end_trial = function(results) {
      originalResponse:trial.response,
      annotations: results
    });
-    console.log(trial_data);
+     console.log(trial_data);
 
       // clear the display
       display_element.innerHTML = '';
@@ -210,12 +211,12 @@ var end_trial = function(results) {
 }
   function sameColorCheck(pathArray){
     if(colorChecked==true){
-      console.log("second pass");
+      // console.log("second pass");
       return(false);
     }
     var sameColStrokes=1;
     for(var i=1;i<dict.length;i++){
-       console.log(dict.length,dict[i].label,dict[0].label);
+       // console.log(dict.length,dict[i].label,dict[0].label);
       if(dict[i].label==dict[0].label){
       sameColStrokes++;
       }}
@@ -230,7 +231,7 @@ var end_trial = function(results) {
 
 //Main Display function for Canvas events
 function display(){  
-console.log("Trial ID", trial.gameID)
+// console.log("Trial ID", trial.gameID)
 //Hiding bonusmeter and progress marker if its the training trial
 if(trial.training==true){
   $("#bonusMeter").text('');
