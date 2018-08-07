@@ -13,7 +13,7 @@ function setupExp(){
 
   socket.on('onConnected', function(d) {
     //var numTrials = d.num_trials;
-    var numTrials = 3;
+    var numTrials = 10;
     var id = d.id;
 
     //var renderList = renderList;
