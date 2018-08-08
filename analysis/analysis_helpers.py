@@ -3,7 +3,6 @@ import numpy as np
 import seaborn as sns
 import pandas as pd
 
-
 ## this is where we will place analysis helper functions
 
 def convert_numeric(X,column_id):
