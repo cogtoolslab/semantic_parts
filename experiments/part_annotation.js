@@ -12,7 +12,7 @@ jsPsych.plugins['part_annotation'] = (function(){
   var dragStat=false;
   //initializing array of selected strokes as empty
   var selectedArray=[];
-   var colorChecked = false;
+  var colorChecked = false;
   plugin.info = {
     name: 'part_annotation',
     parameters: {
@@ -20,7 +20,7 @@ jsPsych.plugins['part_annotation'] = (function(){
   }
   plugin.trial = function(display_element, trial) {
   //More initializations
-  var dict=[];
+  var dict= [];
   var results=[];
   var timeClicked;
   var timeLabeled;
@@ -41,6 +41,7 @@ jsPsych.plugins['part_annotation'] = (function(){
   var colorFlag = false;
   var splineArcLengthThreshold = 18;
   colorChecked=false;
+  var bout=0
 
   //Setting colors for the menu items ROYGBIV from left to right
   //Setting RGB values to interpolate between 
@@ -104,7 +105,7 @@ jsPsych.plugins['part_annotation'] = (function(){
 
 //Ending trial and creating trial data to be sent to db. Also resetting HTML elements
 var end_trial = function(results) {
- 
+
  var time = Date.now();
  selectedArray=[];
  if(trial.training==false){
@@ -133,7 +134,7 @@ var end_trial = function(results) {
      originalResponse:trial.response,
      annotations: results
    });
-     console.log(trial_data);
+   console.log(trial_data);
 
       // clear the display
       display_element.innerHTML = '';
@@ -209,30 +210,31 @@ var end_trial = function(results) {
     drop(x);             
   });
 }
-  function sameColorCheck(pathArray){
-    if(colorChecked==true){
+function sameColorCheck(pathArray){
+  if(colorChecked==true){
       // console.log("second pass");
       return(false);
     }
     var sameColStrokes=1;
     for(var i=1;i<dict.length;i++){
        // console.log(dict.length,dict[i].label,dict[0].label);
-      if(dict[i].label==dict[0].label){
-      sameColStrokes++;
+       if(dict[i].label==dict[0].label){
+        sameColStrokes++;
       }}
-     
-    if(sameColStrokes/dict.length>=similarityThreshold){
-      return(true);
-    }else{return(false)}
-    
 
-  }
+      if(sameColStrokes/dict.length>=similarityThreshold){
+        return(true);
+      }else{return(false)}
+
+
+    }
 
 
 //Main Display function for Canvas events
 function display(){  
 // console.log("Trial ID", trial.gameID)
 //Hiding bonusmeter and progress marker if its the training trial
+
 if(trial.training==true){
   $("#bonusMeter").text('');
   $("#trialNum").text('');
@@ -281,8 +283,8 @@ if(trial.training==true){
 
     }else if(c==pathArray.length){
       colorFlag=true;
-        $("#colorCheck").dialog("open");
-       
+      $("#colorCheck").dialog("open");
+
     }else if(trial.training==false&&c<pathArray.length){
       $('#confirmContinue').dialog("open")}}
       );
@@ -291,14 +293,14 @@ if(trial.training==true){
 
   //Displaying the sketch and setting stroke properties
   var svg = trial.svg;
-  console.log("trial.svg looks like this", trial.svg[0][0])
+  //console.log("trial.svg looks like this", trial.svg[0][0])
   var numPaths=0;
   for(var k=0;k<svg.length;k++){
 
     //converting data to absolute coordinates
     splineArray = Snap.path.toCubic(Snap.path.toAbsolute(svg[k]));
     var copy = Snap.path.toCubic(Snap.path.toAbsolute(svg[k]));
-    console.log(copy);
+    //console.log(copy);
 
     //formatting spline data to be able to create paper js paths from them
     var numSplines = 0;
@@ -397,7 +399,7 @@ totalSplines= numPaths;
             $('#List').menu("enable");
             for(var i=0; i<dict.length; i++){
               if(p.strokeNum==dict[i].cumulativeSplineNum){
-              var changed =false;
+                var changed =false;
             //Changing menu color properties of previous label to distinguish it from others and to match it to current stroke color
             for(var j=0; j<$('#List li').length-2;j++){
               if($('li div')[j].innerHTML==dict[i].label){
@@ -407,7 +409,7 @@ totalSplines= numPaths;
                 $($('li div')[j]).css("border-color", "black");
                 changed = true;
               } }
-                if(dict[i].label=="unknown"){
+              if(dict[i].label=="unknown"){
                 $($('li div')[$('#List li').length-2]).css("background-color", "#660000");
                 $($('li div')[$('#List li').length-2]).css("color", "#f4d142");
                 $($('li div')[$('#List li').length-2]).css("border-width", 3);
@@ -461,18 +463,18 @@ totalSplines= numPaths;
    console.log("colorchecked",colorChecked)
    //timeClicked = Date.now();
    if(clickable == true){
-     
-    if(dragStat==true && selectedArray.length!=0){
-    
-     console.log(timeClicked);
-      $('#List').menu("enable");
-      _.forEach(selectedArray, function(p){
-        p.highlit = true;
-        p.strokeColor = "rgb(200,200,200)";});
-    }
-    dragStat=false;
 
-  } }
+    if(dragStat==true && selectedArray.length!=0){
+
+     console.log(timeClicked);
+     $('#List').menu("enable");
+     _.forEach(selectedArray, function(p){
+      p.highlit = true;
+      p.strokeColor = "rgb(200,200,200)";});
+   }
+   dragStat=false;
+
+ } }
 
 
   //Hover events for entering and exiting strokes
@@ -526,7 +528,7 @@ totalSplines= numPaths;
     other.appendTo("#List");
 
   }
-    
+
   //Function for creating menu and free response box widgets from the list created by listgen()
   function menugen(){
     //disabling enter key submit 
@@ -549,9 +551,45 @@ totalSplines= numPaths;
         var text = ui.item.text();
         if(text!='Other'&& text!="I can't tell"){
 
-          _.forEach(selectedArray,function(p){ 
-            p.highlit=false;
-            p.sendToBack();
+
+            //dict.label==text
+            var tempBouts = []
+            var tempMaxBout = 0
+            var boutCount= 0
+
+
+            //var tempdict =
+            var Num=0 
+            _.forEach(dict,function(p){
+              if(p.label==text){
+             //tempdict[boutCount]=p
+             tempBouts[boutCount] = p.partBoutNum
+             boutCount= boutCount+1}})
+            console.log(tempBouts)
+
+            tempMaxBout= Math.max.apply(Math, tempBouts) 
+            console.log(tempMaxBout)
+           
+
+            
+            
+
+            //console.log(Math.max(dict[partBoutNum]);
+            /*if( typeof tempMaxBout != undefined){
+              partBoutNum= 0
+            }else{
+              partBoutNum = tempMaxBout+1
+            }*/
+
+             partBoutNum = tempMaxBout+1
+             if (partBoutNum<0){
+              partBoutNum=0
+             }
+            console.log(partBoutNum)
+
+            _.forEach(selectedArray,function(p){ 
+              p.highlit=false;
+              p.sendToBack();
 
             //Setting stroke color to the color of the menu item
             p.strokeColor= ui.item.css("background-color");
@@ -560,19 +598,38 @@ totalSplines= numPaths;
             svgstring = p.exportSVG({asString: true});
             var start = svgstring.indexOf('d="')+3;
             numLitStrokes=0;
-            dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
-              "label": text, "strokeColor": p.strokeColor, "timeClicked" : timeClicked, "timeLabeled": Date.now(), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, "withinStrokeSplineNum": p.withinStrokeSplineNum});
-            console.log(dict);
-            p.strokeWidth=5;
-          
-         });        
+            
 
-          c=c+selectedArray.length;
+
+
+
+
+
+            dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
+              "label": text, "strokeColor": p.strokeColor, "timeClicked" : timeClicked, "timeLabeled": Date.now(), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, 
+              "withinStrokeSplineNum": p.withinStrokeSplineNum, "boutNum":bout, "partBoutNum":partBoutNum});
+            
+
+
+
+            //console.log(dict);
+            p.strokeWidth=5;
+
+          }); 
+
+            bout=bout+1
+            console.log(dict)
+            
+
+
+
+
+            c=c+selectedArray.length;
           //Progress marker updates and checking for whether confetti should fall
           if(c==pathArray.length){
             if(trial.training==false){
              totalBonus = totalBonus+0.02;
-            }
+           }
            for (var i = 0; i < confettiCount; i++) {
             create(i);
           }}
@@ -627,7 +684,7 @@ totalSplines= numPaths;
          if(c==pathArray.length){
            if(trial.training==false){
              totalBonus = totalBonus+0.02;
-            }
+           }
            for (var i = 0; i < confettiCount; i++) {
             create(i);
           }}
@@ -744,9 +801,9 @@ totalSplines= numPaths;
         });        
         c=c+selectedArray.length;
         if(c==pathArray.length){
-           if(trial.training==false){
-             totalBonus = totalBonus+0.02;
-            }
+         if(trial.training==false){
+           totalBonus = totalBonus+0.02;
+         }
          for (var i = 0; i < confettiCount; i++) {
           create(i);}}
         //progress bar update
@@ -771,7 +828,7 @@ totalSplines= numPaths;
     width: 350,
     modal: true,
     open : function(event, ui){
-    originalContent = $("#colorCheck").html();
+      originalContent = $("#colorCheck").html();
     },
     buttons:{
       "Ok": function(){
