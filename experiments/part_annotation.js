@@ -37,9 +37,10 @@ jsPsych.plugins['part_annotation'] = (function(){
   var colNo = 0;
   var numLitStrokes=0;
   var confettiCount= 200; 
-  var similarityThreshold=1; 
+  var similarityThreshold=0.9; 
   var colorFlag = false;
   var splineArcLengthThreshold = 18;
+  var maxSameColStrokes
   colorChecked=false;
   var bout=0
 
@@ -53,7 +54,8 @@ jsPsych.plugins['part_annotation'] = (function(){
 
   setTimeout(function() {
     //Setting up HTML for each trial
-    display_element.innerHTML += ('<div class ="wrapper"></div><p id= "bonusMeter" style="font-size:25px;text-align:left; float:left;">Bonus: $ '+ totalBonus.toFixed(3)+'</p>\
+    display_element.innerHTML += ('<a id="downloadAnchorElem" style="display:none"></a>\
+      <div class ="wrapper"></div><p id= "bonusMeter" style="font-size:25px;text-align:left; float:left;">Bonus: $ '+ totalBonus.toFixed(3)+'</p>\
       <p id="trialNum"style="text-align:right; font-size:25px"> '+(trial.trialNum+1)+" of "+trial.num_trials+'</p><div id="main_container" style="width:1000px;height:600px; margin:auto;"> \
       <div id= "upper_container" style="margin:auto; width:710px">\
       <div style="float:right; padding-top:43px;left:5px"><ul id="List" style="margin:auto;"></ul></div>\
@@ -192,6 +194,7 @@ var end_trial = function(results) {
   }
 
 
+
   //Dropping created confetti
   function drop(x) {
    $('.confetti-'+x).animate({
@@ -210,29 +213,41 @@ var end_trial = function(results) {
     drop(x);             
   });
 }
+
+
+//Checking to make sure too many stokes have not been annotated with the same label
 function sameColorCheck(pathArray){
   if(colorChecked==true){
       // console.log("second pass");
       return(false);
     }
-    var sameColStrokes=1;
-    for(var i=1;i<dict.length;i++){
+    var sameColStrokesArr=[]
+    
+    for(var i=0;i<dict.length;i++){
+      var sameColStrokes=1;
        // console.log(dict.length,dict[i].label,dict[0].label);
-       if(dict[i].label==dict[0].label){
-        sameColStrokes++;
-      }}
+       _.forEach(dict, function(p){
+        if(p.label==dict[i].label){
+         sameColStrokes++;
+       }
+     })
+       sameColStrokesArr[i]=sameColStrokes
+     }
+     maxSameColStrokes = Math.max.apply(Math, sameColStrokesArr) 
+     console.log(sameColStrokesArr)
 
-      if(sameColStrokes/dict.length>=similarityThreshold){
-        return(true);
-      }else{return(false)}
+     if(maxSameColStrokes/dict.length>=similarityThreshold){
+      return(true);
+    }else{return(false)}
 
 
-    }
+  }
 
 
-//Main Display function for Canvas events
+//------Main Display function for Canvas events------//
+
 function display(){  
-// console.log("Trial ID", trial.gameID)
+
 //Hiding bonusmeter and progress marker if its the training trial
 
 if(trial.training==true){
@@ -279,10 +294,22 @@ if(trial.training==true){
       $("#List").menu("destroy");
       $("#dialog-form").dialog("destroy");
       $("#confirmContinue").dialog("destroy");
+
+      //Some code to download the results json locally for checking purposes
+      /*
+
+      var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(results);
+      var dlAnchorElem = document.getElementById('downloadAnchorElem');
+      dlAnchorElem.setAttribute("href",     dataStr     );
+      dlAnchorElem.setAttribute("download", "scene.json");
+      dlAnchorElem.click();
+
+      */
+
       end_trial(results);
 
-      //Opening a confirmation box if all strokes haven't been labeled
 
+      //Opening a confirmation box if all strokes haven't been labeled
     }else if(c==pathArray.length){
       colorFlag=true;
       $("#colorCheck").dialog("open");
@@ -293,7 +320,8 @@ if(trial.training==true){
 
 
 
-  //Displaying the sketch and setting stroke properties
+  //----------Displaying the sketch and setting stroke properties--------//
+
   var svg = trial.svg;
   //console.log("trial.svg looks like this", trial.svg[0][0])
   var numPaths=0;
@@ -371,15 +399,15 @@ totalSplines= numPaths;
 
 
 
-   //Click and Hover event handlers
+   //-----------Click and Hover event handlers----------//
 
 
    _.forEach(pathArray, function(p) {
     //Single click handlers
     p.onClick = function(event) {
       if(clickable == true){ 
-        //Selecting a new stroke that hasn't been labeled
-        //Normal single click labeling
+
+        //Normal single click labeling for labeled and unlabeled strokes
 
 
         //if(p.alreadyClicked==false && p.highlit==false){
@@ -393,7 +421,7 @@ totalSplines= numPaths;
             console.log("array of selected strokes",selectedArray)}
 
 
-        //Reselecting an already labeled stroke
+        // Currently deprecated code for selecting an already labeled stroke
 
         /*
         else if(p.alreadyClicked==true && selectedArray.length==0){
@@ -438,6 +466,7 @@ totalSplines= numPaths;
 
 
       //Deselecting a stroke that was accidentally highlighted
+
       //else if(p.alreadyClicked== false && p.highlit==true){
         else if(p.highlit==true){ 
           numLitStrokes--;
@@ -504,20 +533,20 @@ totalSplines= numPaths;
      if(clickable == true){
         //When entering a stroke during dragging
         //if(p.alreadyClicked == false && p.highlit==false && dragStat==true){
-        if(p.highlit==false && dragStat==true){  
-          timeClicked = Date.now();
-          p.highlit=true;
-          selectedArray[numLitStrokes]=p;
-          selectedArray[numLitStrokes].strokeColor = "rgb(100,100,100)";
-          numLitStrokes++
-        }
+          if(p.highlit==false && dragStat==true){  
+            timeClicked = Date.now();
+            p.highlit=true;
+            selectedArray[numLitStrokes]=p;
+            selectedArray[numLitStrokes].strokeColor = "rgb(100,100,100)";
+            numLitStrokes++
+          }
         //When entering a stroke while not dragging 
         //else if (p.alreadyClicked == false && p.highlit==false && dragStat==false){
-        else if (p.highlit==false && dragStat==false){  
-          p.strokeColor = "rgb(100,100,100)";
+          else if (p.highlit==false && dragStat==false){  
+            p.strokeColor = "rgb(100,100,100)";
+          }
         }
-      }
-    }});
+      }});
 
   _.forEach(pathArray, function(p){
     //Setting stroke color back to black on exit from stroke, if not dragging
@@ -527,15 +556,15 @@ totalSplines= numPaths;
        if(p.highlit==false && dragStat==false){
         if(p.alreadyClicked==false){
          p.strokeColor = "rgb(0,0,0)"; 
-        }else if(p.alreadyClicked==true){
-          for(var i=0; i<dict.length;i++){
-            if(p.strokeNum==dict[i].cumulativeSplineNum){
-              p.strokeColor=dict[i].strokeColor
-            }
+       }else if(p.alreadyClicked==true){
+        for(var i=0; i<dict.length;i++){
+          if(p.strokeNum==dict[i].cumulativeSplineNum){
+            p.strokeColor=dict[i].strokeColor
           }
         }
-      }}
-    } }); 
+      }
+    }}
+  } }); 
 }
 
 
@@ -583,17 +612,14 @@ totalSplines= numPaths;
         if(text!='Other'&& text!="I can't tell"){
 
 
-            //dict.label==text
-            var tempBouts = []
-            var tempMaxBout = 0
-            var boutCount= 0
-            var numRelabeled=0
+          var tempBouts = []
+          var tempMaxBout = 0
+          var boutCount= 0
+          var numRelabeled=0
 
 
-            //var tempdict =
-            var Num=0 
-            _.forEach(dict,function(p){
-              if(p.label==text){
+          _.forEach(dict,function(p){
+            if(p.label==text){
              //tempdict[boutCount]=p
              tempBouts[boutCount] = p.partBoutNum
              boutCount= boutCount+1}})
@@ -654,13 +680,13 @@ totalSplines= numPaths;
             dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
               "label": text, "strokeColor": p.strokeColor, "timeClicked" : timeClicked, "timeLabeled": Date.now(), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, 
               "withinStrokeSplineNum": p.withinStrokeSplineNum, "boutNum":bout, "partBoutNum":partBoutNum});
-             p.strokeWidth=5;
-             numRelabeled++
+            p.strokeWidth=5;
+            numRelabeled++
              //selectedArray.splice(selectedArray.indexOf(p),1)
 
-          }
+           }
 
-          }); 
+         }); 
 
             bout=bout+1
             console.log(dict)
@@ -700,9 +726,47 @@ totalSplines= numPaths;
           otherColor = ui.item.css("background-color");
           $("#dialog-form").dialog("open");
         } else if(text =="I can't tell"){
-         _.forEach(selectedArray,function(p){ 
-          p.highlit=false;
-          p.sendToBack();
+
+         var tempBouts = []
+         var tempMaxBout = 0
+         var boutCount= 0
+         var numRelabeled=0
+
+
+         _.forEach(dict,function(p){
+          if(p.label==text){
+             //tempdict[boutCount]=p
+             tempBouts[boutCount] = p.partBoutNum
+             boutCount= boutCount+1}})
+            //console.log(tempBouts)
+
+            tempMaxBout= Math.max.apply(Math, tempBouts) 
+            //console.log(tempMaxBout)
+
+
+            partBoutNum = tempMaxBout+1
+            if (partBoutNum<0){
+              partBoutNum=0
+            }
+
+
+
+            _.forEach(selectedArray,function(p){ 
+              p.highlit=false;
+              p.sendToBack();
+              var toRemove = false
+              var removeLoc
+
+                for(var i =0; i<dict.length;i++){
+                if(p.strokeNum==dict[i].cumulativeSplineNum){
+                  toRemove=true
+                  removeLoc=i
+                }
+              }
+
+               if(toRemove==false){
+
+
             //Setting stroke color to the color of the menu item
             p.strokeColor= ui.item.css("background-color");
             p.alreadyClicked=true;
@@ -716,23 +780,39 @@ totalSplines= numPaths;
               "timeLabeled": Date.now(), 
               "cumulativeSplineNum" : p.strokeNum, 
               "strokeNum":p.masterStrokeNum, 
-              "withinStrokeSplineNum": p.withinStrokeSplineNum});
+              "withinStrokeSplineNum": p.withinStrokeSplineNum,
+              "boutNum":bout,
+              "partBoutNum":partBoutNum
+            });
             console.log(dict);
             p.strokeWidth=5;
+          }else if(toRemove==true){
+            dict.splice(removeLoc,1)
+            p.strokeColor= ui.item.css("background-color");
+            p.alreadyClicked=true;
+            svgstring = p.exportSVG({asString: true});
+            var start = svgstring.indexOf('d="')+3;
+            numLitStrokes=0; 
+            dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
+              "label": "unknown", "strokeColor": p.strokeColor, "timeClicked" : timeClicked, "timeLabeled": Date.now(), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, 
+              "withinStrokeSplineNum": p.withinStrokeSplineNum, "boutNum":bout, "partBoutNum":partBoutNum});
+            p.strokeWidth=5;
+            numRelabeled++
+             //selectedArray.splice(selectedArray.indexOf(p),1)
 
-
-
-
-          });        
-
-         c=c+selectedArray.length;
-         if(c==pathArray.length){
-           if(trial.training==false){
-             totalBonus = totalBonus+0.02;
            }
-           for (var i = 0; i < confettiCount; i++) {
-            create(i);
-          }}
+
+          });  
+            bout=bout+1      
+
+            c=c+selectedArray.length- numRelabeled;
+            if(c==pathArray.length){
+             if(trial.training==false){
+               totalBonus = totalBonus+0.02;
+             }
+             for (var i = 0; i < confettiCount; i++) {
+              create(i);
+            }}
           //Progress marker updates and checking for whether confetti should fall
           $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
           $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
@@ -761,7 +841,7 @@ totalSplines= numPaths;
       });
 
 
-  //Free response dialog box 
+  //dialog form for checking if the participant really wants to progress when all strokes not labeled
 
   $("#confirmContinue").dialog({
     autoOpen: false,
@@ -803,6 +883,8 @@ totalSplines= numPaths;
   }
 })
 
+  //Free response dialog box 
+
   $( "#dialog-form" ).dialog({
     autoOpen: false,
     height: 400,
@@ -818,9 +900,20 @@ totalSplines= numPaths;
     {
 
       "Back": function(){
-        console.log("Back press selected array", selectedArray)
         _.forEach(selectedArray, function(p){
+          if(p.alreadyClicked==false){
           p.strokeColor = 'rgb(0,0,0)';
+          p.highlit=false
+        }else if(p.alreadyClicked==true){
+          for(var i=0; i<dict.length;i++){
+              if(p.strokeNum==dict[i].cumulativeSplineNum){
+                console.log(p.strokeNum, dict[i].cumulativeSplineNum)
+                p.strokeColor=dict[i].strokeColor
+                p.highlit=false
+              }
+            }
+
+        }
         })
         //unclickable = false;
         $("#dialog-form").dialog("close");
@@ -828,26 +921,23 @@ totalSplines= numPaths;
       } ,
 
       Submit: function(ui){
-     
-
-         var tempBouts = []
-            var tempMaxBout = 0
-            var boutCount= 0
-            var numRelabeled=0
 
 
-            //var tempdict =
-            var Num=0 
+       var tempBouts = []
+       var tempMaxBout = 0
+       var boutCount= 0
+       var numRelabeled=0
 
 
-             console.log("array of highlit strokes on menu click",selectedArray)
-            var UI = $("#partName").val();
-             if(UI==""){
-             UI="unknown"
-             }
 
-            _.forEach(dict,function(p){
-              if(p.label==UI){
+       console.log("array of highlit strokes on menu click",selectedArray)
+       var UI = $("#partName").val();
+       if(UI==""){
+         UI="unknown"
+       }
+
+       _.forEach(dict,function(p){
+        if(p.label==UI){
              //tempdict[boutCount]=p
              tempBouts[boutCount] = p.partBoutNum
              boutCount= boutCount+1}})
@@ -862,7 +952,7 @@ totalSplines= numPaths;
               partBoutNum=0
             }
             //console.log(partBoutNum)
-           
+
 
             _.forEach(selectedArray,function(p){ 
               var toRemove = false
@@ -879,7 +969,7 @@ totalSplines= numPaths;
               if(toRemove==false){
 
             //Setting stroke color to the color of the menu item
-               console.log(ui)
+            console.log(ui)
             p.strokeColor= otherColor;
             p.alreadyClicked=true;
             
@@ -909,13 +999,13 @@ totalSplines= numPaths;
             dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
               "label": UI, "strokeColor": p.strokeColor, "timeClicked" : timeClicked, "timeLabeled": Date.now(), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, 
               "withinStrokeSplineNum": p.withinStrokeSplineNum, "boutNum":bout, "partBoutNum":partBoutNum});
-             p.strokeWidth=5;
-             numRelabeled++
+            p.strokeWidth=5;
+            numRelabeled++
              //selectedArray.splice(selectedArray.indexOf(p),1)
 
-          }
+           }
 
-          }); 
+         }); 
 
             bout=bout+1
             console.log(dict)
@@ -1012,23 +1102,23 @@ totalSplines= numPaths;
       }
     }
   });
-  $("#colorCheck").dialog({
-    autoOpen: false,
-    height: 400,
-    width: 350,
-    modal: true,
-    open : function(event, ui){
-      originalContent = $("#colorCheck").html();
+$("#colorCheck").dialog({
+  autoOpen: false,
+  height: 400,
+  width: 350,
+  modal: true,
+  open : function(event, ui){
+    originalContent = $("#colorCheck").html();
+  },
+  buttons:{
+    "Ok": function(){
+      colorChecked=true;
+      $(this).dialog("close");
+      console.log("colorchecked",colorChecked);
+      ;
     },
-    buttons:{
-      "Ok": function(){
-        colorChecked=true;
-        $(this).dialog("close");
-        console.log("colorchecked",colorChecked);
-        ;
-      },
-    }
-  })
+  }
+})
 
 }    
 }
