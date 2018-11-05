@@ -262,7 +262,9 @@ if(trial.training==true){
             "timeLabeled": Date.now(), 
             "cumulativeSplineNum" : p.strokeNum, 
             "strokeNum":p.masterStrokeNum, 
-            "withinStrokeSplineNum": p.withinStrokeSplineNum });
+            "withinStrokeSplineNum": p.withinStrokeSplineNum,
+            "boutNum":NaN,
+            "partBoutNum":NaN });
 
         }
       })
@@ -816,13 +818,158 @@ totalSplines= numPaths;
     {
 
       "Back": function(){
-        selectedArray.strokeColor = 'black';
+        console.log("Back press selected array", selectedArray)
+        _.forEach(selectedArray, function(p){
+          p.strokeColor = 'rgb(0,0,0)';
+        })
         //unclickable = false;
         $("#dialog-form").dialog("close");
         $("#List").menu("enable");
       } ,
 
       Submit: function(ui){
+     
+
+         var tempBouts = []
+            var tempMaxBout = 0
+            var boutCount= 0
+            var numRelabeled=0
+
+
+            //var tempdict =
+            var Num=0 
+
+
+             console.log("array of highlit strokes on menu click",selectedArray)
+            var UI = $("#partName").val();
+             if(UI==""){
+             UI="unknown"
+             }
+
+            _.forEach(dict,function(p){
+              if(p.label==UI){
+             //tempdict[boutCount]=p
+             tempBouts[boutCount] = p.partBoutNum
+             boutCount= boutCount+1}})
+            //console.log(tempBouts)
+
+            tempMaxBout= Math.max.apply(Math, tempBouts) 
+            //console.log(tempMaxBout)
+
+
+            partBoutNum = tempMaxBout+1
+            if (partBoutNum<0){
+              partBoutNum=0
+            }
+            //console.log(partBoutNum)
+           
+
+            _.forEach(selectedArray,function(p){ 
+              var toRemove = false
+              var removeLoc
+              p.highlit=false;
+              p.sendToBack();
+              for(var i =0; i<dict.length;i++){
+                if(p.strokeNum==dict[i].cumulativeSplineNum){
+                  toRemove=true
+                  removeLoc=i
+                }
+
+              }
+              if(toRemove==false){
+
+            //Setting stroke color to the color of the menu item
+               console.log(ui)
+            p.strokeColor= otherColor;
+            p.alreadyClicked=true;
+            
+            svgstring = p.exportSVG({asString: true});
+            var start = svgstring.indexOf('d="')+3;
+            numLitStrokes=0;
+            
+
+
+
+            dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
+              "label": UI, "strokeColor": p.strokeColor, "timeClicked" : timeClicked, "timeLabeled": Date.now(), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, 
+              "withinStrokeSplineNum": p.withinStrokeSplineNum, "boutNum":bout, "partBoutNum":partBoutNum});
+            
+
+
+
+            //console.log(dict);
+            p.strokeWidth=5;
+          }else if(toRemove==true){
+            dict.splice(removeLoc,1)
+            p.strokeColor= otherColor;
+            p.alreadyClicked=true;
+            svgstring = p.exportSVG({asString: true});
+            var start = svgstring.indexOf('d="')+3;
+            numLitStrokes=0; 
+            dict.push({"svgString": svgstring.substring(start, svgstring.indexOf('"',start)),
+              "label": UI, "strokeColor": p.strokeColor, "timeClicked" : timeClicked, "timeLabeled": Date.now(), "cumulativeSplineNum" : p.strokeNum, "strokeNum":p.masterStrokeNum, 
+              "withinStrokeSplineNum": p.withinStrokeSplineNum, "boutNum":bout, "partBoutNum":partBoutNum});
+             p.strokeWidth=5;
+             numRelabeled++
+             //selectedArray.splice(selectedArray.indexOf(p),1)
+
+          }
+
+          }); 
+
+            bout=bout+1
+            console.log(dict)
+            
+
+            c=c+selectedArray.length - numRelabeled;
+          //Progress marker updates and checking for whether confetti should fall
+          if(c==pathArray.length){
+            if(trial.training==false){
+             totalBonus = totalBonus+0.02;
+           }
+           for (var i = 0; i < confettiCount; i++) {
+            create(i);
+          }}
+          $(".progress-bar").css("width", (c/pathArray.length)*100 + '%');
+          $(".progress-bar").attr('aria-valuenow', (c/pathArray.length)*100);
+          $('.progress-bar').html(c+" out of " +pathArray.length +' labeled');
+
+          if(trial.training==false){
+            Bonus=Math.round(c*0.002*1000)/1000;
+            $('#bonusMeter').html("Bonus: $ "+(Bonus+totalBonus).toFixed(3));
+          }
+
+          for( var i = 0; i<pathArray.length; i++){
+            if(pathArray[i].alreadyClicked == false){
+              pathArray[i].strokeWidth = Math.max(5,(c/(pathArray.length))*13);
+            }
+          }
+
+          selectedArray=[];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /*
 
         clickable = true;
         _.forEach(selectedArray,function(p){ 
@@ -859,7 +1006,7 @@ totalSplines= numPaths;
           Bonus=Math.round(c*0.002*1000)/1000;
           $('#bonusMeter').html("Bonus: $ "+(Bonus+totalBonus).toFixed(3));
         }
-        selectedArray=[];
+        selectedArray=[]; */
 
         $(this).dialog("close");
       }
