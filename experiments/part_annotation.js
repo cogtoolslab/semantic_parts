@@ -757,14 +757,14 @@ totalSplines= numPaths;
               var toRemove = false
               var removeLoc
 
-                for(var i =0; i<dict.length;i++){
+              for(var i =0; i<dict.length;i++){
                 if(p.strokeNum==dict[i].cumulativeSplineNum){
                   toRemove=true
                   removeLoc=i
                 }
               }
 
-               if(toRemove==false){
+              if(toRemove==false){
 
 
             //Setting stroke color to the color of the menu item
@@ -802,7 +802,7 @@ totalSplines= numPaths;
 
            }
 
-          });  
+         });  
             bout=bout+1      
 
             c=c+selectedArray.length- numRelabeled;
@@ -902,10 +902,10 @@ totalSplines= numPaths;
       "Back": function(){
         _.forEach(selectedArray, function(p){
           if(p.alreadyClicked==false){
-          p.strokeColor = 'rgb(0,0,0)';
-          p.highlit=false
-        }else if(p.alreadyClicked==true){
-          for(var i=0; i<dict.length;i++){
+            p.strokeColor = 'rgb(0,0,0)';
+            p.highlit=false
+          }else if(p.alreadyClicked==true){
+            for(var i=0; i<dict.length;i++){
               if(p.strokeNum==dict[i].cumulativeSplineNum){
                 console.log(p.strokeNum, dict[i].cumulativeSplineNum)
                 p.strokeColor=dict[i].strokeColor
@@ -913,11 +913,13 @@ totalSplines= numPaths;
               }
             }
 
-        }
+          }
         })
         //unclickable = false;
         $("#dialog-form").dialog("close");
-        $("#List").menu("enable");
+        //$("#List").menu("enable");
+        numLitStrokes=0; 
+        selectedArray=[]
       } ,
 
       Submit: function(ui){
