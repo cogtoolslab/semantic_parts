@@ -33,6 +33,7 @@ jsPsych.plugins['part_annotation'] = (function(){
   var splineArray;   
   var clickable=true;
   var c=0;
+  var numOthers=0;
   var otherColor;
   var colNo = 0;
   var numLitStrokes=0;
@@ -43,6 +44,8 @@ jsPsych.plugins['part_annotation'] = (function(){
   var maxSameColStrokes
   colorChecked=false;
   var bout=0
+  var instCountArr
+  var partList
 
   //Setting colors for the menu items ROYGBIV from left to right
   //Setting RGB values to interpolate between 
@@ -57,8 +60,9 @@ jsPsych.plugins['part_annotation'] = (function(){
     display_element.innerHTML += ('<a id="downloadAnchorElem" style="display:none"></a>\
       <div class ="wrapper"></div><p id= "bonusMeter" style="font-size:25px;text-align:left; float:left;">Bonus: $ '+ totalBonus.toFixed(3)+'</p>\
       <p id="trialNum"style="text-align:right; font-size:25px"> '+(trial.trialNum+1)+" of "+trial.num_trials+'</p><div id="main_container" style="width:1000px;height:600px; margin:auto;"> \
-      <div id= "upper_container" style="margin:auto; width:710px">\
-      <div style="float:right; padding-top:43px;left:5px"><ul id="List" style="margin:auto;"></ul></div>\
+      <div id= "upper_container" style="margin:auto; width:800px">\
+      <div style="float:right; padding-top:43px;left:0px"><ul id="List" style="margin:auto; float:left"></ul>\
+      <div style="float:left; padding-top:0px;left:0px"><ul id="InstCount" style="margin:auto;"></ul></div></div>\
       <div id="canvas_container" style="width:300px;display:absolute;margin:auto;">\
       <p id="Title" style="color:black;height:10%">'+ trial.category+'</p> \
       <canvas id="myCanvas" style="border: 2px solid #000000; border-radius:10px"  \
@@ -98,6 +102,9 @@ jsPsych.plugins['part_annotation'] = (function(){
       your labeling just to be sure? Once you are done, click on the "next sketch" button again to continue</div>');
 
     paper.setup('myCanvas');
+    partList = trial.parts.toString().split(',');
+    instCountArr = Array.apply(null, Array(partList.length+2)).map(Number.prototype.valueOf,0);
+    console.log("This is the arr", instCountArr)
     listgen();
     menugen();
     display();
@@ -255,6 +262,9 @@ if(trial.training==true){
   $("#trialNum").text('');
 }
 
+
+
+
   //Highlighting the target image in context
   $($('.row img')[0]).css({"border-width": "10px", "border-color": "red"});
 
@@ -292,6 +302,7 @@ if(trial.training==true){
       project.activeLayer.removeChildren();
       paper.view.draw();
       $("#List").menu("destroy");
+      $("#InstCount").menu("destroy")
       $("#dialog-form").dialog("destroy");
       $("#confirmContinue").dialog("destroy");
 
@@ -506,7 +517,7 @@ totalSplines= numPaths;
 
    if(clickable == true){
 
-    
+
      dragStat=true;
    }}
 
@@ -532,7 +543,7 @@ totalSplines= numPaths;
    dragStat=false;
 
 
-   
+
 
 
  } }
@@ -542,7 +553,7 @@ totalSplines= numPaths;
 
   _.forEach(pathArray, function(p) {
     p.onMouseEnter = function(event) {
-      
+
      if(clickable == true){
         //When entering a stroke during dragging
         //if(p.alreadyClicked == false && p.highlit==false && dragStat==true){
@@ -593,20 +604,35 @@ totalSplines= numPaths;
   //Generating the list of par labels 
   function listgen(){
     colNo=0
+    instCountInd=0
+    
     $("#List").empty();
+    $("#InstCount").empty();
     var partList = trial.parts.toString().split(',');
     _.forEach(partList, function(p){
       var li = $("<li><div>" + p +"</div></li>" );
+      console.log("hey is this fine?",instCountArr)
+      var inst= $("<li><div id='"+instCountInd+"'>" + instCountArr[instCountInd] +"</div></li>" );
+      instCountInd++
       setColor(li);
       li.appendTo("#List");
+      inst.appendTo("#InstCount");
 
     });
     var unk = $("<li><div>" + "I can't tell"+"</div></li>" )
+
+    var inst= $("<li><div id='"+instCountInd+"'>" + instCountArr[instCountInd]+"</div></li>" );
+    instCountInd++
     setColor(unk);
-    unk.appendTo("#List")
+    unk.appendTo("#List");
+    inst.appendTo("#InstCount");
     var other = $("<li><div>" + "Other" +"</div></li>" );
+
+    var inst= $("<li><div id='"+instCountInd+"'>" + instCountArr[instCountInd]+"</div></li>" );
+    //instCountInd++
     setColor(other);
     other.appendTo("#List");
+    inst.appendTo("#InstCount");
 
   }
 
@@ -619,18 +645,46 @@ totalSplines= numPaths;
 
      //Populating the menu
      //Creating functions for menu interaction
+
+
+
+
+
+
+     $("#InstCount").menu({
+       disabled: true,
+     })
+
+
+
+
+
+
+
      
      $("#List").menu({ 
       disabled: true,
       modal: true,
       select : function(event, ui){
+
         clickable = true;
         //Refreshing the menu on each click;
         listgen();
         $("#List").menu("refresh");
+        $("#InstCount").menu("refresh")
         //Retrieving text element of selected option
         var text = ui.item.text();
+
+        console.log($("#InstCount"))
         if(text!='Other'&& text!="I can't tell"){
+          var loc
+
+          for(var i=0;i<partList.length;i++){
+            if(text==partList[i]){
+              loc=i
+
+            }
+          }
 
 
           var tempBouts = []
@@ -654,6 +708,11 @@ totalSplines= numPaths;
             if (partBoutNum<0){
               partBoutNum=0
             }
+            instCountArr[loc]=partBoutNum+1
+            listgen();
+            $("#List").menu("refresh");
+            $("#InstCount").menu("refresh")
+
             //console.log(partBoutNum)
             console.log("array of highlit strokes on menu click",selectedArray)
 
@@ -743,19 +802,21 @@ totalSplines= numPaths;
           selectedArray=[];
         }
         else if(text == 'Other'){
+
           //Calling free entry box
           otherColor = ui.item.css("background-color");
           $("#dialog-form").dialog("open");
         } else if(text =="I can't tell"){
+          var loc=partList.length
 
-         var tempBouts = []
-         var tempMaxBout = 0
-         var boutCount= 0
-         var numRelabeled=0
+          var tempBouts = []
+          var tempMaxBout = 0
+          var boutCount= 0
+          var numRelabeled=0
 
 
-         _.forEach(dict,function(p){
-          if(p.label==text){
+          _.forEach(dict,function(p){
+            if(p.label=="unknown"){
              //tempdict[boutCount]=p
              tempBouts[boutCount] = p.partBoutNum
              boutCount= boutCount+1}})
@@ -769,6 +830,12 @@ totalSplines= numPaths;
             if (partBoutNum<0){
               partBoutNum=0
             }
+            instCountArr[loc]=partBoutNum+1
+            listgen();
+            $("#List").menu("refresh");
+            $("#InstCount").menu("refresh")
+
+
 
 
 
@@ -896,6 +963,7 @@ totalSplines= numPaths;
       project.activeLayer.removeChildren();
       paper.view.draw();
       $("#List").menu("destroy");
+      $("#InstCount").menu("destroy")
       $("#dialog-form").dialog("destroy");
       $("#confirmContinue").dialog("destroy");
       end_trial(results);
@@ -945,18 +1013,20 @@ totalSplines= numPaths;
       } ,
 
       Submit: function(ui){
+        numOthers++
+        var loc = partList.length+1
 
 
-       var tempBouts = []
-       var tempMaxBout = 0
-       var boutCount= 0
-       var numRelabeled=0
+        var tempBouts = []
+        var tempMaxBout = 0
+        var boutCount= 0
+        var numRelabeled=0
 
 
 
-       console.log("array of highlit strokes on menu click",selectedArray)
-       var UI = $("#partName").val();
-       if(UI==""){
+        console.log("array of highlit strokes on menu click",selectedArray)
+        var UI = $("#partName").val();
+        if(UI==""){
          UI="unknown"
        }
 
@@ -976,6 +1046,10 @@ totalSplines= numPaths;
               partBoutNum=0
             }
             //console.log(partBoutNum)
+            instCountArr[loc]= numOthers
+            listgen();
+            $("#List").menu("refresh");
+            $("#InstCount").menu("refresh")
 
 
             _.forEach(selectedArray,function(p){ 

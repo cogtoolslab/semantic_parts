@@ -19,11 +19,12 @@
   display: none;
 }
 
- .ui-menu { width: 200px; }
+ 
  .ui-widget-header { padding: 0.2em; }
- .ui-menu {
-    display: block;
-    margin:auto;
+ #List {
+    width: 200px; 
+    /*display: block;
+*/
     
 
     /* bottom:38%; */
@@ -34,6 +35,14 @@
   margin: auto;
   /*margin-bottom: 330px;
   margin-left: 125px;*/
+}
+
+
+#InstCount{
+  width: 50px;
+
+  /*display: block;
+  */
 }
 
 #Title {
