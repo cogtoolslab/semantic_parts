@@ -503,15 +503,23 @@ totalSplines= numPaths;
 
   //Setting drag state to true for drag selector
   tool.onMouseDrag= function(event){
+
    if(clickable == true){
+
+    
      dragStat=true;
    }}
 
  //Setting states for when mouse is lifted after dragging and activating menus
  tool.onMouseUp = function(event){
+
+
+
+
    console.log("colorchecked",colorChecked)
    //timeClicked = Date.now();
    if(clickable == true){
+    console.log("selectedArrayBefore", selectedArray)
 
     if(dragStat==true && selectedArray.length!=0){
 
@@ -523,6 +531,10 @@ totalSplines= numPaths;
    }
    dragStat=false;
 
+
+   
+
+
  } }
 
 
@@ -530,6 +542,7 @@ totalSplines= numPaths;
 
   _.forEach(pathArray, function(p) {
     p.onMouseEnter = function(event) {
+      
      if(clickable == true){
         //When entering a stroke during dragging
         //if(p.alreadyClicked == false && p.highlit==false && dragStat==true){
@@ -563,8 +576,16 @@ totalSplines= numPaths;
           }
         }
       }
-    }}
-  } }); 
+    }else if(p.highlit==false&&dragStat==true){
+      timeClicked = Date.now();
+      p.highlit=true;
+      selectedArray[numLitStrokes]=p;
+      selectedArray[numLitStrokes].strokeColor = "rgb(100,100,100)";
+      numLitStrokes++
+
+    }
+  }
+} }); 
 }
 
 
