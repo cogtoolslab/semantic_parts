@@ -188,7 +188,7 @@ var end_trial = function(results) {
       default:
       colour = "red";
     }
-    $('<div class="confetti-'+i+' '+colour+'"></div>').css({
+    $('<div style="position:fixed" class="confetti-'+i+' '+colour+'"></div>').css({
      "width" : width+"px",
      "height" : height+"px",
      "top" : -Math.random()*20+"%",
@@ -1134,27 +1134,6 @@ totalSplines= numPaths;
           }
 
           selectedArray=[];
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         /*

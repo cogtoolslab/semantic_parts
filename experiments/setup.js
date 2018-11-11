@@ -27,16 +27,27 @@ function setupExp(){
     var trials = new Array(tmp.num_trials + 3);
     
     
+
+
     var instructionsHTML = {
-      'str1' :"<p style = 'font-size:20px;line-height:1.3;'> Welcome! In this HIT you will play a fun game where you will see some sketches and tell us what you see!<p style = 'font-size:20px;line-height:1.3;'>Each sketch was made by somebody who was playing a Pictionary-style game, in which they had to make a sketch of a target object (outlined in red) so that someone else could tell which object in the set they were trying to draw.<p style = 'font-size:20px;line-height:1.3;'><img src = 'instructions1.png' style='border: 2px solid #000000;'></img><p> <br> <br> </p></p>\
+      'str1' :"<p style = 'font-size:20px;line-height:1.3;'> Welcome! In this HIT you will play a fun game where you will see some sketches and tell us what you see!<p style = 'font-size:20px;line-height:1.3;'>Each sketch was made by somebody who\
+      was playing a Pictionary-style game, in which they had to make a sketch of a target object (outlined in red) so that someone else could tell which object in the set \
+      they were trying to draw.<p style = 'font-size:20px;line-height:1.3;'><img src = 'instructions1.png' style='border: 2px solid #000000;'></img><p> <br>  </p></p>\
       <p style = 'font-size:20px;line-height:1.3;'>Your goal is to label each of the strokes in these sketches by selecting parts from a menu.</p></p></p>",
-      'str2':"<p style = 'font-size:20px;line-height:1.3;'> Let's walk through an example! Please carefully review the diagram below:<p><img src= 'instructions2.png' style= 'height:650px;border: 2px solid #000000;'></img><p> <br> <br> </p></p></p>",
-      'str3':"<p style = 'font-size:30px;line-height:1.3;'> Here's how you label a sketch! <p style = 'font-size:20px;line-height:1.3;'> 1. You can click on a stroke OR paint over it by dragging your cursor over several strokes.\
-      Once it is selected, it will turn light-gray.<p style = 'font-size:20px;line-height:1.3;'><img src = 'instructions3.png' style='height:350px; width:1050px; border: 2px solid #000000; '></img></p><p style= 'line-height:1.3;'><img src = 'instructions4.png' style='height:350px; width:1050px;border: 2px solid #000000;'></img><p> <br> <br> </p></p><p style = 'font-size:20px;line-height:1.3;'> 2. You then click on one of the labels in the righthand menu to label it. Once it is labeled,\
-      it will turn into the same color as the word in the menu.<p style='line-height:1.3;'><img src ='instructions5.png' style='height:350px; width:1050px;border: 2px solid #000000;'></img><p> <br> <br> </p></p><p style = 'font-size:20px;line-height:1.3;'> 3. If the label you think is most appropriate for the stroke is not already \
-      in the menu, please click 'Other' to provide your own label. If you cannot identify a stroke, select it and click on 'I can't tell' in the menu.<p style='line-height:1.3;'><img src ='instructions6.png' style='height:350px; width:1050px;border: 2px solid #000000;'></img><p> <br> <br> </p></p><p style = 'font-size:20px;line-height:1.3;'> 4. If you change your mind about a stroke you already labeled, just click\
-      that stroke again, and select a new label from the menu.<p style='line-height:1.3;'><img src ='instructions7.png' style='height:350px; width:1050px;border: 2px solid #000000;'></img><p> <br> <br> </p></p> </p> <p style = 'font-size:20px;line-height:1.3;'> 5. Repeat steps 1–4 until you have labeled all the strokes in the sketch.</p>\
-      <p style = 'font-size:20px;line-height:1.3;'>Note: To make your life easier, as you label more strokes in each sketch, the remaining ones will get thicker so it is easier to see them.</p> <p style='line-height:1.3;'><img src ='instructions8.png' style='height:350px;border: 2px solid #000000;'></img></p></p>",
+      'str2':"<p style = 'font-size:20px;line-height:1.3;'> Let's walk through an example! Please carefully review the diagram below:<p><img src= 'instructions2.jpeg' style= 'height:650px;border: 2px solid #000000;'></img><p> <br>  </p></p></p>",
+      'str3':"<p style = 'font-size:30px;line-height:1;'> Here's how you label a sketch! <p style = 'font-size:20px;line-height:1.3;'>(scroll down please)</p><p style = 'font-size:20px;line-height:1.3;'> 1. You can click on a stroke \
+      OR paint over it by dragging your cursor over several strokes.\
+      Once it is selected, it will turn light-gray.<p style = 'font-size:20px;line-height:1.3;'><img src = 'instructions3.jpeg' style='height:450px; width:1150px; border: 2px solid #000000; '></img></p><p style= 'line-height:1.3;'>\
+      <img src = 'instructions4.jpeg' style='height:450px; width:1150px;border: 2px solid #000000;'></img><p> <br>  </p></p><p style = 'font-size:20px;line-height:1.3;'> 2. Your goal is to provide a label for every distinct part of each sketch.\
+      So you should be sure to select every stroke that represents a specific part -- no more and no fewer-- before clicking on a menu item to label it.</p>\
+      <p style = 'font-size:20px;line-height:1.3;'>For example, if a sketch of a chair has four legs, please label each leg separately. To do this, first select only the strokes corresponding to one leg, then click on the word 'leg' in the menu.\
+      Then repeat this procedure for the remaining legs of the chair. <p style='line-height:1.3;'><img src ='instructions5.jpeg' style='height:450px; width:1150px;border: 2px solid #000000;'></img><p> <br>  </p></p> \
+      <p style = 'font-size:20px;line-height:1.3;'> <p style = 'font-size:20px;line-height:1.3;'>3. Don't worry if you highlight too many strokes by accident!\
+      You can click on a highlighted stroke again to unhighlight it.<p style='line-height:1.3;'><img src ='instructions6.jpeg' style='height:450px; width:1150px;border: 2px solid #000000;'></img><p> <br>  </p> </p> \
+      <p style = 'font-size:20px;line-height:1.3;'>4. Important! Before clicking on a menu item, please make sure you have selected all the strokes you intended to -- no more and no fewer. \
+      You can keep track of how many distinct parts of the same kind you have already labeled by looking at the numbers in the righthand column. <p style='line-height:1.3;'><img src ='instructions7.jpeg' style='height:450px;border: 2px solid #000000;'></img><p></p> <br> </p><p style = 'font-size:20px;line-height:1.3;'>5. If the label you think is most appropriate for the stroke is not already \
+      in the menu, please click 'Other' to provide your own label. If you cannot identify a stroke, select it and click on 'I can't tell' in the menu.<p style='line-height:1.3;'><img src ='instructions8.jpeg' style='height:450px; width:1150px;border: 2px solid #000000;'></img><p> <br>  </p></p> <p style = 'font-size:20px;line-height:1.3;'>6. Repeat steps 1–5 until you have labeled all the strokes in the sketch.</p>\
+      <p style = 'font-size:20px;line-height:1.3;'>Note: To make your life easier, as you label more strokes in each sketch, the remaining ones will get thicker so it is easier to see them.</p> <p style='line-height:1.3;'><img src ='instructions9.jpeg' style='height:450px;border: 2px solid #000000;'></img></p></p>",
       
       'str4': "<p style = 'font-size:30px;line-height:1.3;'> Okay, let's try it out! </p><p style = 'font-size:20px;line-height:1.3;'> On the next screen you will get to practice labeling the parts of a sketch. Click on 'next sketch' when you're done labeling everything.</p>"}
 
@@ -73,13 +84,13 @@ function setupExp(){
       trials[1].category = data.category;
       trials[1].renders = data.renders;
       //trials[1].targetPos = 0;
-       trials[1].gameID = "7004-6ff0964c-ff95-40f9-8696-d6a8931c94d5";
-        trials[1].condition= "further";
-        trials[1].numStrokes = 5;
-        trials[1].outcome = true;
-        trials[1].orginalTrialNum = 17;
-        trials[1].response= "straight";
-  
+      trials[1].gameID = "7004-6ff0964c-ff95-40f9-8696-d6a8931c94d5";
+      trials[1].condition= "further";
+      trials[1].numStrokes = 5;
+      trials[1].outcome = true;
+      trials[1].orginalTrialNum = 17;
+      trials[1].response= "straight";
+
 
       trials[2] ={
         type: 'instructions',
@@ -116,8 +127,8 @@ function setupExp(){
 
        // console.log("main on start being called");
 
-        oldCallback = newCallback;
-        var newCallback = function(stim) {
+       oldCallback = newCallback;
+       var newCallback = function(stim) {
           //.log('received stim')
         //      	_.extend(trials[1], stim);
 
