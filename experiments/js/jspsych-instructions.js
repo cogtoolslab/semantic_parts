@@ -48,7 +48,7 @@ jsPsych.plugins.instructions = (function() {
       allow_keys: {
         type: jsPsych.plugins.parameterType.BOOL,
         pretty_name: 'Allow keys',
-        default: false,
+        default: true,
         description: 'If true, the subject can use keyboard keys to navigate the pages.'
       },
       show_clickable_nav: {
