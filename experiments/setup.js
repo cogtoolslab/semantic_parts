@@ -62,7 +62,7 @@ function setupExp(){
         ],
         show_clickable_nav: true,
         allow_backward: true,
-        allow_keys:true
+        allow_keys:false
 
       };
 
