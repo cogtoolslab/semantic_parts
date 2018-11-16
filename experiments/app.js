@@ -86,7 +86,7 @@ function sendStim(socket, data) {
   sendPostRequest('http://localhost:6001/db/getstims', {
     json: {
       dbname: 'stimuli',
-      colname: 'svg_annotation_sketchpad_basic_allcats_dev',
+      colname: 'svg_annotation_sketchpad_basic_allcats',
       numTrials: 1,
       gameid: data.gameID
     }
