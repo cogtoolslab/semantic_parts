@@ -121,7 +121,6 @@ class FeatureExtractor():
             elif self.data_type=='images':
                 im_ = im.convert(mode="RGB")
 
-
             ## POSSIBLY do this preprocessing if you are working with sketches
             if (self.data_type=='sketch') & (self.crop_sketch==True):
                 arr = np.asarray(im_)
@@ -168,41 +167,21 @@ class FeatureExtractor():
             return np.array([item for sublist in x for item in sublist])
 
         def get_metadata_from_path(path):
-            parsed_path = path.split('.')[0].split('/')[-1].split('_')
-            ## e.g., '6378-75ca9ee2-ed38-4434-b0bc-00c039f29b57_12_waiting_01_1_run4_generalization_3_start'
-            gameID = parsed_path[0]
-            trialNum = parsed_path[1]
-            target = parsed_path[2]+parsed_path[3]
-            repetition = parsed_path[4]
-            if parsed_path[5] == 'run4':
-                condition = parsed_path[5]+parsed_path[6]
-                num_strokes_deleted = parsed_path[7]
-                direction = parsed_path[8]
-            else:
-                condition = parsed_path[5]+parsed_path[6]+parsed_path[7]
-                num_strokes_deleted = parsed_path[8]
-                direction = parsed_path[9]
-
-            return gameID, trialNum, condition, target, repetition, num_strokes_deleted, direction
+            parsed_path = path.split('/')[-1].split('.')[0]
+            return parsed_path
 
         def generator(paths, imsize=self.imsize, use_cuda=use_cuda):
             for path in paths:
                 image = load_image(path)
-                gameID, trialNum, condition, target, repetition, num_strokes_deleted, direction = get_metadata_from_path(path)
-                yield (image, gameID, trialNum, condition, target, repetition, num_strokes_deleted, direction)
+                sketchid = get_metadata_from_path(path)
+                yield (image, sketchid)
 
         # define generator
         generator = generator(self.paths,imsize=self.imsize,use_cuda=self.use_cuda)
 
         # initialize sketch and label matrices
         Features = []
-        GameIDs = []
-        TrialNums = []
-        Conditions = []
-        Targets = []
-        Repetitions = []
-        NumStrokesDeleteds = []
-        Directions = []
+        SketchIDs = []
 
         n = 0
         quit = False
@@ -217,44 +196,28 @@ class FeatureExtractor():
                 sketch_batch = Variable(torch.zeros(batch_size, 3, self.imsize, self.imsize))
                 if use_cuda:
                     sketch_batch = sketch_batch.cuda(self.cuda_device)
-                run_batch = []
-                game_batch = []
-                trial_batch = []
-                condition_batch = []
-                target_batch = []
-                repetition_batch = []
-                num_strokes_deleted_batch = []
-                direction_batch = []
+                sketchid_batch = []
 
-                if (n+1)%20==0:
-                    print('Batch {}'.format(n + 1))
+                if (n+1)%1==0:
+                    print('Extracting features from batch {}'.format(n + 1))
                 for b in range(batch_size):
                     try:
-                        sketch, gameID, trialNum, condition, target, repetition, num_strokes_deleted, direction = generator.next()
+                        sketch,sketchid = generator.next()
                         sketch_batch[b] = sketch
-                        game_batch.append(gameID)
-                        trial_batch.append(trialNum)
-                        condition_batch.append(condition)
-                        target_batch.append(target)
-                        repetition_batch.append(repetition)
-                        num_strokes_deleted_batch.append(num_strokes_deleted)
-                        direction_batch.append(direction)
+                        sketchid_batch.append(sketchid)
+
                     except StopIteration:
                         quit = True
                         print('stopped!')
                         break
 
-                n = n + 1
                 if n == self.num_images//self.batch_size:
                     sketch_batch = sketch_batch.narrow(0,0,b)
-                    run_batch = run_batch[:b + 1]
-                    game_batch = game_batch[:b + 1]
-                    trial_batch = trial_batch[:b + 1]
-                    condition_batch = condition_batch[:b + 1]
-                    target_batch = target_batch[:b + 1]
-                    repetition_batch = repetition_batch[:b + 1]
-                    num_strokes_deleted_batch = num_strokes_deleted_batch[:b + 1]
-                    direction_batch = direction_batch[:b + 1]
+                    sketchid_batch = sketchid_batch[:b + 1]
+                    print('sketch_batch size',sketch_batch.size())
+                    print('sketch_id length',len(sketchid_batch))
+
+                n += 1
 
                 # extract features from batch
                 sketch_batch = extractor(sketch_batch)
@@ -265,18 +228,12 @@ class FeatureExtractor():
                 else:
                     Features = np.vstack((Features,sketch_batch))
 
-                GameIDs.append(game_batch)
-                TrialNums.append(trial_batch)
-                Conditions.append(condition_batch)
-                Targets.append(target_batch)
-                Repetitions.append(repetition_batch)
-                NumStrokesDeleteds.append(num_strokes_deleted_batch)
-                Directions.append(direction_batch)
+                SketchIDs.append(sketchid_batch)
+                print('Shape of Features',np.shape(Features))
+                print('Length of shapeids',len(flatten_list(SketchIDs)))
 
                 if n == self.num_images//batch_size + 1:
                     break
-        GameIDs,TrialNums,\
-        Conditions,Targets,Repetitions, NumStrokesDeleteds, Directions = map(flatten_list,\
-                                            [GameIDs,TrialNums,\
-                                            Conditions,Targets,Repetitions, NumStrokesDeleteds, Directions])
-        return Features,[GameIDs,TrialNums,Conditions,Targets,Repetitions, NumStrokesDeleteds, Directions]
+
+        SketchIDs = flatten_list(SketchIDs)
+        return Features,SketchIDs
