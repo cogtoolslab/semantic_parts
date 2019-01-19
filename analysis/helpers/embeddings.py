@@ -214,8 +214,8 @@ class FeatureExtractor():
                 if n == self.num_images//self.batch_size:
                     sketch_batch = sketch_batch.narrow(0,0,b)
                     sketchid_batch = sketchid_batch[:b + 1]
-                    print('sketch_batch size',sketch_batch.size())
-                    print('sketch_id length',len(sketchid_batch))
+                    #print('sketch_batch size',sketch_batch.size())
+                    #print('sketch_id length',len(sketchid_batch))
 
                 n += 1
 
