@@ -1,0 +1,57 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+library(tidyverse)
+library(tidyboot)
+d <- read_csv('results/features/semantic_parts_aggregated.csv')
+sparsity <- function(vec) {
+    k = length(vec)
+    L1norm = norm(as.matrix(vec), type="1")
+    L2norm = norm(as.matrix(vec), type="2")
+    s = (sqrt(k) - (L1norm/L2norm))/(sqrt(k) - 1)
+    return(s)
+}
+
+mean_sparsity_diff <- function(d, sample_id) {
+d %>%
+  group_by(target, condition) %>%
+  arrange(target,condition) %>%
+  sample_frac(1, replace = T) %>%
+    select(-sketch_id, -category, -outcome) %>%
+    group_by(target, condition) %>%
+    arrange(target,condition) %>%
+    summarize_all(mean) %>%
+    gather(feature, val, armrest_numstrokes:wing_total_arclength) %>%
+    spread(condition, val) %>%
+    mutate(diff = closer - further) %>%
+    group_by(target) %>%
+    summarize(sparsity = get_sparsity(diff)) %>%
+    ungroup() %>%
+    summarize(m = mean(sparsity)) %>%
+    mutate(sample_num = sample_id) 
+}
+
+booted <- map_dfr(seq_len(1000), ~d %>%
+  group_by(target, condition) %>%
+  arrange(target,condition) %>%
+  sample_frac(1, replace = T) %>%
+  mean_sparsity_diff(.x)
+)
+  
+true <- mean_sparsity_diff(d, 'empirical')
+
+ggplot(data.frame(boot = booted$m, true = true$m), 
+       aes(x = 0, y = boot)) +
+  geom_violin(fill = '#d07e93', alpha = 0.25, color = NA) +
+  geom_point(aes(x = 0, y = true), size = 4, color = "#163c4e") +
+  theme_bw() +
+  ylab('sparsity of diff') +
+  coord_flip() +
+  scale_x_continuous(breaks = NULL) +
+  theme(aspect.ratio = 1/5)
+```
+
