@@ -8,22 +8,42 @@ library(tidyverse)
 library(tidyboot)
 library(ggthemes)
 ```
+# Examining correspondence between strokes and parts
+
+## Load in spline-level dataset
 
 ```{r}
 d <- read_csv('../../results/csv/splines.csv')
+```
 
+## Visualize distribution of splines per stroke
+
+```{r}
 d %>%
   group_by(stroke_id) %>% 
   tally() %>%
   group_by(n) %>%
   tally() %>%
-  ggplot(aes(x = n, y = nn)) +
+  ungroup() %>%
+  mutate(total = sum(nn)) %>%
+  mutate(prop = nn / total) %>%
+  ggplot(aes(x = n, y = prop)) +
     geom_bar(stat = 'identity') +
     xlab("number of splines / stroke") +
     ylab('count') +
     theme_few() 
-  
 ```
+
+## Look at mean # splines per stroke
+
+```{r}
+  d %>%
+  group_by(stroke_id) %>% 
+  tally() %>%
+    summarize(mean(n))
+```
+
+## Break # of distinct parts out by total number of splines
 
 ```{r}
 d %>%
@@ -40,6 +60,8 @@ d %>%
     theme_few() 
 ```
 
+## Threshold at 1 and re-compute proportions
+
 ```{r}
 d %>%
   group_by(stroke_id) %>%
@@ -54,8 +76,10 @@ d %>%
   summarize(sum(n) / mean(total))
 ```
 
+## Construct null model
+
 ```{r}
-null.df <- map_dfr(seq_len(100), ~d %>%
+null.df <- map_dbl(seq_len(100), ~(d %>%
   group_by(sketch_id) %>%
   mutate(num_parts = length(unique(label))) %>%
   #group_by(spline_id) %>%
@@ -68,13 +92,9 @@ null.df <- map_dfr(seq_len(100), ~d %>%
   mutate(total = length(num_splines)) %>%
   group_by(num_diff_parts) %>%
   summarize(prop = n() / mean(total)) %>%
-  mutate(sample_id = .x))
+  mutate(sample_id = .x) %>%
+  filter(num_diff_parts == 1))$prop)
 
-null.df %>%
-  group_by(num_diff_parts) %>%
-  summarize(`ci_upper`=quantile(prop, probs=0.975),
-            `ci_lower`=quantile(prop, probs=0.025),
-            `empirical_stat`=quantile(prop, probs=0.5)) %>%
-  
-
+cat("mean:", mean(null.df), 
+    '; range: ', sort(null.df)[1], ',', sort(null.df)[length(null.df)-1])
 ```
