@@ -74,7 +74,7 @@ def render_svg_color(paths,
                fill_mode = 'none',
                viewbox=[0, 0, 300, 300],
                base_dir = './',
-               out_dir = 'svg',
+               out_dir = 'lesion_sketches',
                out_fname= 'tmp.svg'):
 
     '''
@@ -94,6 +94,7 @@ def render_svg_color(paths,
          viewbox=viewbox,
          filename=os.path.join(base_dir,out_dir,out_fname))
  
+
 
 def generate_svg_path_list(svg_dir):
     svg_paths = list_files(svg_dir, ext='svg')
@@ -115,6 +116,10 @@ def svg_to_png(svg_paths,
         print(cmd_string)
         os.system(cmd_string)
         clear_output(wait=True)
+        
+        
+
+
 
 
 
