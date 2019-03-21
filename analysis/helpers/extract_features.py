@@ -31,6 +31,7 @@ python extract_features.py --data='/data/jefan/semantic_parts/sketches/png' --la
 
 '''
 
+
 # retrieve sketch paths
 def list_files(path, ext='png'):
     result = [y for x in os.walk(path) for y in glob(os.path.join(x[0], '*.%s' % ext))]

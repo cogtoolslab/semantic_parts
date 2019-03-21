@@ -23,7 +23,10 @@ from PIL import Image
 ## 5: [1, 4096]
 ## 6: [1, 4096]
 
+
+
 use_cuda = torch.cuda.is_available()
+
 
 class VGG19Embeddings(nn.Module):
     """Splits vgg19 into separate sections so that we can get
@@ -151,8 +154,9 @@ class FeatureExtractor():
                 im = im.cuda(self.cuda_device)
             return im
 
-        def load_vgg19(layer_index=self.layer,use_cuda=True,cuda_device=self.cuda_device):
-            vgg19 = models.vgg19(pretrained=True).cuda(self.cuda_device)
+        def load_vgg19(layer_index=self.layer,use_cuda=use_cuda,cuda_device=self.cuda_device):
+            vgg19 = models.vgg19(pretrained=True)
+            #.cuda(self.cuda_device)
             vgg19 = VGG19Embeddings(vgg19,layer_index,spatial_avg=self.spatial_avg)
             vgg19.eval()  # freeze dropout
             print('CUDA DEVICE NUM: {}  CROP SKETCH set to {}'.format(self.cuda_device, self.crop_sketch))
@@ -237,3 +241,6 @@ class FeatureExtractor():
 
         SketchIDs = flatten_list(SketchIDs)
         return Features,SketchIDs
+    
+    
+   
