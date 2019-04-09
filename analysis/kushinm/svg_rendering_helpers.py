@@ -74,7 +74,7 @@ def render_svg_color(paths,
                fill_mode = 'none',
                viewbox=[0, 0, 300, 300],
                base_dir = './',
-               out_dir = 'lesion_sketches',
+               out_dir = 'svg',
                out_fname= 'tmp.svg'):
 
     '''
