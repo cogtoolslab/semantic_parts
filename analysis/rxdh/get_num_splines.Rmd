@@ -1,0 +1,100 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(tidyboot)
+library(ggthemes)
+```
+# Examining correspondence between strokes and parts
+
+## Load in spline-level dataset
+
+```{r}
+d <- read_csv('../../results/csv/splines.csv')
+```
+
+## Visualize distribution of splines per stroke
+
+```{r}
+d %>%
+  group_by(stroke_id) %>% 
+  tally() %>%
+  group_by(n) %>%
+  tally() %>%
+  ungroup() %>%
+  mutate(total = sum(nn)) %>%
+  mutate(prop = nn / total) %>%
+  ggplot(aes(x = n, y = prop)) +
+    geom_bar(stat = 'identity') +
+    xlab("number of splines / stroke") +
+    ylab('count') +
+    theme_few() 
+```
+
+## Look at mean # splines per stroke
+
+```{r}
+  d %>%
+  group_by(stroke_id) %>% 
+  tally() %>%
+    summarize(mean(n))
+```
+
+## Break # of distinct parts out by total number of splines
+
+```{r}
+d %>%
+  group_by(stroke_id) %>%
+  summarize(num_diff_parts = length(unique(label)),
+            num_splines = length(label)) %>%
+  group_by(num_diff_parts, num_splines) %>%
+  tally() %>%
+  ggplot(aes(x = num_diff_parts, y = n)) +
+    geom_bar(stat = 'identity') +
+    xlab("number of parts") +
+    ylab('count') +
+    facet_wrap(~ num_splines, scales = 'free_y') +
+    theme_few() 
+```
+
+## Threshold at 1 and re-compute proportions
+
+```{r}
+d %>%
+  group_by(stroke_id) %>%
+  summarize(num_diff_parts = length(unique(label)),
+            num_splines = length(label)) %>%
+  filter(num_splines > 1) %>%
+  group_by(num_diff_parts, num_splines) %>%
+  tally() %>%
+  ungroup() %>%
+  mutate(total = sum(n)) %>%
+  group_by(num_diff_parts) %>%
+  summarize(sum(n) / mean(total))
+```
+
+## Construct null model
+
+```{r}
+null.df <- map_dbl(seq_len(100), ~(d %>%
+  group_by(sketch_id) %>%
+  mutate(num_parts = length(unique(label))) %>%
+  #group_by(spline_id) %>%
+  rowwise() %>%
+  mutate(fake_label = sample(seq_len(num_parts), 1)) %>%
+  ungroup() %>%
+  group_by(stroke_id) %>%
+  summarize(num_diff_parts = length(unique(fake_label)),
+            num_splines = length(fake_label)) %>%
+  mutate(total = length(num_splines)) %>%
+  group_by(num_diff_parts) %>%
+  summarize(prop = n() / mean(total)) %>%
+  mutate(sample_id = .x) %>%
+  filter(num_diff_parts == 1))$prop)
+
+cat("mean:", mean(null.df), 
+    '; range: ', sort(null.df)[1], ',', sort(null.df)[length(null.df)-1])
+```
