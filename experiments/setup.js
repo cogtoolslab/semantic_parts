@@ -130,8 +130,6 @@ function setupExp(){
 
        oldCallback = newCallback;
        var newCallback = function(stim) {
-          //.log('received stim')
-        //      	_.extend(trials[1], stim);
 
         trial.training = false;
         trial.svg = stim.svg;
@@ -151,19 +149,6 @@ function setupExp(){
         trial.outcome = stim.outcome;
         trial.originalTrialNum = stim.trialNum;
         trial.response = stim.response;
-
-        /*r=0
-        for(var i=0;i<renderList.length;i++){
-          if(renderList[i].subordinate==trial.distractors[c]){
-          trial.renders[r]= renderList[i].url;
-          c++;
-          r++;
-         }
-          else if(renderList[i].subordinate==trial.category){   
-           trial.renders[r]= renderList[i].url;
-           r++;
-         }
-       }*/
        r=0
        c=1
        _.forEach(renderList, function(f){
